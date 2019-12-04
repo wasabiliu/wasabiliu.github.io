@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://deuterium.fun/"/>
-  <updated>2019-12-04T05:36:33.081Z</updated>
+  <updated>2019-12-04T13:13:18.408Z</updated>
   <id>http://deuterium.fun/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="http://deuterium.fun/2019/12/04/hello-world/"/>
     <id>http://deuterium.fun/2019/12/04/hello-world/</id>
     <published>2019-12-04T05:36:33.081Z</published>
-    <updated>2019-12-04T05:36:33.081Z</updated>
+    <updated>2019-12-04T13:13:18.408Z</updated>
     
     <summary type="html">
     
@@ -36,6 +36,10 @@
     </summary>
     
     
+    
+      <category term="hexo" scheme="http://deuterium.fun/tags/hexo/"/>
+    
+      <category term="start" scheme="http://deuterium.fun/tags/start/"/>
     
   </entry>
   
