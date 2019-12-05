@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://deuterium.fun/"/>
-  <updated>2019-12-04T13:21:37.611Z</updated>
+  <updated>2019-12-05T03:56:53.248Z</updated>
   <id>http://deuterium.fun/</id>
   
   <author>
@@ -15,6 +15,36 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Go struct to json</title>
+    <link href="http://deuterium.fun/2019/12/05/go-struct-to-json/"/>
+    <id>http://deuterium.fun/2019/12/05/go-struct-to-json/</id>
+    <published>2019-12-05T03:27:38.000Z</published>
+    <updated>2019-12-05T03:56:53.248Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;最近做了一些将go中结构体输出到json的事情，各种花样输出，在这里整理一下。&lt;/p&gt;
+&lt;h3 id=&quot;问题1：如何将struct转成json？&quot;&gt;&lt;a href=&quot;#问题1：如何将struct转成json？&quot; class=&quot;headerlink&quot;
+        
+      
+    
+    </summary>
+    
+    
+      <category term="programming" scheme="http://deuterium.fun/categories/programming/"/>
+    
+    
+      <category term="go" scheme="http://deuterium.fun/tags/go/"/>
+    
+      <category term="json" scheme="http://deuterium.fun/tags/json/"/>
+    
+  </entry>
   
   <entry>
     <title>Hello World</title>

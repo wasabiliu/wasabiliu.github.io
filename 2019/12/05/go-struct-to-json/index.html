@@ -4,8 +4,12 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Hello World, Deuterium">
-    <meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hex">
+    <meta name="keywords" content="Go struct to json, Deuterium">
+    <meta name="description" content="最近做了一些将go中结构体输出到json的事情，各种花样输出，在这里整理一下。
+问题1：如何将struct转成json？这是最简单的一种情况，直接使用encoding/json包中的函数就可以了：
+package main
+
+import ">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -13,7 +17,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Hello World | Deuterium</title>
+    <title>Go struct to json | Deuterium</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -242,13 +246,13 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/12.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/22.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
                     <div class="description center-align post-title">
-                        Hello World
+                        Go struct to json
                     </div>
                 </div>
             </div>
@@ -366,12 +370,12 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/hexo/">
-                                <span class="chip bg-color">hexo</span>
+                            <a href="/tags/go/">
+                                <span class="chip bg-color">go</span>
                             </a>
                         
-                            <a href="/tags/start/">
-                                <span class="chip bg-color">start</span>
+                            <a href="/tags/json/">
+                                <span class="chip bg-color">json</span>
                             </a>
                         
                     </div>
@@ -382,8 +386,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/hello/" class="post-category">
-                                hello
+                            <a href="/categories/programming/" class="post-category">
+                                programming
                             </a>
                         
                     </div>
@@ -395,7 +399,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
-                    2019-12-04
+                    2019-12-05
                 </div>
                 
 
@@ -404,14 +408,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    73
+                    739
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>Read Times:&nbsp;&nbsp;
-                    1 Min
+                    3 Min
                 </div>
                 
 				
@@ -422,15 +426,141 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><pre class="line-numbers language-bash"><code class="language-bash">$ hexo new <span class="token string">"My New Post"</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><pre class="line-numbers language-bash"><code class="language-bash">$ hexo server<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><pre class="line-numbers language-bash"><code class="language-bash">$ hexo generate<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><pre class="line-numbers language-bash"><code class="language-bash">$ hexo deploy<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+                <p>最近做了一些将go中结构体输出到json的事情，各种花样输出，在这里整理一下。</p>
+<h3 id="问题1：如何将struct转成json？"><a href="#问题1：如何将struct转成json？" class="headerlink" title="问题1：如何将struct转成json？"></a>问题1：如何将struct转成json？</h3><p>这是最简单的一种情况，直接使用<code>encoding/json</code>包中的函数就可以了：</p>
+<pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">package</span> main
+
+<span class="token keyword">import</span> <span class="token punctuation">(</span>
+    <span class="token string">"encoding/json"</span>
+    <span class="token string">"fmt"</span>
+<span class="token punctuation">)</span>
+
+<span class="token keyword">type</span> Item <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+    Label <span class="token builtin">string</span>
+    Value <span class="token builtin">int32</span>
+    URL   <span class="token builtin">string</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    item <span class="token operator">:=</span> Item<span class="token punctuation">{</span><span class="token string">"hello"</span><span class="token punctuation">,</span> <span class="token number">127</span><span class="token punctuation">,</span> <span class="token string">"http://test.com"</span><span class="token punctuation">}</span>
+    bdata<span class="token punctuation">,</span> err <span class="token operator">:=</span> json<span class="token punctuation">.</span><span class="token function">Marshal</span><span class="token punctuation">(</span>item<span class="token punctuation">)</span>
+    <span class="token keyword">if</span> err <span class="token operator">==</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+        fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token function">string</span><span class="token punctuation">(</span>bdata<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+        fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>结果：</p>
+<pre class="line-numbers language-json"><code class="language-json"><span class="token punctuation">{</span><span class="token property">"Label"</span><span class="token operator">:</span><span class="token string">"hello"</span><span class="token punctuation">,</span><span class="token property">"Value"</span><span class="token operator">:</span><span class="token number">127</span><span class="token punctuation">,</span><span class="token property">"URL"</span><span class="token operator">:</span><span class="token string">"http://test.com"</span><span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="问题2：我想自定义输出json的key怎么弄？"><a href="#问题2：我想自定义输出json的key怎么弄？" class="headerlink" title="问题2：我想自定义输出json的key怎么弄？"></a>问题2：我想自定义输出json的key怎么弄？</h3><p>使用struct的tag即可：</p>
+<pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">type</span> Item <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+    Label <span class="token builtin">string</span> <span class="token string">`json:"name"`</span>
+    Value <span class="token builtin">int32</span>  <span class="token string">`json:"value"`</span>
+    URL   <span class="token builtin">string</span> <span class="token string">`json:"url"`</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>结果：</p>
+<pre class="line-numbers language-json"><code class="language-json"><span class="token punctuation">{</span><span class="token property">"name"</span><span class="token operator">:</span><span class="token string">"hello"</span><span class="token punctuation">,</span><span class="token property">"value"</span><span class="token operator">:</span><span class="token number">127</span><span class="token punctuation">,</span><span class="token property">"url"</span><span class="token operator">:</span><span class="token string">"http://test.com"</span><span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="问题3：有的字段不是必须的，如果为空就不输出呢？"><a href="#问题3：有的字段不是必须的，如果为空就不输出呢？" class="headerlink" title="问题3：有的字段不是必须的，如果为空就不输出呢？"></a>问题3：有的字段不是必须的，如果为空就不输出呢？</h3><p>比如URL字段可能为空，如果为空的话就不希望输出了。</p>
+<pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    item <span class="token operator">:=</span> Item<span class="token punctuation">{</span><span class="token string">"hello"</span><span class="token punctuation">,</span> <span class="token number">127</span><span class="token punctuation">,</span> <span class="token string">""</span><span class="token punctuation">}</span>
+    bdata<span class="token punctuation">,</span> err <span class="token operator">:=</span> json<span class="token punctuation">.</span><span class="token function">Marshal</span><span class="token punctuation">(</span>item<span class="token punctuation">)</span>
+    <span class="token keyword">if</span> err <span class="token operator">==</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+        fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token function">string</span><span class="token punctuation">(</span>bdata<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+        fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>结果：</p>
+<pre class="line-numbers language-json"><code class="language-json"><span class="token punctuation">{</span><span class="token property">"label"</span><span class="token operator">:</span><span class="token string">"hello"</span><span class="token punctuation">,</span><span class="token property">"value"</span><span class="token operator">:</span><span class="token number">127</span><span class="token punctuation">,</span><span class="token property">"url"</span><span class="token operator">:</span><span class="token string">""</span><span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>可以使用<code>omitempty</code>标签来达到这个目的：</p>
+<pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">type</span> Item <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+    Label <span class="token builtin">string</span> <span class="token string">`json:"label"`</span>
+    Value <span class="token builtin">int32</span>  <span class="token string">`json:"value"`</span>
+    URL   <span class="token builtin">string</span> <span class="token string">`json:"url,omitempty"`</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>结果：</p>
+<pre class="line-numbers language-json"><code class="language-json"><span class="token punctuation">{</span><span class="token property">"label"</span><span class="token operator">:</span><span class="token string">"hello"</span><span class="token punctuation">,</span><span class="token property">"value"</span><span class="token operator">:</span><span class="token number">127</span><span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="问题4：我想忽略某一个具体的字段"><a href="#问题4：我想忽略某一个具体的字段" class="headerlink" title="问题4：我想忽略某一个具体的字段"></a>问题4：我想忽略某一个具体的字段</h3><p>方法一：可以直接使用这个标签：</p>
+<pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">type</span> User <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+    Name     <span class="token builtin">string</span> <span class="token string">`json:"name"`</span>
+    Email    <span class="token builtin">string</span> <span class="token string">`json:"email"`</span>
+    Password <span class="token builtin">string</span> <span class="token string">`json:"-"`</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>方法二：如果struct是别人定义的不允许我们修改这个标签，除了我们自定义一个struct外，还可以使用匿名struct：</p>
+<pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    user <span class="token operator">:=</span> User<span class="token punctuation">{</span><span class="token string">"valineliu"</span><span class="token punctuation">,</span> <span class="token string">"1749118121@qq.com"</span><span class="token punctuation">,</span> <span class="token string">"password"</span><span class="token punctuation">}</span>
+    bdata<span class="token punctuation">,</span> err <span class="token operator">:=</span> json<span class="token punctuation">.</span><span class="token function">Marshal</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token punctuation">{</span>
+        <span class="token operator">*</span>User
+        Password <span class="token builtin">bool</span> <span class="token string">`json:"password,omitempty"`</span>
+    <span class="token punctuation">}</span><span class="token punctuation">{</span>
+        User<span class="token punctuation">:</span> <span class="token operator">&amp;</span>user<span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span>
+    <span class="token keyword">if</span> err <span class="token operator">==</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+        fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token function">string</span><span class="token punctuation">(</span>bdata<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>结果：</p>
+<pre class="line-numbers language-json"><code class="language-json"><span class="token punctuation">{</span><span class="token property">"name"</span><span class="token operator">:</span><span class="token string">"valineliu"</span><span class="token punctuation">,</span><span class="token property">"email"</span><span class="token operator">:</span><span class="token string">"1749118121@qq.com"</span><span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>这里使用了嵌套结构体的概念，外面的<code>Password</code>字段覆盖了里面<code>User</code>的<code>Password</code>字段，然后通过问题3里的技巧，达到忽略某个字段的目的。</p>
+<h3 id="问题5：临时添加一个或多个字段"><a href="#问题5：临时添加一个或多个字段" class="headerlink" title="问题5：临时添加一个或多个字段"></a>问题5：临时添加一个或多个字段</h3><p>这个就比较简单了，自定义一个struct即可：</p>
+<pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">type</span> User <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+    Name     <span class="token builtin">string</span> <span class="token string">`json:"name"`</span>
+    Email    <span class="token builtin">string</span> <span class="token string">`json:"email"`</span>
+    Password <span class="token builtin">string</span> <span class="token string">`json:"password"`</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">type</span> PublicUser <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+    <span class="token operator">*</span>User
+    Password <span class="token builtin">bool</span>   <span class="token string">`json:"password,omitempty"`</span>
+    Token    <span class="token builtin">string</span> <span class="token string">`json:"token"`</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    user <span class="token operator">:=</span> User<span class="token punctuation">{</span><span class="token string">"valineliu"</span><span class="token punctuation">,</span> <span class="token string">"1749118121@qq.com"</span><span class="token punctuation">,</span> <span class="token string">"password"</span><span class="token punctuation">}</span>
+    publicUser <span class="token operator">:=</span> PublicUser<span class="token punctuation">{</span>
+        User<span class="token punctuation">:</span>  <span class="token operator">&amp;</span>user<span class="token punctuation">,</span>
+        Token<span class="token punctuation">:</span> <span class="token string">"test_token"</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span>
+    bdata<span class="token punctuation">,</span> err <span class="token operator">:=</span> json<span class="token punctuation">.</span><span class="token function">Marshal</span><span class="token punctuation">(</span>publicUser<span class="token punctuation">)</span>
+    <span class="token keyword">if</span> err <span class="token operator">==</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+        fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token function">string</span><span class="token punctuation">(</span>bdata<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>结果</p>
+<pre class="line-numbers language-json"><code class="language-json"><span class="token punctuation">{</span><span class="token property">"name"</span><span class="token operator">:</span><span class="token string">"valineliu"</span><span class="token punctuation">,</span><span class="token property">"email"</span><span class="token operator">:</span><span class="token string">"1749118121@qq.com"</span><span class="token punctuation">,</span><span class="token property">"token"</span><span class="token operator">:</span><span class="token string">"test_token"</span><span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="问题6：将多个struct组合成一个json"><a href="#问题6：将多个struct组合成一个json" class="headerlink" title="问题6：将多个struct组合成一个json"></a>问题6：将多个struct组合成一个json</h3><p>可能一个服务的数据来自不同的接口，需要组合到一个json里，那么同样自定义一个struct就可以了：</p>
+<pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">type</span> User <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+    Name     <span class="token builtin">string</span> <span class="token string">`json:"name"`</span>
+    Email    <span class="token builtin">string</span> <span class="token string">`json:"email"`</span>
+    Password <span class="token builtin">string</span> <span class="token string">`json:"password"`</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">type</span> Analytics <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+    Blogs <span class="token builtin">int32</span> <span class="token string">`json:"blogs"`</span>
+    Read  <span class="token builtin">int32</span> <span class="token string">`json:"read"`</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">type</span> PublicUser <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+    <span class="token operator">*</span>User
+    Password <span class="token builtin">bool</span> <span class="token string">`json:"password,omitempty"`</span>
+    <span class="token operator">*</span>Analytics
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    user <span class="token operator">:=</span> User<span class="token punctuation">{</span><span class="token string">"valineliu"</span><span class="token punctuation">,</span> <span class="token string">"1749118121@qq.com"</span><span class="token punctuation">,</span> <span class="token string">"password"</span><span class="token punctuation">}</span>
+    analytics <span class="token operator">:=</span> Analytics<span class="token punctuation">{</span><span class="token number">100</span><span class="token punctuation">,</span> <span class="token number">200</span><span class="token punctuation">}</span>
+    publicUser <span class="token operator">:=</span> PublicUser<span class="token punctuation">{</span>
+        User<span class="token punctuation">:</span>      <span class="token operator">&amp;</span>user<span class="token punctuation">,</span>
+        Analytics<span class="token punctuation">:</span> <span class="token operator">&amp;</span>analytics<span class="token punctuation">,</span>
+    <span class="token punctuation">}</span>
+    bdata<span class="token punctuation">,</span> err <span class="token operator">:=</span> json<span class="token punctuation">.</span><span class="token function">Marshal</span><span class="token punctuation">(</span>publicUser<span class="token punctuation">)</span>
+    <span class="token keyword">if</span> err <span class="token operator">==</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+        fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token function">string</span><span class="token punctuation">(</span>bdata<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>结果</p>
+<pre class="line-numbers language-json"><code class="language-json"><span class="token punctuation">{</span><span class="token property">"name"</span><span class="token operator">:</span><span class="token string">"valineliu"</span><span class="token punctuation">,</span><span class="token property">"email"</span><span class="token operator">:</span><span class="token string">"1749118121@qq.com"</span><span class="token punctuation">,</span><span class="token property">"blogs"</span><span class="token operator">:</span><span class="token number">100</span><span class="token punctuation">,</span><span class="token property">"read"</span><span class="token operator">:</span><span class="token number">200</span><span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h3><p>这篇文章的结束不是这个话题的结束。关于go语言中使用json还有很多话题可以讨论，这里仅仅是将go中的struct转换成json输出，此外，还有将json转换成struct，以及自定义<code>Marshal</code>和<code>Unmarshal</code>函数等话题。</p>
 
             </div>
             <hr/>
@@ -456,7 +586,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://deuterium.fun/2019/12/04/hello-world/">http://deuterium.fun/2019/12/04/hello-world/</a>
+                    <a href="http://deuterium.fun/2019/12/05/go-struct-to-json/">http://deuterium.fun/2019/12/05/go-struct-to-json/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -494,12 +624,12 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/hexo/">
-                                    <span class="chip bg-color">hexo</span>
+                                <a href="/tags/go/">
+                                    <span class="chip bg-color">go</span>
                                 </a>
                             
-                                <a href="/tags/start/">
-                                    <span class="chip bg-color">start</span>
+                                <a href="/tags/json/">
+                                    <span class="chip bg-color">json</span>
                                 </a>
                             
                         </div>
@@ -803,9 +933,10 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
+                <i class="far fa-dot-circle"></i>&nbsp;Current
+            </div>
             <div class="card">
                 <a href="/2019/12/05/go-struct-to-json/">
                     <div class="card-image">
@@ -827,9 +958,9 @@ import
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2019-12-05
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2019-12-05
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -842,6 +973,7 @@ import
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -861,7 +993,7 @@ import
         
         <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge right-badge text-color">
-                Current&nbsp;<i class="far fa-dot-circle"></i>
+                Next&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
                 <a href="/2019/12/04/hello-world/">
@@ -895,7 +1027,6 @@ import
                         </span>
                     </div>
                 </div>
-
                 
                 <div class="card-action article-tags">
                     
