@@ -408,14 +408,14 @@ import ">
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    739
+                    952
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>Read Times:&nbsp;&nbsp;
-                    3 Min
+                    4 Min
                 </div>
                 
 				
@@ -526,7 +526,7 @@ import ">
         fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token function">string</span><span class="token punctuation">(</span>bdata<span class="token punctuation">)</span><span class="token punctuation">)</span>
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>结果</p>
+<p>结果：</p>
 <pre class="line-numbers language-json"><code class="language-json"><span class="token punctuation">{</span><span class="token property">"name"</span><span class="token operator">:</span><span class="token string">"valineliu"</span><span class="token punctuation">,</span><span class="token property">"email"</span><span class="token operator">:</span><span class="token string">"1749118121@qq.com"</span><span class="token punctuation">,</span><span class="token property">"token"</span><span class="token operator">:</span><span class="token string">"test_token"</span><span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <h3 id="问题6：将多个struct组合成一个json"><a href="#问题6：将多个struct组合成一个json" class="headerlink" title="问题6：将多个struct组合成一个json"></a>问题6：将多个struct组合成一个json</h3><p>可能一个服务的数据来自不同的接口，需要组合到一个json里，那么同样自定义一个struct就可以了：</p>
 <pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">type</span> User <span class="token keyword">struct</span> <span class="token punctuation">{</span>
@@ -558,8 +558,41 @@ import ">
         fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token function">string</span><span class="token punctuation">(</span>bdata<span class="token punctuation">)</span><span class="token punctuation">)</span>
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>结果</p>
+<p>结果：</p>
 <pre class="line-numbers language-json"><code class="language-json"><span class="token punctuation">{</span><span class="token property">"name"</span><span class="token operator">:</span><span class="token string">"valineliu"</span><span class="token punctuation">,</span><span class="token property">"email"</span><span class="token operator">:</span><span class="token string">"1749118121@qq.com"</span><span class="token punctuation">,</span><span class="token property">"blogs"</span><span class="token operator">:</span><span class="token number">100</span><span class="token punctuation">,</span><span class="token property">"read"</span><span class="token operator">:</span><span class="token number">200</span><span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="问题7：我能自定义一个struct如何转换成json吗？"><a href="#问题7：我能自定义一个struct如何转换成json吗？" class="headerlink" title="问题7：我能自定义一个struct如何转换成json吗？"></a>问题7：我能自定义一个struct如何转换成json吗？</h3><p>比如，我们有这样的结构：</p>
+<pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">type</span> Article <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+    Title   <span class="token builtin">string</span>    <span class="token string">`json:"title"`</span>
+    PubTime time<span class="token punctuation">.</span>Time <span class="token string">`json:"pubtime"`</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>直接<code>Marshal</code>后会是这样：</p>
+<pre class="line-numbers language-json"><code class="language-json"><span class="token punctuation">{</span><span class="token property">"title"</span><span class="token operator">:</span><span class="token string">"my_title"</span><span class="token punctuation">,</span><span class="token property">"pubtime"</span><span class="token operator">:</span><span class="token string">"2019-12-05T20:52:50.759801+08:00"</span><span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>如果我们想<code>pubtime</code>输出的时间是时间戳，可以自定义输出形式：</p>
+<pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">func</span> <span class="token punctuation">(</span>a Article<span class="token punctuation">)</span> <span class="token function">MarshalJSON</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">byte</span><span class="token punctuation">,</span> <span class="token builtin">error</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">type</span> Alias Article
+    <span class="token keyword">return</span> json<span class="token punctuation">.</span><span class="token function">Marshal</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token punctuation">{</span>
+        PubTime <span class="token builtin">int64</span> <span class="token string">`json:"pubtime"`</span>
+        Article
+    <span class="token punctuation">}</span><span class="token punctuation">{</span>
+        PubTime<span class="token punctuation">:</span> a<span class="token punctuation">.</span>PubTime<span class="token punctuation">.</span><span class="token function">Unix</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+        Article<span class="token punctuation">:</span>   a<span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>然而这样是不行的，执行后会报一个<code>fatal error: stack overflow</code>的错误。这是因为，在自定义的<code>MarshalJSON</code>函数里直接调用了<code>Article.MarshalJSON</code>函数，这样就无限调用了，直到报错。</p>
+<p>为了避免出现这个错误，可以定义一个别名（Alias）：</p>
+<pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">func</span> <span class="token punctuation">(</span>a Article<span class="token punctuation">)</span> <span class="token function">MarshalJSON</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">byte</span><span class="token punctuation">,</span> <span class="token builtin">error</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">type</span> Alias Article
+    <span class="token keyword">return</span> json<span class="token punctuation">.</span><span class="token function">Marshal</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token punctuation">{</span>
+        PubTime <span class="token builtin">int64</span> <span class="token string">`json:"pubtime"`</span>
+        Alias
+    <span class="token punctuation">}</span><span class="token punctuation">{</span>
+        PubTime<span class="token punctuation">:</span> a<span class="token punctuation">.</span>PubTime<span class="token punctuation">.</span><span class="token function">Unix</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+        Alias<span class="token punctuation">:</span>   <span class="token punctuation">(</span>Alias<span class="token punctuation">)</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>结果：</p>
+<pre class="line-numbers language-json"><code class="language-json"><span class="token punctuation">{</span><span class="token property">"pubtime"</span><span class="token operator">:</span><span class="token number">1575638467</span><span class="token punctuation">,</span><span class="token property">"title"</span><span class="token operator">:</span><span class="token string">"my_title"</span><span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>完美。</p>
 <h3 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h3><p>这篇文章的结束不是这个话题的结束。关于go语言中使用json还有很多话题可以讨论，这里仅仅是将go中的struct转换成json输出，此外，还有将json转换成struct，以及自定义<code>Marshal</code>和<code>Unmarshal</code>函数等话题。</p>
 
             </div>
