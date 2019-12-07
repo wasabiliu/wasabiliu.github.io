@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://deuterium.fun/"/>
-  <updated>2019-12-06T13:21:46.096Z</updated>
+  <updated>2019-12-07T12:42:07.303Z</updated>
   <id>http://deuterium.fun/</id>
   
   <author>
@@ -15,6 +15,36 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>What is physics</title>
+    <link href="http://deuterium.fun/2019/12/07/what-is-physics/"/>
+    <id>http://deuterium.fun/2019/12/07/what-is-physics/</id>
+    <published>2019-12-07T12:41:20.000Z</published>
+    <updated>2019-12-07T12:42:07.303Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;blockquote&gt;
+&lt;p&gt;这篇文章是阅读《费恩曼物理学讲义 第一卷 新千年版》第1-3章的阅读笔记。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&quot;1-从一片沙滩开始&quot;&gt;&lt;a href=&quot;#1-从一片沙滩开始&quot; class=&quot;headerlink&quot;
+        
+      
+    
+    </summary>
+    
+    
+      <category term="physics" scheme="http://deuterium.fun/categories/physics/"/>
+    
+    
+      <category term="physics" scheme="http://deuterium.fun/tags/physics/"/>
+    
+  </entry>
   
   <entry>
     <title>Go struct to json</title>
