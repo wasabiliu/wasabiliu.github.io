@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://deuterium.fun/"/>
-  <updated>2019-12-08T06:52:28.862Z</updated>
+  <updated>2019-12-08T11:00:33.341Z</updated>
   <id>http://deuterium.fun/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="http://deuterium.fun/2019/12/08/character-sets-and-collations-in-mysql/"/>
     <id>http://deuterium.fun/2019/12/08/character-sets-and-collations-in-mysql/</id>
     <published>2019-12-08T06:51:46.000Z</published>
-    <updated>2019-12-08T06:52:28.862Z</updated>
+    <updated>2019-12-08T11:00:33.341Z</updated>
     
     <summary type="html">
     
@@ -30,7 +30,7 @@
         
         
           &lt;p&gt;最近遇到一个关于MySQL字符乱码的问题，比较好解决，但是为了更好地理解MySQL中的字符系统，参考MySQL的文档整理一下关于MySQL中字符集合字符序的问题。&lt;/p&gt;
-&lt;h3 id=&quot;1-什么是字符集合字符序&quot;&gt;&lt;a href=&quot;#1-什么是字符集合字符序&quot;
+&lt;h3 id=&quot;1-什么是字符集和字符序&quot;&gt;&lt;a href=&quot;#1-什么是字符集和字符序&quot;
         
       
     
