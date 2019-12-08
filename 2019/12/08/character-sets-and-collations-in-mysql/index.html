@@ -4,12 +4,9 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="What is physics, Deuterium">
-    <meta name="description" content="
-这篇文章是阅读《费恩曼物理学讲义 第一卷 新千年版》第1-3章的阅读笔记。
-
-1. 从一片沙滩开始我们生活在一个多姿多彩的世界中。
-想象一下，去年的某一天，我们正在一个美丽的海边沙滩享受着没有工作烦恼的美妙时光。你躺在柔软细密的沙滩上，不">
+    <meta name="keywords" content="Character Sets and Collations in MySQL, Deuterium">
+    <meta name="description" content="最近遇到一个关于MySQL字符乱码的问题，比较好解决，但是为了更好地理解MySQL中的字符系统，参考MySQL的文档整理一下关于MySQL中字符集合字符序的问题。
+1. 什么是字符集合字符序MySQL是存储数据的数据库，既然是存储数据的，那">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -17,7 +14,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>What is physics | Deuterium</title>
+    <title>Character Sets and Collations in MySQL | Deuterium</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -246,13 +243,13 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/13.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/20.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
                     <div class="description center-align post-title">
-                        What is physics
+                        Character Sets and Collations in MySQL
                     </div>
                 </div>
             </div>
@@ -370,8 +367,12 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/physics/">
-                                <span class="chip bg-color">physics</span>
+                            <a href="/tags/mysql/">
+                                <span class="chip bg-color">mysql</span>
+                            </a>
+                        
+                            <a href="/tags/charset/">
+                                <span class="chip bg-color">charset</span>
                             </a>
                         
                     </div>
@@ -382,8 +383,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/physics/" class="post-category">
-                                physics
+                            <a href="/categories/mysql/" class="post-category">
+                                mysql
                             </a>
                         
                     </div>
@@ -395,7 +396,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
-                    2019-12-07
+                    2019-12-08
                 </div>
                 
 
@@ -404,7 +405,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    2k
+                    1.7k
                 </div>
                 
 
@@ -422,49 +423,117 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <blockquote>
-<p>这篇文章是阅读《费恩曼物理学讲义 第一卷 新千年版》第1-3章的阅读笔记。</p>
-</blockquote>
-<h3 id="1-从一片沙滩开始"><a href="#1-从一片沙滩开始" class="headerlink" title="1. 从一片沙滩开始"></a>1. 从一片沙滩开始</h3><p>我们生活在一个多姿多彩的世界中。</p>
-<p>想象一下，去年的某一天，我们正在一个美丽的海边沙滩享受着没有工作烦恼的美妙时光。你躺在柔软细密的沙滩上，不远处就是蔚蓝的大海，海水波光粼粼，海风吹拂，你感受到了凉爽，海水在海风的吹拂下翻起阵阵海浪；海水拍打在海中岩石上，激起浪花与泡沫；海水中生活着许许多多不同的生物，也许海绵宝宝和派大星正在不远处的海底捉水母；太阳挂在天上，持续不断发着光；望着这一切，作为观察者的你在想着什么呢？或许是晚上吃啥以及和她那美好的回忆与幸福。</p>
-<p><img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/Physics/beach.jpg" alt=""></p>
-<p>除了这些，我们生活的世界还有许许多多的错综复杂以及变化无穷。那么，这些事物到底是什么呢？是什么使得它们如此不同，但在某些方面又表现得如此相同？面对这一切，作为智慧生物，我们的好奇心驱使我们，提出种种问题，把事物联系起来，而将它们的种种表现理解为或许是由较少量的基本事物和相互作用以无穷多的方式组合后所产生的的结果。毕竟，阿瑟·克拉克说，“心智”是宇宙间最珍贵的东西。</p>
-<p><img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/Physics/A%20Space%20Odyssey.jpg" alt="2001：太空漫游"></p>
-<p>比如，沙粒和岩石是两回事儿吗？也许沙粒就是小小的岩石？那月亮是否也是岩石呢？如果我们了解了岩石，是不是就了解了沙粒和月亮呢？</p>
-<p>再比如，风是不是和海洋里的水流类似，就是一种空气的流动？不同的运动有什么共同性质呢？</p>
-<p>等等。我们就是希望试图了解我们所生活环境中的所有问题，将乍看起来不同的事物联系起来，减少不同事物的数目，从而能更好地理解它们。</p>
-<h3 id="2-什么是理解"><a href="#2-什么是理解" class="headerlink" title="2. 什么是理解"></a>2. 什么是理解</h3><p>既然我们希望理解所有的事物，那么首先就应该先问问自己，<strong>什么是理解？</strong>毕竟，有目标才能更好达成目标。</p>
-<p>想象一下，整个世界的运作方式是无所不能的神们所下的一盘巨大的琪。下棋有下棋的规则，我们就是这盘棋的观众。作为普通的观众我们不知道神们下棋的规则，只能看神们是如何下棋的，并以此来猜测棋的规则。就像小时候在旁边看父亲下棋一样。</p>
-<img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/Physics/chess.jpg" alt="" width="50%" height="50%">
-
-<p>如果我们看得够多了，我们就能猜出一些规则来。但即使我们能够猜出一些规则，我们也不能很好地理解某一步棋为什么要那么走，这仅仅是因为情况太复杂了，而我们的智力又是有限的。</p>
-<p>如果你会下象棋，就会知道，知道象棋的规则与如何下好是很不同的。</p>
-<p>自然界也是如此，但是自然更加复杂。</p>
-<p>我们要做的，就是尽可能知道更多的规则，知道了这些规则，就可以说“理解”了世界。</p>
-<h3 id="3-如何理解"><a href="#3-如何理解" class="headerlink" title="3. 如何理解"></a>3. 如何理解</h3><p>几百年前，人们就已经想出了一些方法，那就是：观察、推理和实验，这就是通常所说的科学方法。更详细一点，就是下面这样：</p>
-<img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/Physics/science.JPG" alt="" width="50%" height="50%">
-
-<p>虽然通过上面的方法我们可以得到一些规则，但是，这些规则都是对大自然整个真理的近似，因为我们不知道所有的规则，所以只能一步一步去近似，这样我们才能更好地理解。</p>
-<p>对于理解的检验，有一条科学的原则：实验是一切知识的试金石。</p>
-<h3 id="4-怎么知道我们理解的对呢？"><a href="#4-怎么知道我们理解的对呢？" class="headerlink" title="4. 怎么知道我们理解的对呢？"></a>4. 怎么知道我们理解的对呢？</h3><p>之前我们说过，我们不能全面地理解神们下的棋。既然这样，我们怎么知道我们已经知道的规则就是正确的呢？</p>
-<p>一共有三种办法。第一个，我们首先将大自然安排得非常简单，只有几个部分组成。因为简单，我们可以正确地预测会发生什么事。</p>
-<p>比如，对于象棋，我们知道棋盘上有格子和线条的交叉点。通过几次（甚至一次）观察我们就知道，棋子是放在线条交叉点上的而不是格子里（国际象棋是放在格子里）。</p>
-<p>第二个，利用由已知规则推导出来的较一般性法则来检验已知规则本身。</p>
-<p>比如，我们可能发现，“卒”和“兵”只能前进，不能后退，因此我们可以推断，“卒”和“兵”只能在最开始所在的那条直线上。但是随着更多的观察我们发现，有的“卒”和“兵”在越过中间的楚河汉界之后，还能左右移动，但不管怎样，它们还是不能后退而只能前进。这样，我们通过新发生的现象，更好地理解了之前已知的规则。</p>
-<p>第三个比较粗糙，就是用粗略的近似方法来加以辨别。我们可能不知道公园老大爷那么走的原因，但我们可以猜测，那肯定是为了化解对方的一次将军。同样，根据我们对自然的理解，即使我们不能看出所有事物的规则，我们也能更多地理解我们的自然。</p>
-<h3 id="5-什么是物理"><a href="#5-什么是物理" class="headerlink" title="5. 什么是物理"></a>5. 什么是物理</h3><p>说了这么多，终于到了主题：<strong>什么是物理。</strong></p>
-<p>“物理”一词在英文里是“physics”，最先出自于古希腊文“φύσις”，原意是“自然”。在中文里，这词最早可在战国时期佚书《鹖冠子·王𫓧篇》找到，“愿闻其人情物理所以啬万物与天地总与神明体正之道。”在这里，“物理”指的是一切事物之道理。</p>
-<p>上面说了好多自然啊、事物啊、理解啊、规则啊什么的，其实物理就是研究万物运行的道理。</p>
-<h3 id="6-物理学与其他科学的关系"><a href="#6-物理学与其他科学的关系" class="headerlink" title="6. 物理学与其他科学的关系"></a>6. 物理学与其他科学的关系</h3><p>假如人类遭遇了末日，所有的科学知识都丢了，只能把一句话留给后人，那么怎么用最少的字传递最多的知识呢？</p>
+                <p>最近遇到一个关于MySQL字符乱码的问题，比较好解决，但是为了更好地理解MySQL中的字符系统，参考MySQL的文档整理一下关于MySQL中字符集合字符序的问题。</p>
+<h3 id="1-什么是字符集合字符序"><a href="#1-什么是字符集合字符序" class="headerlink" title="1. 什么是字符集合字符序"></a>1. 什么是字符集合字符序</h3><p>MySQL是存储数据的数据库，既然是存储数据的，那么数据就需要一个编码的规则，因为计算机对于所有的数据都是通过二进制编码的方式存储的。字符集（Character Sets），就是字符到二进制编码映射的集合。由于不同的语言所包含的字符不同，所以为了支持不同的语言，MySQL定义了许许多多不同的字符集。</p>
+<p>举一个简单的例子，假如我们有一种语言只有四个字符：<code>A, B, a, b</code>。</p>
+<p>我们规定了这四个字符到二进制编码的规则：</p>
+<table>
+<thead>
+<tr>
+<th>Symbol</th>
+<th>Encoding</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>A</code></td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>B</code></td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>a</code></td>
+<td>2</td>
+</tr>
+<tr>
+<td><code>b</code></td>
+<td>3</td>
+</tr>
+</tbody></table>
+<p>在这里，<code>A</code>就是一个字符，而数字0就是字符<code>A</code>的编码，这四个字符和编码组合在一起就是字符集。</p>
+<p>接下来看看什么是字符序（Collations）。</p>
+<p>对于上面的字符集，我们需要有一个比较的规则。比如，我们想比较<code>A</code>和<code>B</code>，当然结果有三种：等于、小于或大于。但我们熟悉的还是<code>A&lt;B</code>。一种简单的方式就是比较他们的编码数字。因为<code>0&lt;1</code>，所以对应的字符<code>A&lt;B</code>。</p>
+<p>这样就构成了一条字符比较的规则。这样的一条规则就可以构成一个字符序。</p>
+<p>进一步，如果我们规定大写字母和对应的小写字母相等呢？这样就又多了一条规则：</p>
 <blockquote>
-<p>所有的物体都是由原子构成的——这些原子是一些小小的粒子，它们一直不停地运动着，当彼此略微离开时相互吸引，当彼此过于挤紧时又相互排斥。</p>
+<p><code>a</code>=<code>A</code>, <code>b</code>=<code>B</code></p>
 </blockquote>
-<p>这一句话，包含了关于这个世界的大量信息。</p>
-<p>这也是物理和其他科学的关系的基石。因为所有的物体都是由原子构成的，其他的科学研究的也是各种物体，不管是化学研究的有机物和无机物，生物研究的各种生命体，天文学研究各种天体，以及地质学研究的各种地质问题，归根结底研究的都是“物体”，而所有的物体都是由原子构成的。</p>
-<p><img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/Physics/relations.png" alt=""></p>
-<p>这并不是没有了物理学我们就不能开展其他科学研究了。仅仅是研究的不同角度而已。物理不能回答为什么青蛙会跳，但是物理知道青蛙是什么，就是一堆堆不同的分子组成的一个物体，仅此而已。</p>
-<h3 id="7-那么，开始吧"><a href="#7-那么，开始吧" class="headerlink" title="7. 那么，开始吧"></a>7. 那么，开始吧</h3><p>最后，跟着费恩曼的脚步，逐渐理解我们的世界，慢慢品味物理的美酒。</p>
-<p><img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/Physics/feynman.png" alt=""></p>
+<p>这样，两条比较的规则就又构成了一个字符序。</p>
+<p>通过这个简单的例子，我们可以知道：</p>
+<ol>
+<li>字符集就是字符到二进制编码的映射集合；</li>
+<li>字符序是比较字符集的规则集合；</li>
+<li>一个字符集可能有多个字符序。</li>
+</ol>
+<p>在MySQL中，定义了许多字符集合字符序。这些字符集合字符序可以帮助我们处理很多字符相关的问题。</p>
+<h3 id="2-MySQL中的字符集合字符序"><a href="#2-MySQL中的字符集合字符序" class="headerlink" title="2. MySQL中的字符集合字符序"></a>2. MySQL中的字符集合字符序</h3><p>在MySQL中，我们可以使用如下的语句来查看字符集：</p>
+<pre class="line-numbers language-mysql"><code class="language-mysql">SHOW CHARACTER SET;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>这会列出所有的字符集。如果想筛选的话，可以加上<code>LIKE</code>条件：</p>
+<pre class="line-numbers language-mysql"><code class="language-mysql">SHOW CHARATER SET LIKE 'utf%';<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>结果如下：</p>
+<pre class="line-numbers language-shell"><code class="language-shell">+---------+------------------+--------------------+--------+
+| Charset | Description      | Default collation  | Maxlen |
++---------+------------------+--------------------+--------+
+| utf16   | UTF-16 Unicode   | utf16_general_ci   |      4 |
+| utf16le | UTF-16LE Unicode | utf16le_general_ci |      4 |
+| utf32   | UTF-32 Unicode   | utf32_general_ci   |      4 |
+| utf8    | UTF-8 Unicode    | utf8_general_ci    |      3 |
+| utf8mb4 | UTF-8 Unicode    | utf8mb4_0900_ai_ci |      4 |
++---------+------------------+--------------------+--------+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>结果返回了字符集的名称、描述、默认字符序以及单个字符最大长度等信息。</p>
+<p>每一个字符集都有一个默认的字符序，有的字符集有多个字符序，可以通过下面的语句查看一个字符集的字符序：</p>
+<pre class="line-numbers language-mysql"><code class="language-mysql">SHOW COLLATION WHERE Charset = 'utf8mb4';<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>返回的结果会列出所有的字符序以及相关的信息，这里就不展示了。</p>
+<p>字符序有下面的特点：</p>
+<ol>
+<li>两个不同的字符集不会有相同的字符序。也就是每个字符集都有自己单独的字符序小弟，大家不会有交集；</li>
+<li>每一个字符集都有一个默认的字符序；</li>
+<li>字符序的名字是以对应的字符集名称为前缀的。</li>
+</ol>
+<img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/MySQL/characterset.PNG">
+
+<h3 id="3-在MySQL中使用字符集"><a href="#3-在MySQL中使用字符集" class="headerlink" title="3. 在MySQL中使用字符集"></a>3. 在MySQL中使用字符集</h3><p>MySQL中有很多可以控制字符集的选项，这些选项过于复杂很容易混淆。不过记住一点：</p>
+<blockquote>
+<p>只有基于字符的值才真正的“有”字符集的概念。</p>
+</blockquote>
+<p>对于其他类型的值，字符集只是一个设置，用来指定用哪一种字符进行比较或操作。基于字符的值能存放在某列中、查询的字符中、表达式的计算结果中或者某个用户变量中，等等。</p>
+<p>MySQL中字符集的设置可以分为两类：创建对象时的默认值、在服务器和客户端通信时的设置。</p>
+<h4 id="3-1-创建对象时的默认设置"><a href="#3-1-创建对象时的默认设置" class="headerlink" title="3.1 创建对象时的默认设置"></a>3.1 创建对象时的默认设置</h4><p>在MySQL中，从上到下一共有四层字符集的设置，分别是服务器（Server）、数据库（Database）、表（Table）和列（Column），在每一层都可以指定一个默认的字符集：</p>
+<img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/MySQL/charset_layers.PNG">
+
+<p>其中，服务器和数据库的字符集设置有对应的参数：<code>character_set_server</code>和<code>character_set_database</code>，表和列的字符集设置在对应的DDL语句中。</p>
+<p>由于真正存放数据的是列，所以更高层次的字符集设置仅仅是指定一个默认值，如果在创建列时没有知道字符集，就会从下到上寻找设置的字符集。如果指定了一个字符集，那么上面所有层次的设置都没有效果了。</p>
+<p>在MySQL 5.5、5.6和5.7中，默认的字符集是latin1，在最新的MySQL 8中，默认的字符集是utf8。</p>
+<h4 id="3-2-服务器和客户端通信时的设置"><a href="#3-2-服务器和客户端通信时的设置" class="headerlink" title="3.2 服务器和客户端通信时的设置"></a>3.2 服务器和客户端通信时的设置</h4><p>当服务器和客户端进行通信时，可能各自使用不同的字符集。这时，服务器需要进行字符的转换工作。这涉及到MySQL中的三个参数：<code>character_set_client</code>、<code>character_set_connection</code>和<code>character_set_results</code>。</p>
+<p>这三个参数的影响效果如下图所示：</p>
+<img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/MySQL/charset_communacate.PNG">
+
+<p>这里服务器进行了两次翻译过程：</p>
+<ol>
+<li>SQL语句从客户端离开时的字符集是<code>character_set_client</code>；</li>
+<li>SQL语句进入服务器后服务器转换成<code>character_set_connection</code>；</li>
+<li>服务器处理完SQL语句后，将结果的字符集设置成了<code>character_set_results</code>。</li>
+</ol>
+<p>根据需要，可以使用<code>SET NAMES</code>或者<code>SET CHARACTER SET</code>语句来改变上面的设置：</p>
+<pre class="line-numbers language-mysql"><code class="language-mysql">SET NAMES 'utf8';<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>这样，会将<code>character_set_client</code>、<code>character_set_connection</code>和<code>character_set_results</code>都设置成utf8。</p>
+<p>不过在服务器上使用这个命令只能改变服务器端的设置，客户端程序也需要设置正确的字符集才能避免出现问题。</p>
+<h4 id="3-3-小结"><a href="#3-3-小结" class="headerlink" title="3.3 小结"></a>3.3 小结</h4><p>可以通过<code>SHOW VARIABLES LIKE &#39;character%&#39;</code>命令来查看这些参数的值：</p>
+<pre class="line-numbers language-shell"><code class="language-shell">+--------------------------+-----------------------------------------------------------+
+| Variable_name            | Value                                                     |
++--------------------------+-----------------------------------------------------------+
+| character_set_client     | latin1                                                    |
+| character_set_connection | latin1                                                    |
+| character_set_database   | utf8mb4                                                   |
+| character_set_filesystem | binary                                                    |
+| character_set_results    | latin1                                                    |
+| character_set_server     | utf8mb4                                                   |
+| character_set_system     | utf8                                                      |
+| character_sets_dir       | /usr/local/mysql-8.0.13-macos10.14-x86_64/share/charsets/ |
++--------------------------+-----------------------------------------------------------+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="4-字符集的选择"><a href="#4-字符集的选择" class="headerlink" title="4. 字符集的选择"></a>4. 字符集的选择</h3><p>使用不同的字符集会带来更多的CPU操作，可能也会消耗更多的内存和磁盘空间。因此，为了方便，最好先为服务器（或者数据库）设置一个合理的字符集，然后根据不同的情况让某些列选择合适的字符集，</p>
+<p>如果统一使用utf8字符集，整个世界都清净了。这也是很常见的一种做法。不过有的时候并不需要使用utf8，使用utf8之后会增加磁盘空间的消耗。</p>
 
             </div>
             <hr/>
@@ -490,7 +559,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://deuterium.fun/2019/12/07/what-is-physics/">http://deuterium.fun/2019/12/07/what-is-physics/</a>
+                    <a href="http://deuterium.fun/2019/12/08/character-sets-and-collations-in-mysql/">http://deuterium.fun/2019/12/08/character-sets-and-collations-in-mysql/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -528,8 +597,12 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/physics/">
-                                    <span class="chip bg-color">physics</span>
+                                <a href="/tags/mysql/">
+                                    <span class="chip bg-color">mysql</span>
+                                </a>
+                            
+                                <a href="/tags/charset/">
+                                    <span class="chip bg-color">charset</span>
                                 </a>
                             
                         </div>
@@ -833,9 +906,10 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
+                <i class="far fa-dot-circle"></i>&nbsp;Current
+            </div>
             <div class="card">
                 <a href="/2019/12/08/character-sets-and-collations-in-mysql/">
                     <div class="card-image">
@@ -854,9 +928,9 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2019-12-08
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2019-12-08
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -869,6 +943,7 @@
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -891,35 +966,35 @@
                 Next&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2019/12/05/go-struct-to-json/">
+                <a href="/2019/12/07/what-is-physics/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/22.jpg" class="responsive-img" alt="Go struct to json">
+                        <img src="/medias/featureimages/13.jpg" class="responsive-img" alt="What is physics">
                         
-                        <span class="card-title">Go struct to json</span>
+                        <span class="card-title">What is physics</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            最近做了一些将go中结构体输出到json的事情，各种花样输出，在这里整理一下。
-问题1：如何将struct转成json？这是最简单的一种情况，直接使用encoding/json包中的函数就可以了：
-package main
+                            
+这篇文章是阅读《费恩曼物理学讲义 第一卷 新千年版》第1-3章的阅读笔记。
 
-import 
+1. 从一片沙滩开始我们生活在一个多姿多彩的世界中。
+想象一下，去年的某一天，我们正在一个美丽的海边沙滩享受着没有工作烦恼的美妙时光。你躺在柔软细密的沙滩上，不
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2019-12-05
+                                <i class="far fa-clock fa-fw icon-date"></i>2019-12-07
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/programming/" class="post-category">
-                                    programming
+                            <a href="/categories/physics/" class="post-category">
+                                    physics
                                 </a>
                             
                             
@@ -929,12 +1004,8 @@ import
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/go/">
-                        <span class="chip bg-color">go</span>
-                    </a>
-                    
-                    <a href="/tags/json/">
-                        <span class="chip bg-color">json</span>
+                    <a href="/tags/physics/">
+                        <span class="chip bg-color">physics</span>
                     </a>
                     
                 </div>
