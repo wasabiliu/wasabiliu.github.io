@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>File to Redis</title>
+      <link href="/2019/12/10/file-to-redis/"/>
+      <url>/2019/12/10/file-to-redis/</url>
+      
+        <content type="html"><![CDATA[<p>问题是这样的，现在需要把一个文件里的所有数据上传到redis的set中，文件里存储的就是ID，每行一个：</p><pre class="line-numbers language-shell"><code class="language-shell">head id.list10000100011000210003100041000510006100071000810009<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>为了将这一万条记录添加到redis中的某个set中，需要写一个脚本来执行这个操作。</p><p>主要的思路就是构造一个如下命令组成的一堆命令：</p><pre class="line-numbers language-shell"><code class="language-shell">sadd setname 10000<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>然后使用<code>redis-cli</code>将命令通过pipeline的形式发送到服务器。流程如下：</p><img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/Redis/file2redis.PNG"><p>下面就是生成命令的shell脚本：</p><pre class="line-numbers language-shell"><code class="language-shell">#!/bin/bashINFILE=$1SETKEY=$2TOFILE=${SETKEY}'.data'echo $TOFILErm $TOFILE >/dev/null 2>&1while IFS= read -r line; do    echo "sadd $SETKEY $line" >> $TOFILEdone < $INFILEunix2dos $TOFILEcat $TOFILE | ./redis-cli --pipe<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>在脚本的最后，通过下面的命令将所有的redis命令发送到了redis服务器中：</p><pre class="line-numbers language-shell"><code class="language-shell">cat $TOFILE | ./redis-cli --pipe<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>可以在redis中查看是否正确。</p><p>对于将数据导入redis的其它格式中，也是类似的过程，只需要把循环中添加的命令改成需要的形式就可以了。</p><p>Done</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> redis </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> redis </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Character Sets and Collations in MySQL</title>
       <link href="/2019/12/08/character-sets-and-collations-in-mysql/"/>
       <url>/2019/12/08/character-sets-and-collations-in-mysql/</url>
