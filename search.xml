@@ -42,14 +42,14 @@
           
           <category> redis </category>
           
-          <category> tips </category>
-          
       </categories>
       
       
         <tags>
             
             <tag> redis </tag>
+            
+            <tag> tips </tag>
             
         </tags>
       
