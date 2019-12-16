@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://deuterium.fun/"/>
-  <updated>2019-12-16T08:54:45.417Z</updated>
+  <updated>2019-12-16T09:37:11.916Z</updated>
   <id>http://deuterium.fun/</id>
   
   <author>
@@ -15,6 +15,35 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Data Types in MySQL</title>
+    <link href="http://deuterium.fun/2019/12/16/data-types-in-mysql/"/>
+    <id>http://deuterium.fun/2019/12/16/data-types-in-mysql/</id>
+    <published>2019-12-16T09:32:58.000Z</published>
+    <updated>2019-12-16T09:37:11.916Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h3 id=&quot;1-开始&quot;&gt;&lt;a href=&quot;#1-开始&quot; class=&quot;headerlink&quot; title=&quot;1. 开始&quot;&gt;&lt;/a&gt;1.
+        
+      
+    
+    </summary>
+    
+    
+      <category term="mysql" scheme="http://deuterium.fun/categories/mysql/"/>
+    
+    
+      <category term="mysql" scheme="http://deuterium.fun/tags/mysql/"/>
+    
+      <category term="data_type" scheme="http://deuterium.fun/tags/data-type/"/>
+    
+  </entry>
   
   <entry>
     <title>File to Redis</title>
