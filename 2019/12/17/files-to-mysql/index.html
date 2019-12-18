@@ -5,8 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="keywords" content="Files to MySQL, Deuterium">
-    <meta name="description" content="问题：把一个本地的文件（比如.txt或.csv文件）导入到指定的一张MySQL表中。可以使用mysqlimport或者LOAD DATA命令来完成。这篇文章仅仅是简单介绍一下mysqlimport和LOAD DATA的简单用法。
-1. Pr">
+    <meta name="description" content="问题：把一个本地的文件（比如.txt或.csv文件）导入到指定的一张MySQL表中。可以使用mysqlimport或者LOAD DATA命令来完成。这篇文章仅仅是简单介绍一下mysqlimport和LOAD DATA的简单用法。关于LOAD">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -405,7 +404,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    543
+                    560
                 </div>
                 
 
@@ -423,7 +422,7 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p><strong>问题</strong>：把一个本地的文件（比如.txt或.csv文件）导入到指定的一张MySQL表中。可以使用mysqlimport或者<code>LOAD DATA</code>命令来完成。这篇文章仅仅是简单介绍一下mysqlimport和<code>LOAD DATA</code>的简单用法。</p>
+                <p><strong>问题</strong>：把一个本地的文件（比如.txt或.csv文件）导入到指定的一张MySQL表中。可以使用mysqlimport或者<code>LOAD DATA</code>命令来完成。这篇文章仅仅是简单介绍一下mysqlimport和<code>LOAD DATA</code>的简单用法。关于<code>LOAD DATA</code>的详细说明，参考<a href="http://deuterium.fun/2019/12/18/what-happens-when-using-load-data/">What Happens When Using LOAD DATA</a>。</p>
 <h3 id="1-Prework：创建测试表和文件"><a href="#1-Prework：创建测试表和文件" class="headerlink" title="1. Prework：创建测试表和文件"></a>1. Prework：创建测试表和文件</h3><p>首先创建一个测试表：</p>
 <pre class="line-numbers language-mysql"><code class="language-mysql">CREATE TABLE one_piece (
     `no`    INT,
