@@ -440,7 +440,7 @@
 <span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
     http<span class="token punctuation">.</span><span class="token function">ListenAndServe</span><span class="token punctuation">(</span><span class="token string">""</span><span class="token punctuation">,</span><span class="token boolean">nil</span><span class="token punctuation">)</span>
 <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>使用<code>go run</code>命令执行程序，然后在本地浏览器打开<a href="http://localhost，得到`404" target="_blank" rel="noopener">http://localhost，得到`404</a> page not found`的错误。</p>
+<p>使用<code>go run</code>命令执行程序，然后在本地浏览器打开<a href="http://localhost" target="_blank" rel="noopener">http://localhost</a> ，得到<code>404 page not found</code>的错误。</p>
 <p>这就是一个最简单的服务器，什么也不做，但确实是一个服务器。</p>
 <p>现在MindMap里多了点东西：</p>
 <img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/Programming/goweb2.png">
@@ -502,7 +502,7 @@
 <pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">type</span> Handler <span class="token keyword">interface</span> <span class="token punctuation">{</span>
     <span class="token function">ServeHTTP</span><span class="token punctuation">(</span>ResponseWriter<span class="token punctuation">,</span> <span class="token operator">*</span>Request<span class="token punctuation">)</span>
 <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-<p>任何结构只要有一个签名是这样的函数，都可以作为<code>Server</code>的处理器；同样，任何任何接受这两个参数的函数，也可以当做一个处理器。</p>
+<p>任何结构只要有一个签名是这样的函数，都可以作为<code>Server</code>的处理器；同样，任何接受这两个参数的函数，也可以当做一个处理器。</p>
 <p>不过这么做有个明显的缺陷就是，服务器不会通过URL来将请求路由到不同的处理器。为了能根据URL处理不同的请求，我们需要多个处理器。</p>
 <img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/Programming/goweb4.png">
 
@@ -529,7 +529,7 @@
 
     s<span class="token punctuation">.</span><span class="token function">ListenAndServe</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>在这里定义了两个<code>Handler</code>，然后通过<code>http.Handle()</code>函数注册这两个<code>Handler</code>而不是直接对<code>Server</code>指定，这样就可以使用两个处理器了。在浏览器中分别访问<a href="http://localhost:8080/hello和http://localhost:8080/world可以得到不同的结果。" target="_blank" rel="noopener">http://localhost:8080/hello和http://localhost:8080/world可以得到不同的结果。</a></p>
+<p>在这里定义了两个<code>Handler</code>，然后通过<code>http.Handle()</code>函数注册这两个<code>Handler</code>而不是直接对<code>Server</code>指定，这样就可以使用两个处理器了。在浏览器中分别访问<a href="http://localhost:8080/hello" target="_blank" rel="noopener">http://localhost:8080/hello</a> 和 <a href="http://localhost:8080/world" target="_blank" rel="noopener">http://localhost:8080/world</a> 可以得到不同的结果。</p>
 <p>来看看<code>http.Handle()</code>函数做了什么：</p>
 <pre class="line-numbers language-go"><code class="language-go"><span class="token comment" spellcheck="true">// Handle registers the handler for the given pattern</span>
 <span class="token comment" spellcheck="true">// in the DefaultServeMux.</span>
