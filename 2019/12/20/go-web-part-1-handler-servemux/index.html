@@ -1,0 +1,1441 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="Go Web (Part 1): Handler &amp; ServeMux, Deuterium">
+    <meta name="description" content="1. Begin使用Go语言的标准库net/http可以快速构建一个简单的web服务。这篇文章从零开始构建一个简单的web服务器，并主要聚焦于处理器Handler和多路复用器ServeMux。
+在开始之前，MindMap里一无所有：
+
+
+2">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Go Web (Part 1): Handler &amp; ServeMux | Deuterium</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+    
+    <script src="/libs/jquery/jquery.min.js"></script>
+    
+<link rel="alternate" href="/atom.xml" title="Deuterium" type="application/atom+xml">
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper head-container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">Deuterium</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>Home</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>Tags</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>Categories</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>Archives</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>About</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>Contact</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>Friends</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="Search" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">Deuterium</div>
+        <div class="logo-desc">
+            
+            Software and anecdotes.
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			Home
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			Tags
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			Categories
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			Archives
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			About
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			Contact
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			Friends
+		</a>
+          
+        </li>
+        
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/0.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <div class="description center-align post-title">
+                        Go Web (Part 1): Handler &amp; ServeMux
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        height: calc(100vh - 250px);
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #3B5998;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #3B5998;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #3B5998;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/go/">
+                                <span class="chip bg-color">go</span>
+                            </a>
+                        
+                            <a href="/tags/web/">
+                                <span class="chip bg-color">web</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/programming/" class="post-category">
+                                programming
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
+                    2019-12-20
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
+                    2.5k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>Read Times:&nbsp;&nbsp;
+                    10 Min
+                </div>
+                
+				
+                
+            </div>
+            
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h3 id="1-Begin"><a href="#1-Begin" class="headerlink" title="1. Begin"></a>1. Begin</h3><p>使用Go语言的标准库<code>net/http</code>可以快速构建一个简单的web服务。这篇文章从零开始构建一个简单的web服务器，并主要聚焦于处理器Handler和多路复用器ServeMux。</p>
+<p>在开始之前，MindMap里一无所有：</p>
+<img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/Programming/goweb1.png">
+
+<h3 id="2-The-Simplest-Server"><a href="#2-The-Simplest-Server" class="headerlink" title="2. The Simplest Server"></a>2. The Simplest Server</h3><p>使用<code>net/http</code>包中的<code>ListenAndServe()</code>函数可以快速构建一个最简单的服务器：</p>
+<pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">package</span> main
+
+<span class="token keyword">import</span> <span class="token punctuation">(</span>
+    <span class="token string">"net/http"</span>
+<span class="token punctuation">)</span>
+
+<span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    http<span class="token punctuation">.</span><span class="token function">ListenAndServe</span><span class="token punctuation">(</span><span class="token string">""</span><span class="token punctuation">,</span><span class="token boolean">nil</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>使用<code>go run</code>命令执行程序，然后在本地浏览器打开<a href="http://localhost，得到`404" target="_blank" rel="noopener">http://localhost，得到`404</a> page not found`的错误。</p>
+<p>这就是一个最简单的服务器，什么也不做，但确实是一个服务器。</p>
+<p>现在MindMap里多了点东西：</p>
+<img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/Programming/goweb2.png">
+
+<h3 id="3-发生了什么"><a href="#3-发生了什么" class="headerlink" title="3. 发生了什么"></a>3. 发生了什么</h3><p>调用<code>http.ListenAndServe()</code>函数就可以启动一个服务器，那么发生了什么呢？</p>
+<p>查看源码可知这个函数的实现：</p>
+<pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">func</span> <span class="token function">ListenAndServe</span><span class="token punctuation">(</span>addr <span class="token builtin">string</span><span class="token punctuation">,</span> handler Handler<span class="token punctuation">)</span> <span class="token builtin">error</span> <span class="token punctuation">{</span>
+    server <span class="token operator">:=</span> <span class="token operator">&amp;</span>Server<span class="token punctuation">{</span>Addr<span class="token punctuation">:</span> addr<span class="token punctuation">,</span> Handler<span class="token punctuation">:</span> handler<span class="token punctuation">}</span>
+    <span class="token keyword">return</span> server<span class="token punctuation">.</span><span class="token function">ListenAndServe</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>原来是通过构造一个<code>Server</code>并调用这个<code>Server</code>的<code>ListenAndServe()</code>函数实现的。</p>
+<p>那也就是说，我们可以自己构造一个<code>Server</code>，然后启动服务器：</p>
+<pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    s <span class="token operator">:=</span> http<span class="token punctuation">.</span>Server<span class="token punctuation">{</span>
+        Addr<span class="token punctuation">:</span>    <span class="token string">"127.0.0.1:8080"</span><span class="token punctuation">,</span>
+        Handler<span class="token punctuation">:</span> <span class="token boolean">nil</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span>
+    s<span class="token punctuation">.</span><span class="token function">ListenAndServe</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>启动之后结果一样（如果端口被占用可以换一个端口）。</p>
+<p>使用<code>http.ListenAndServe()</code>函数可以使用两个参数（<code>Addr</code>服务器地址和<code>Handler</code>处理器）就可以启动一个简单的服务。如果需要更加复杂的设置，需要使用<code>Server</code>结构。<code>Server</code>定义如下：</p>
+<pre class="line-numbers language-go"><code class="language-go"><span class="token comment" spellcheck="true">// A Server defines parameters for running an HTTP server.</span>
+<span class="token comment" spellcheck="true">// The zero value for Server is a valid configuration.</span>
+<span class="token keyword">type</span> Server <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+    Addr    <span class="token builtin">string</span>  <span class="token comment" spellcheck="true">// TCP address to listen on, ":http" if empty</span>
+    Handler Handler <span class="token comment" spellcheck="true">// handler to invoke, http.DefaultServeMux if nil</span>
+    TLSConfig <span class="token operator">*</span>tls<span class="token punctuation">.</span>Config
+    ReadTimeout time<span class="token punctuation">.</span>Duration
+    ReadHeaderTimeout time<span class="token punctuation">.</span>Duration
+    WriteTimeout time<span class="token punctuation">.</span>Duration
+    IdleTimeout time<span class="token punctuation">.</span>Duration
+    MaxHeaderBytes <span class="token builtin">int</span>
+    TLSNextProto <span class="token keyword">map</span><span class="token punctuation">[</span><span class="token builtin">string</span><span class="token punctuation">]</span><span class="token keyword">func</span><span class="token punctuation">(</span><span class="token operator">*</span>Server<span class="token punctuation">,</span> <span class="token operator">*</span>tls<span class="token punctuation">.</span>Conn<span class="token punctuation">,</span> Handler<span class="token punctuation">)</span>
+    ConnState <span class="token keyword">func</span><span class="token punctuation">(</span>net<span class="token punctuation">.</span>Conn<span class="token punctuation">,</span> ConnState<span class="token punctuation">)</span>
+    ErrorLog <span class="token operator">*</span>log<span class="token punctuation">.</span>Logger
+    BaseContext <span class="token keyword">func</span><span class="token punctuation">(</span>net<span class="token punctuation">.</span>Listener<span class="token punctuation">)</span> context<span class="token punctuation">.</span>Context
+    ConnContext <span class="token keyword">func</span><span class="token punctuation">(</span>ctx context<span class="token punctuation">.</span>Context<span class="token punctuation">,</span> c net<span class="token punctuation">.</span>Conn<span class="token punctuation">)</span> context<span class="token punctuation">.</span>Context
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这样，MindMap中又多了点东西，也知道了一些关联：</p>
+<img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/Programming/goweb3.png">
+
+<h3 id="3-处理器Handler"><a href="#3-处理器Handler" class="headerlink" title="3. 处理器Handler"></a>3. 处理器Handler</h3><p>由于<code>Handler</code>为空，所以这个服务器什么也不做只是返回404。为了让服务器做事情，需要添加处理器Handler：</p>
+<pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">type</span> MyHandler <span class="token keyword">struct</span><span class="token punctuation">{</span><span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token punctuation">(</span>mh <span class="token operator">*</span>MyHandler<span class="token punctuation">)</span> <span class="token function">ServeHTTP</span><span class="token punctuation">(</span>w http<span class="token punctuation">.</span>ResponseWriter<span class="token punctuation">,</span> r <span class="token operator">*</span>http<span class="token punctuation">.</span>Request<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    fmt<span class="token punctuation">.</span><span class="token function">Fprintf</span><span class="token punctuation">(</span>w<span class="token punctuation">,</span> <span class="token string">"Hello World"</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    s <span class="token operator">:=</span> http<span class="token punctuation">.</span>Server<span class="token punctuation">{</span>
+        Addr<span class="token punctuation">:</span>    <span class="token string">"127.0.0.1:8080"</span><span class="token punctuation">,</span>
+        Handler<span class="token punctuation">:</span> <span class="token operator">&amp;</span>MyHandler<span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span>
+    s<span class="token punctuation">.</span><span class="token function">ListenAndServe</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>执行结果就是得到了一个<code>Hello World</code>。</p>
+<p>这里定义了一个简单的处理器<code>MyHandler</code>，然后添加到定义的<code>Server</code>中。</p>
+<p>所以为了让服务器有事情做，需要定义<code>Handler</code>告诉它做什么。一个<code>Handler</code>其实是一个接口：</p>
+<pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">type</span> Handler <span class="token keyword">interface</span> <span class="token punctuation">{</span>
+    <span class="token function">ServeHTTP</span><span class="token punctuation">(</span>ResponseWriter<span class="token punctuation">,</span> <span class="token operator">*</span>Request<span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>任何结构只要有一个签名是这样的函数，都可以作为<code>Server</code>的处理器；同样，任何任何接受这两个参数的函数，也可以当做一个处理器。</p>
+<p>不过这么做有个明显的缺陷就是，服务器不会通过URL来将请求路由到不同的处理器。为了能根据URL处理不同的请求，我们需要多个处理器。</p>
+<img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/Programming/goweb4.png">
+
+<h3 id="4-多个Handler"><a href="#4-多个Handler" class="headerlink" title="4. 多个Handler"></a>4. 多个Handler</h3><p>直接对<code>Server</code>指定<code>Handler</code>只能添加一个处理器，为了支持多个处理器，需要别的做法：</p>
+<pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">type</span> HelloHandler <span class="token keyword">struct</span><span class="token punctuation">{</span><span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token punctuation">(</span>hh <span class="token operator">*</span>HelloHandler<span class="token punctuation">)</span> <span class="token function">ServeHTTP</span><span class="token punctuation">(</span>w http<span class="token punctuation">.</span>ResponseWriter<span class="token punctuation">,</span> r <span class="token operator">*</span>http<span class="token punctuation">.</span>Request<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    fmt<span class="token punctuation">.</span><span class="token function">Fprintf</span><span class="token punctuation">(</span>w<span class="token punctuation">,</span> <span class="token string">"Hello"</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">type</span> WorldHandler <span class="token keyword">struct</span><span class="token punctuation">{</span><span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token punctuation">(</span>wh <span class="token operator">*</span>WorldHandler<span class="token punctuation">)</span> <span class="token function">ServeHTTP</span><span class="token punctuation">(</span>w http<span class="token punctuation">.</span>ResponseWriter<span class="token punctuation">,</span> r <span class="token operator">*</span>http<span class="token punctuation">.</span>Request<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    fmt<span class="token punctuation">.</span><span class="token function">Fprintf</span><span class="token punctuation">(</span>w<span class="token punctuation">,</span> <span class="token string">"World"</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    s <span class="token operator">:=</span> http<span class="token punctuation">.</span>Server<span class="token punctuation">{</span>
+        Addr<span class="token punctuation">:</span> <span class="token string">"127.0.0.1:8080"</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span>
+
+    http<span class="token punctuation">.</span><span class="token function">Handle</span><span class="token punctuation">(</span><span class="token string">"/hello"</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>HelloHandler<span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
+    http<span class="token punctuation">.</span><span class="token function">Handle</span><span class="token punctuation">(</span><span class="token string">"/world"</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>WorldHandler<span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+    s<span class="token punctuation">.</span><span class="token function">ListenAndServe</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>在这里定义了两个<code>Handler</code>，然后通过<code>http.Handle()</code>函数注册这两个<code>Handler</code>而不是直接对<code>Server</code>指定，这样就可以使用两个处理器了。在浏览器中分别访问<a href="http://localhost:8080/hello和http://localhost:8080/world可以得到不同的结果。" target="_blank" rel="noopener">http://localhost:8080/hello和http://localhost:8080/world可以得到不同的结果。</a></p>
+<p>来看看<code>http.Handle()</code>函数做了什么：</p>
+<pre class="line-numbers language-go"><code class="language-go"><span class="token comment" spellcheck="true">// Handle registers the handler for the given pattern</span>
+<span class="token comment" spellcheck="true">// in the DefaultServeMux.</span>
+<span class="token comment" spellcheck="true">// The documentation for ServeMux explains how patterns are matched.</span>
+<span class="token keyword">func</span> <span class="token function">Handle</span><span class="token punctuation">(</span>pattern <span class="token builtin">string</span><span class="token punctuation">,</span> handler Handler<span class="token punctuation">)</span> <span class="token punctuation">{</span> DefaultServeMux<span class="token punctuation">.</span><span class="token function">Handle</span><span class="token punctuation">(</span>pattern<span class="token punctuation">,</span> handler<span class="token punctuation">)</span> <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>原来是把具体的<code>Handler</code>注册到了一个叫做<code>DefaultServeMux</code>的变量里，在详细看看具体做了什么之前，先看看处理器函数<code>HandlerFunc</code>。</p>
+<h3 id="5-处理器函数HandlerFunc"><a href="#5-处理器函数HandlerFunc" class="headerlink" title="5. 处理器函数HandlerFunc"></a>5. 处理器函数HandlerFunc</h3><p>除了使用Handler结构外，还可以使用具有相同参数的函数，只不过需要使用<code>http.HandleFunc()</code>函数：</p>
+<pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">func</span> <span class="token function">hello</span><span class="token punctuation">(</span>w http<span class="token punctuation">.</span>ResponseWriter<span class="token punctuation">,</span> r <span class="token operator">*</span>http<span class="token punctuation">.</span>Request<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    fmt<span class="token punctuation">.</span><span class="token function">Fprintf</span><span class="token punctuation">(</span>w<span class="token punctuation">,</span> <span class="token string">"Hello"</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token function">world</span><span class="token punctuation">(</span>w http<span class="token punctuation">.</span>ResponseWriter<span class="token punctuation">,</span> r <span class="token operator">*</span>http<span class="token punctuation">.</span>Request<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    fmt<span class="token punctuation">.</span><span class="token function">Fprintf</span><span class="token punctuation">(</span>w<span class="token punctuation">,</span> <span class="token string">"World"</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    s <span class="token operator">:=</span> http<span class="token punctuation">.</span>Server<span class="token punctuation">{</span>
+        Addr<span class="token punctuation">:</span> <span class="token string">"127.0.0.1:8080"</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span>
+
+    http<span class="token punctuation">.</span><span class="token function">HandleFunc</span><span class="token punctuation">(</span><span class="token string">"/hello"</span><span class="token punctuation">,</span> hello<span class="token punctuation">)</span>
+    http<span class="token punctuation">.</span><span class="token function">HandleFunc</span><span class="token punctuation">(</span><span class="token string">"/world"</span><span class="token punctuation">,</span> world<span class="token punctuation">)</span>
+
+    s<span class="token punctuation">.</span><span class="token function">ListenAndServe</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>效果和使用<code>http.Handle()</code>一样。处理器函数能够完成和处理器一样的功能，代码也更简洁一些。可以在实际使用中根据不同场景使用不同的方式。比如，如果代码中已经有处理的接口，只需要添加一个<code>ServeHTTP</code>函数就可以把这个接口转换成处理器了。</p>
+<p>来看看<code>http.HandleFunc()</code>做了什么：</p>
+<pre class="line-numbers language-go"><code class="language-go"><span class="token comment" spellcheck="true">// HandleFunc registers the handler function for the given pattern</span>
+<span class="token comment" spellcheck="true">// in the DefaultServeMux.</span>
+<span class="token comment" spellcheck="true">// The documentation for ServeMux explains how patterns are matched.</span>
+<span class="token keyword">func</span> <span class="token function">HandleFunc</span><span class="token punctuation">(</span>pattern <span class="token builtin">string</span><span class="token punctuation">,</span> handler <span class="token keyword">func</span><span class="token punctuation">(</span>ResponseWriter<span class="token punctuation">,</span> <span class="token operator">*</span>Request<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    DefaultServeMux<span class="token punctuation">.</span><span class="token function">HandleFunc</span><span class="token punctuation">(</span>pattern<span class="token punctuation">,</span> handler<span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>又是<code>DefaultServeMux</code>，接下来详细看看这个是什么，以及它是怎么和<code>Server</code>关联起来的。</p>
+<img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/Programming/goweb5.png">
+
+<h3 id="6-多路复用器ServeMux和DefaultServeMux"><a href="#6-多路复用器ServeMux和DefaultServeMux" class="headerlink" title="6. 多路复用器ServeMux和DefaultServeMux"></a>6. 多路复用器ServeMux和DefaultServeMux</h3><p>不管使用<code>http.Handle()</code>注册处理器<code>Handler</code>还是使用<code>http.HandleFunc()</code>注册处理器函数<code>HandlerFunc</code>，内部都涉及到了一个变量<code>DefaultServeMux</code>，这个是默认的多路复用器，即<code>ServeMux</code>的一个实例：</p>
+<pre class="line-numbers language-go"><code class="language-go"><span class="token comment" spellcheck="true">// DefaultServeMux is the default ServeMux used by Serve.</span>
+<span class="token keyword">var</span> DefaultServeMux <span class="token operator">=</span> <span class="token operator">&amp;</span>defaultServeMux
+<span class="token keyword">var</span> defaultServeMux ServeMux<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>多路复用器的作用就是根据URL将不同的请求路由到不同的处理器上进行处理：</p>
+<img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/Programming/servemux.PNG">
+
+<p><code>ServeMux</code>结构里有一个<code>map</code>，用来保存路由和处理器的映射：</p>
+<pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">type</span> ServeMux <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+    mu    sync<span class="token punctuation">.</span>RWMutex
+    m     <span class="token keyword">map</span><span class="token punctuation">[</span><span class="token builtin">string</span><span class="token punctuation">]</span>muxEntry
+    es    <span class="token punctuation">[</span><span class="token punctuation">]</span>muxEntry <span class="token comment" spellcheck="true">// slice of entries sorted from longest to shortest.</span>
+    hosts <span class="token builtin">bool</span>       <span class="token comment" spellcheck="true">// whether any patterns contain hostnames</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>而<code>ServeMux</code>的<code>Handle()</code>和<code>HandleFunc()</code>函数就是将处理器注册到这个<code>map</code>里的。</p>
+<p>不过<code>HandleFunc()</code>怎么把一个函数变成一个处理器呢？</p>
+<pre class="line-numbers language-go"><code class="language-go"><span class="token comment" spellcheck="true">// HandleFunc registers the handler function for the given pattern.</span>
+<span class="token keyword">func</span> <span class="token punctuation">(</span>mux <span class="token operator">*</span>ServeMux<span class="token punctuation">)</span> <span class="token function">HandleFunc</span><span class="token punctuation">(</span>pattern <span class="token builtin">string</span><span class="token punctuation">,</span> handler <span class="token keyword">func</span><span class="token punctuation">(</span>ResponseWriter<span class="token punctuation">,</span> <span class="token operator">*</span>Request<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> handler <span class="token operator">==</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+        <span class="token function">panic</span><span class="token punctuation">(</span><span class="token string">"http: nil handler"</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+    mux<span class="token punctuation">.</span><span class="token function">Handle</span><span class="token punctuation">(</span>pattern<span class="token punctuation">,</span> <span class="token function">HandlerFunc</span><span class="token punctuation">(</span>handler<span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>原来使用了一个名叫<code>HandlerFunc</code>的结构（注意和<code>http.HandleFunc</code>的区别）完成了转换。<code>HandlerFunc</code>定义如下：</p>
+<pre class="line-numbers language-go"><code class="language-go"><span class="token comment" spellcheck="true">// The HandlerFunc type is an adapter to allow the use of</span>
+<span class="token comment" spellcheck="true">// ordinary functions as HTTP handlers. If f is a function</span>
+<span class="token comment" spellcheck="true">// with the appropriate signature, HandlerFunc(f) is a</span>
+<span class="token comment" spellcheck="true">// Handler that calls f.</span>
+<span class="token keyword">type</span> HandlerFunc <span class="token keyword">func</span><span class="token punctuation">(</span>ResponseWriter<span class="token punctuation">,</span> <span class="token operator">*</span>Request<span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// ServeHTTP calls f(w, r).</span>
+<span class="token keyword">func</span> <span class="token punctuation">(</span>f HandlerFunc<span class="token punctuation">)</span> <span class="token function">ServeHTTP</span><span class="token punctuation">(</span>w ResponseWriter<span class="token punctuation">,</span> r <span class="token operator">*</span>Request<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">f</span><span class="token punctuation">(</span>w<span class="token punctuation">,</span> r<span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这样我们就理解了不管是<code>http.Handle()</code>还是<code>http.HandleFunc()</code>最终都归结于<code>ServeMux.Handle()</code>。如果不指定<code>ServeMux</code>的话，就使用默认的<code>DefaultServeMux</code>。</p>
+<p>还需要注意一点就是，<code>ServeMux</code>本身也实现了<code>ServeHTTP()</code>函数，也是可以作为处理器的，这就是<code>DefaultServeMux</code>可以作为处理器的原因。</p>
+<h3 id="7-ServeMux是如何路由的"><a href="#7-ServeMux是如何路由的" class="headerlink" title="7. ServeMux是如何路由的"></a>7. ServeMux是如何路由的</h3><p>我们已经大致了解了<code>ServeMux</code>是根据内部维护的一个<code>map</code>来找到具体的处理器的。这里来看看具体的实现细节，对于理解整个流程很有帮助。</p>
+<p>回到最开始，不管是使用<code>http.ListenAndServe()</code>还是<code>Server.ListenAndServe()</code>，都是需要先<code>Listen</code>然后<code>Serve</code>，主要的过程就是创建一个TCP链接然后监听请求，最终就是到<code>serve()</code>函数里，主要代码如下：</p>
+<pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">func</span> <span class="token punctuation">(</span>c <span class="token operator">*</span>conn<span class="token punctuation">)</span> <span class="token function">serve</span><span class="token punctuation">(</span>ctx context<span class="token punctuation">.</span>Context<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token operator">...</span>
+    serverHandler<span class="token punctuation">{</span>c<span class="token punctuation">.</span>server<span class="token punctuation">}</span><span class="token punctuation">.</span><span class="token function">ServeHTTP</span><span class="token punctuation">(</span>w<span class="token punctuation">,</span> w<span class="token punctuation">.</span>req<span class="token punctuation">)</span>
+    <span class="token operator">...</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这里使用了一个叫做<code>serverHandler</code>的代理：</p>
+<pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">type</span> serverHandler <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+    srv <span class="token operator">*</span>Server
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token punctuation">(</span>sh serverHandler<span class="token punctuation">)</span> <span class="token function">ServeHTTP</span><span class="token punctuation">(</span>rw ResponseWriter<span class="token punctuation">,</span> req <span class="token operator">*</span>Request<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    handler <span class="token operator">:=</span> sh<span class="token punctuation">.</span>srv<span class="token punctuation">.</span>Handler
+    <span class="token keyword">if</span> handler <span class="token operator">==</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+        handler <span class="token operator">=</span> DefaultServeMux
+    <span class="token punctuation">}</span>
+    <span class="token keyword">if</span> req<span class="token punctuation">.</span>RequestURI <span class="token operator">==</span> <span class="token string">"*"</span> <span class="token operator">&amp;&amp;</span> req<span class="token punctuation">.</span>Method <span class="token operator">==</span> <span class="token string">"OPTIONS"</span> <span class="token punctuation">{</span>
+        handler <span class="token operator">=</span> globalOptionsHandler<span class="token punctuation">{</span><span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    handler<span class="token punctuation">.</span><span class="token function">ServeHTTP</span><span class="token punctuation">(</span>rw<span class="token punctuation">,</span> req<span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>从这里可以看到<code>DefaultServeMux</code>就是默认的多路复用器。所以如果给<code>Server</code>指定了一个<code>Handler</code>，那么就会调用这个<code>Handler</code>的<code>ServeHTTP()</code>函数；如果没有指定的话，就调用<code>DefaultServeMux</code>的<code>ServeHTTP()</code>函数，毕竟我们在前面已经知道<code>DefaultServeMux</code>就是<code>ServeMux</code>的一个实例，而<code>ServeMux</code>实现了<code>ServeHTTP()</code>函数：</p>
+<pre class="line-numbers language-go"><code class="language-go"><span class="token comment" spellcheck="true">// ServeHTTP dispatches the request to the handler whose</span>
+<span class="token comment" spellcheck="true">// pattern most closely matches the request URL.</span>
+<span class="token keyword">func</span> <span class="token punctuation">(</span>mux <span class="token operator">*</span>ServeMux<span class="token punctuation">)</span> <span class="token function">ServeHTTP</span><span class="token punctuation">(</span>w ResponseWriter<span class="token punctuation">,</span> r <span class="token operator">*</span>Request<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> r<span class="token punctuation">.</span>RequestURI <span class="token operator">==</span> <span class="token string">"*"</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> r<span class="token punctuation">.</span><span class="token function">ProtoAtLeast</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            w<span class="token punctuation">.</span><span class="token function">Header</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">Set</span><span class="token punctuation">(</span><span class="token string">"Connection"</span><span class="token punctuation">,</span> <span class="token string">"close"</span><span class="token punctuation">)</span>
+        <span class="token punctuation">}</span>
+        w<span class="token punctuation">.</span><span class="token function">WriteHeader</span><span class="token punctuation">(</span>StatusBadRequest<span class="token punctuation">)</span>
+        <span class="token keyword">return</span>
+    <span class="token punctuation">}</span>
+    h<span class="token punctuation">,</span> <span class="token boolean">_</span> <span class="token operator">:=</span> mux<span class="token punctuation">.</span><span class="token function">Handler</span><span class="token punctuation">(</span>r<span class="token punctuation">)</span>
+    h<span class="token punctuation">.</span><span class="token function">ServeHTTP</span><span class="token punctuation">(</span>w<span class="token punctuation">,</span> r<span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这个函数所做的就是根据请求找到对应的<code>Handler</code>，然后让这个处理器完成具体的工作。下面就是<code>ServeMux.Handler()</code>函数的主要部分<code>ServeMux.handler()</code>：</p>
+<pre class="line-numbers language-go"><code class="language-go"><span class="token comment" spellcheck="true">// handler is the main implementation of Handler.</span>
+<span class="token comment" spellcheck="true">// The path is known to be in canonical form, except for CONNECT methods.</span>
+<span class="token keyword">func</span> <span class="token punctuation">(</span>mux <span class="token operator">*</span>ServeMux<span class="token punctuation">)</span> <span class="token function">handler</span><span class="token punctuation">(</span>host<span class="token punctuation">,</span> path <span class="token builtin">string</span><span class="token punctuation">)</span> <span class="token punctuation">(</span>h Handler<span class="token punctuation">,</span> pattern <span class="token builtin">string</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    mux<span class="token punctuation">.</span>mu<span class="token punctuation">.</span><span class="token function">RLock</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">defer</span> mux<span class="token punctuation">.</span>mu<span class="token punctuation">.</span><span class="token function">RUnlock</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    <span class="token comment" spellcheck="true">// Host-specific pattern takes precedence over generic ones</span>
+    <span class="token keyword">if</span> mux<span class="token punctuation">.</span>hosts <span class="token punctuation">{</span>
+        h<span class="token punctuation">,</span> pattern <span class="token operator">=</span> mux<span class="token punctuation">.</span><span class="token function">match</span><span class="token punctuation">(</span>host <span class="token operator">+</span> path<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">if</span> h <span class="token operator">==</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+        h<span class="token punctuation">,</span> pattern <span class="token operator">=</span> mux<span class="token punctuation">.</span><span class="token function">match</span><span class="token punctuation">(</span>path<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">if</span> h <span class="token operator">==</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+        h<span class="token punctuation">,</span> pattern <span class="token operator">=</span> <span class="token function">NotFoundHandler</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">""</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>里面调用了<code>ServeMux.match()</code>函数，其实就是根据URL到<code>map</code>去找具体的<code>Handler</code>：</p>
+<pre class="line-numbers language-go"><code class="language-go"><span class="token comment" spellcheck="true">// Find a handler on a handler map given a path string.</span>
+<span class="token comment" spellcheck="true">// Most-specific (longest) pattern wins.</span>
+<span class="token keyword">func</span> <span class="token punctuation">(</span>mux <span class="token operator">*</span>ServeMux<span class="token punctuation">)</span> <span class="token function">match</span><span class="token punctuation">(</span>path <span class="token builtin">string</span><span class="token punctuation">)</span> <span class="token punctuation">(</span>h Handler<span class="token punctuation">,</span> pattern <span class="token builtin">string</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// Check for exact match first.</span>
+    v<span class="token punctuation">,</span> ok <span class="token operator">:=</span> mux<span class="token punctuation">.</span>m<span class="token punctuation">[</span>path<span class="token punctuation">]</span>
+    <span class="token keyword">if</span> ok <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> v<span class="token punctuation">.</span>h<span class="token punctuation">,</span> v<span class="token punctuation">.</span>pattern
+    <span class="token punctuation">}</span>
+
+    <span class="token comment" spellcheck="true">// Check for longest valid match.  mux.es contains all patterns</span>
+    <span class="token comment" spellcheck="true">// that end in / sorted from longest to shortest.</span>
+    <span class="token keyword">for</span> <span class="token boolean">_</span><span class="token punctuation">,</span> e <span class="token operator">:=</span> <span class="token keyword">range</span> mux<span class="token punctuation">.</span>es <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> strings<span class="token punctuation">.</span><span class="token function">HasPrefix</span><span class="token punctuation">(</span>path<span class="token punctuation">,</span> e<span class="token punctuation">.</span>pattern<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">return</span> e<span class="token punctuation">.</span>h<span class="token punctuation">,</span> e<span class="token punctuation">.</span>pattern
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> <span class="token boolean">nil</span><span class="token punctuation">,</span> <span class="token string">""</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>首先，精确匹配，找到了就返回。如果没有找到，就根据一定的规则来找，最后如果还没有找到，那么返回404。</p>
+<p>在后面的那个循环中，来找最长匹配的URL。<code>mux.es</code>是一个切片，这里存储的都是在注册<code>Handler</code>时模式以<code>/</code>结尾的：</p>
+<pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">func</span> <span class="token punctuation">(</span>mux <span class="token operator">*</span>ServeMux<span class="token punctuation">)</span> <span class="token function">Handle</span><span class="token punctuation">(</span>pattern <span class="token builtin">string</span><span class="token punctuation">,</span> handler Handler<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token operator">...</span>
+    <span class="token keyword">if</span> pattern<span class="token punctuation">[</span><span class="token function">len</span><span class="token punctuation">(</span>pattern<span class="token punctuation">)</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token string">'/'</span> <span class="token punctuation">{</span>
+        mux<span class="token punctuation">.</span>es <span class="token operator">=</span> <span class="token function">appendSorted</span><span class="token punctuation">(</span>mux<span class="token punctuation">.</span>es<span class="token punctuation">,</span> e<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+    <span class="token operator">...</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这样就清楚了，路由过程如下：</p>
+<ol>
+<li>精确匹配，找到就返回；</li>
+<li>如果没有精确匹配到，就到所有注册<code>Handler</code>时模式以<code>/</code>结尾的模式中寻找，原则是最长匹配；</li>
+<li>还没有找到的话，就404。</li>
+</ol>
+<p>举个例子，比如注册时将<code>hello</code>这个处理器注册到了<code>/hello/</code>下，那么对于<code>/hello/wrong</code>这个请求如果精确匹配没找到的话就可以匹配<code>/hello/</code>，因为这个模式以<code>/</code>结尾；如果注册<code>hello</code>处理器的时候模式是<code>/hello</code>的话，那就不会把<code>/hello/wrong</code>路由到<code>/hello</code>对应的处理器上来了。</p>
+<p><code>ServeMux</code>有一个缺点就是无法使用变量来实现URL模式匹配，比如<code>/post/123</code>这种，可以使用第三方库来避开这个限制。</p>
+<p>这篇文章梳理了一下<code>net/http</code>包中下面的几个概念：</p>
+<ul>
+<li><code>http.ListenAndServe()</code></li>
+<li><code>Server.ListenAndServe()</code></li>
+<li><code>http.Handle()</code></li>
+<li><code>Handler</code></li>
+<li><code>http.HandleFunc()</code></li>
+<li><code>HandlerFunc</code></li>
+<li><code>DefaultServeMux</code></li>
+</ul>
+<p>而在我们的MindMap中，形成了下面的结构：</p>
+<img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/Programming/goweb6.png">
+
+<p>To Be Continued…</p>
+
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        Author:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="http://deuterium.fun" rel="external nofollow noreferrer">Valineliu</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        Link:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="http://deuterium.fun/2019/12/20/go-web-part-1-handler-servemux/">http://deuterium.fun/2019/12/20/go-web-part-1-handler-servemux/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        Reprint policy:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    All articles in this blog are used except for special statements
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    reprint polocy. If reproduced, please indicate source
+                    <a href="http://deuterium.fun" target="_blank">Valineliu</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>Copied successfully, please follow the reprint policy of this article</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">more</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/go/">
+                                    <span class="chip bg-color">go</span>
+                                </a>
+                            
+                                <a href="/tags/web/">
+                                    <span class="chip bg-color">web</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    
+    <div class="social-share" data-sites="wechat,weibo,douban" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+        <style>
+    .valine-card {
+        margin: 1.5rem auto;
+    }
+
+    .valine-card .card-content {
+        padding: 20px 20px 5px 20px;
+    }
+
+    #vcomments textarea {
+        box-sizing: border-box;
+        background: url("/medias/comment_bg.png") 100% 100% no-repeat;
+    }
+
+    #vcomments p {
+        margin: 2px 2px 10px;
+        font-size: 1.05rem;
+        line-height: 1.78rem;
+    }
+
+    #vcomments blockquote p {
+        text-indent: 0.2rem;
+    }
+
+    #vcomments a {
+        padding: 0 2px;
+        color: #4cbf30;
+        font-weight: 500;
+        text-decoration: none;
+    }
+
+    #vcomments img {
+        max-width: 100%;
+        height: auto;
+        cursor: pointer;
+    }
+
+    #vcomments ol li {
+        list-style-type: decimal;
+    }
+
+    #vcomments ol,
+    ul {
+        display: block;
+        padding-left: 2em;
+        word-spacing: 0.05rem;
+    }
+
+    #vcomments ul li,
+    ol li {
+        display: list-item;
+        line-height: 1.8rem;
+        font-size: 1rem;
+    }
+
+    #vcomments ul li {
+        list-style-type: disc;
+    }
+
+    #vcomments ul ul li {
+        list-style-type: circle;
+    }
+
+    #vcomments table, th, td {
+        padding: 12px 13px;
+        border: 1px solid #dfe2e5;
+    }
+
+    #vcomments table, th, td {
+        border: 0;
+    }
+
+    table tr:nth-child(2n), thead {
+        background-color: #fafafa;
+    }
+
+    #vcomments table th {
+        background-color: #f2f2f2;
+        min-width: 80px;
+    }
+
+    #vcomments table td {
+        min-width: 80px;
+    }
+
+    #vcomments h1 {
+        font-size: 1.85rem;
+        font-weight: bold;
+        line-height: 2.2rem;
+    }
+
+    #vcomments h2 {
+        font-size: 1.65rem;
+        font-weight: bold;
+        line-height: 1.9rem;
+    }
+
+    #vcomments h3 {
+        font-size: 1.45rem;
+        font-weight: bold;
+        line-height: 1.7rem;
+    }
+
+    #vcomments h4 {
+        font-size: 1.25rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    #vcomments h5 {
+        font-size: 1.1rem;
+        font-weight: bold;
+        line-height: 1.4rem;
+    }
+
+    #vcomments h6 {
+        font-size: 1rem;
+        line-height: 1.3rem;
+    }
+
+    #vcomments p {
+        font-size: 1rem;
+        line-height: 1.5rem;
+    }
+
+    #vcomments hr {
+        margin: 12px 0;
+        border: 0;
+        border-top: 1px solid #ccc;
+    }
+
+    #vcomments blockquote {
+        margin: 15px 0;
+        border-left: 5px solid #42b983;
+        padding: 1rem 0.8rem 0.3rem 0.8rem;
+        color: #666;
+        background-color: rgba(66, 185, 131, .1);
+    }
+
+    #vcomments pre {
+        font-family: monospace, monospace;
+        padding: 1.2em;
+        margin: .5em 0;
+        background: #272822;
+        overflow: auto;
+        border-radius: 0.3em;
+        tab-size: 4;
+    }
+
+    #vcomments code {
+        font-family: monospace, monospace;
+        padding: 1px 3px;
+        font-size: 0.92rem;
+        color: #e96900;
+        background-color: #f8f8f8;
+        border-radius: 2px;
+    }
+
+    #vcomments pre code {
+        font-family: monospace, monospace;
+        padding: 0;
+        color: #e8eaf6;
+        background-color: #272822;
+    }
+
+    #vcomments pre[class*="language-"] {
+        padding: 1.2em;
+        margin: .5em 0;
+    }
+
+    #vcomments code[class*="language-"],
+    pre[class*="language-"] {
+        color: #e8eaf6;
+    }
+
+    #vcomments [type="checkbox"]:not(:checked), [type="checkbox"]:checked {
+        position: inherit;
+        margin-left: -1.3rem;
+        margin-right: 0.4rem;
+        margin-top: -1px;
+        vertical-align: middle;
+        left: unset;
+        visibility: visible;
+    }
+
+    #vcomments b,
+    strong {
+        font-weight: bold;
+    }
+
+    #vcomments dfn {
+        font-style: italic;
+    }
+
+    #vcomments small {
+        font-size: 85%;
+    }
+
+    #vcomments cite {
+        font-style: normal;
+    }
+
+    #vcomments mark {
+        background-color: #fcf8e3;
+        padding: .2em;
+    }
+
+    #vcomments table, th, td {
+        padding: 12px 13px;
+        border: 1px solid #dfe2e5;
+    }
+
+    table tr:nth-child(2n), thead {
+        background-color: #fafafa;
+    }
+
+    #vcomments table th {
+        background-color: #f2f2f2;
+        min-width: 80px;
+    }
+
+    #vcomments table td {
+        min-width: 80px;
+    }
+
+    #vcomments [type="checkbox"]:not(:checked), [type="checkbox"]:checked {
+        position: inherit;
+        margin-left: -1.3rem;
+        margin-right: 0.4rem;
+        margin-top: -1px;
+        vertical-align: middle;
+        left: unset;
+        visibility: visible;
+    }
+</style>
+
+<div class="card valine-card" data-aos="fade-up">
+    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; left: 20px; top: 15px; padding-bottom: 5px;">
+        <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
+        <span>评论</span>
+    </div>
+    <div id="vcomments" class="card-content" style="display: grid">
+    </div>
+</div>
+
+<script src="/libs/valine/av-min.js"></script>
+<script src="/libs/valine/Valine.min.js"></script>
+<script>
+    new Valine({
+        el: '#vcomments',
+        appId: 'BFXDDa5GNPBSIaLTpmkrVlrz-gzGzoHsz',
+        appKey: '2Up07jbiLJPDxricj9CLg3Qw',
+        notify: 'false' === 'true',
+        verify: 'false' === 'true',
+        visitor: 'true' === 'true',
+        avatar: 'mm',
+        pageSize: '10',
+        lang: 'en',
+        placeholder: 'say someting...'
+    });
+</script>
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="far fa-dot-circle"></i>&nbsp;Current
+            </div>
+            <div class="card">
+                <a href="/2019/12/20/go-web-part-1-handler-servemux/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="Go Web (Part 1): Handler & ServeMux">
+                        
+                        <span class="card-title">Go Web (Part 1): Handler & ServeMux</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            1. Begin使用Go语言的标准库net/http可以快速构建一个简单的web服务。这篇文章从零开始构建一个简单的web服务器，并主要聚焦于处理器Handler和多路复用器ServeMux。
+在开始之前，MindMap里一无所有：
+
+
+2
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2019-12-20
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/programming/" class="post-category">
+                                    programming
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/go/">
+                        <span class="chip bg-color">go</span>
+                    </a>
+                    
+                    <a href="/tags/web/">
+                        <span class="chip bg-color">web</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                Next&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2019/12/18/what-happens-when-using-load-data/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="What Happens When Using LOAD DATA">
+                        
+                        <span class="card-title">What Happens When Using LOAD DATA</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            在之前的文章Files to MySQL中简单介绍了mysqlimport和LOAD DATA的使用，也知道了mysqlimport其实就是使用了LOAD DATA语句。在这篇文章中详细介绍一下LOAD DATA这个语句，来看看当使用这个语
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2019-12-18
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/mysql/" class="post-category">
+                                    mysql
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/mysql/">
+                        <span class="chip bg-color">mysql</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+    
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+<!-- 代码块折行 -->
+
+<style type="text/css">
+code[class*="language-"], pre[class*="language-"] { white-space: pre !important; }
+</style>
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;You Will See...</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+    <footer class="page-footer bg-color">
+    <div class="container row center-align">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            <span id="year">2019</span>
+            <a href="http://deuterium.fun" target="_blank">Valineliu</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+            
+            
+            
+            
+            
+            <br>
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link ">
+
+
+    <a href="mailto:1749118121@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;Search</span>
+            <input type="search" id="searchInput" name="s" placeholder="Please enter a search keyword"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
