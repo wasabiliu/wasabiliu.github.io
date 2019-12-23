@@ -404,7 +404,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    560
+                    556
                 </div>
                 
 
@@ -445,10 +445,10 @@ no      name
 <pre class="line-numbers language-shell"><code class="language-shell">mysqlimport --ignore-lines=1 \
 --fields-terminated-by='\t' \
 --local \
--h 10.55.142.100 \
--P3596 \
--u db_szdev \
--p test \
+-h host \
+-P port \
+-u username \
+-p db_name \
 /path/to/one_piece.txt<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>执行后会让输入密码，之后就执行成功了。</p>
 <p>可以查看一下：</p>
@@ -473,10 +473,10 @@ no      name
 <pre class="line-numbers language-shell"><code class="language-shell">mysqlimport --ignore-lines=1 \
 --fields-terminated-by='\t' \
 --local \
--h 10.55.142.100 \
--P3596 \
--u db_szdev \
--p test \
+-h host \
+-P port \
+-u username \
+-p db_name \
 /path/to/one_piece.txt
 /path/to/steins_gate.txt<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="4-使用LOAD-DATA导入文件"><a href="#4-使用LOAD-DATA导入文件" class="headerlink" title="4. 使用LOAD DATA导入文件"></a>4. 使用<code>LOAD DATA</code>导入文件</h3><p>mysqlimport其实是对<code>LOAD DATA</code>的一层封装，这样我们就可以使用<code>LOAD DATA</code>导入文件：</p>
