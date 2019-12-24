@@ -1,0 +1,1412 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="Go Web (Part 2): Request, Deuterium">
+    <meta name="description" content="在了解了使用net/http构建go web服务之后，这篇文章深入了解一下在Go中如何处理一个请求。
+
+
+1. 请求包含什么HTTP Message有Request和Response两种。这里详细看看Request Message，一个请求">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Go Web (Part 2): Request | Deuterium</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+    
+    <script src="/libs/jquery/jquery.min.js"></script>
+    
+<link rel="alternate" href="/atom.xml" title="Deuterium" type="application/atom+xml">
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper head-container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">Deuterium</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>Home</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>Tags</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>Categories</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>Archives</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>About</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>Contact</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>Friends</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="Search" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">Deuterium</div>
+        <div class="logo-desc">
+            
+            Software and anecdotes.
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			Home
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			Tags
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			Categories
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			Archives
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			About
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			Contact
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			Friends
+		</a>
+          
+        </li>
+        
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/17.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <div class="description center-align post-title">
+                        Go Web (Part 2): Request
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        height: calc(100vh - 250px);
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #3B5998;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #3B5998;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #3B5998;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/go/">
+                                <span class="chip bg-color">go</span>
+                            </a>
+                        
+                            <a href="/tags/web/">
+                                <span class="chip bg-color">web</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/programming/" class="post-category">
+                                programming
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
+                    2019-12-24
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
+                    2.3k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>Read Times:&nbsp;&nbsp;
+                    9 Min
+                </div>
+                
+				
+                
+            </div>
+            
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <p>在了解了使用<code>net/http</code>构建go web服务之后，这篇文章深入了解一下在Go中如何处理一个请求。</p>
+<img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/Programming/goweb7.png">
+
+<h3 id="1-请求包含什么"><a href="#1-请求包含什么" class="headerlink" title="1. 请求包含什么"></a>1. 请求包含什么</h3><p>HTTP Message有Request和Response两种。这里详细看看Request Message，一个请求消息的格式如下：</p>
+<pre class="line-numbers language-shell"><code class="language-shell">method request-URL version
+headers
+
+entity-body<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>Go中的<code>net/http</code>包提供了一个用于表示HTTP请求消息的结构<code>Reqeust</code>。<code>Request</code>将上面请求消息的内容经过分析后存储在不同的字段中，还包括一系列有用的方法。主要的字段有：</p>
+<ul>
+<li>URL</li>
+<li>Header</li>
+<li>Body</li>
+<li>Form, PostForm, MultipartForm</li>
+</ul>
+<p>除了这些字段，还可以使用<code>Request</code>的一些方法处理请求中的cookie等。</p>
+<h3 id="2-URL"><a href="#2-URL" class="headerlink" title="2. URL"></a>2. URL</h3><p><code>Request</code>中的<code>URL</code>字段可以存储请求中URL的信息，在<code>Reqeuest</code>中的<code>URL</code>字段是一个指向<code>net/url</code>包中<code>URL</code>结构的指针，<code>URL</code>结构主要字段如下：</p>
+<pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">type</span> URL <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+    Scheme     <span class="token builtin">string</span>
+    User       <span class="token operator">*</span>Userinfo <span class="token comment" spellcheck="true">// username and password information</span>
+    Host       <span class="token builtin">string</span>    <span class="token comment" spellcheck="true">// host or host:port</span>
+    Path       <span class="token builtin">string</span>    <span class="token comment" spellcheck="true">// path (relative paths may omit leading slash)</span>
+    RawPath    <span class="token builtin">string</span>    <span class="token comment" spellcheck="true">// encoded path hint (see EscapedPath method)</span>
+    RawQuery   <span class="token builtin">string</span>    <span class="token comment" spellcheck="true">// encoded query values, without '?'</span>
+    Fragment   <span class="token builtin">string</span>    <span class="token comment" spellcheck="true">// fragment for references, without '#'</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>URL的一般格式是这样的：</p>
+<pre class="line-numbers language-shell"><code class="language-shell">scheme://[userinfo@]host/path[?query][#fragment]<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>其中[]中的是可选的信息。</p>
+<p>在<code>net/url</code>包中有解析URL的函数<code>Parse()</code>和<code>ParseRequestURI()</code>，两者都是将传进来的URL解析成一个<code>URL</code>结构并返回这个<code>URL</code>的指针。</p>
+<p>比如这个URL：<a href="https://book.douban.com/people/valineliu/collect?start=30&amp;sort=time&amp;rating=all&amp;filter=all&amp;mode=list#here" target="_blank" rel="noopener">https://book.douban.com/people/valineliu/collect?start=30&amp;sort=time&amp;rating=all&amp;filter=all&amp;mode=list#here</a></p>
+<p>解析之后的结果如下：</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>Scheme</code></td>
+<td>https</td>
+</tr>
+<tr>
+<td><code>Host</code></td>
+<td>book.douban.com</td>
+</tr>
+<tr>
+<td><code>Path</code></td>
+<td>/people/valineliu/collect</td>
+</tr>
+<tr>
+<td><code>RawQuery</code></td>
+<td>start=0&amp;sort=time&amp;rating=all&amp;filter=all&amp;mode=list</td>
+</tr>
+<tr>
+<td><code>Fragment</code></td>
+<td>here</td>
+</tr>
+</tbody></table>
+<p><code>Parse()</code>和<code>ParseRequestURI()</code>不解析<code>RawPath</code>字段，需要调用<code>URL.EscapedPath()</code>函数来获得这个字段值。</p>
+<p><code>RawQuery</code>字段包含了没有解析的查询参数，可以通过对这个参数的解析获得URL中的查询参数，不过可以直接使用<code>Request</code>结构中的<code>Form</code>字段来获取，后面再详细介绍。</p>
+<p>还有一个需要注意的问题就是，如果请求是通过浏览器发送的话，程序就得不到<code>Fragment</code>字段，因为浏览器会截断<code>Fragment</code>，与<code>net/http</code>库无关。</p>
+<h3 id="3-Header"><a href="#3-Header" class="headerlink" title="3. Header"></a>3. Header</h3><p>HTTP请求和响应消息都有一个Header结构，在go中，<code>net/http</code>包中有一个<code>Header</code>结构来存储Header结构。</p>
+<p><code>Header</code>本质上就是一个<code>map</code>，定义如下：</p>
+<pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">type</span> Header <span class="token keyword">map</span><span class="token punctuation">[</span><span class="token builtin">string</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">string</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>不过值是一个<code>[]string</code>，也就是说，对一个key可以有多个值。</p>
+<p><code>Header</code>有四个基本方法，可以方便地对内容进行操作，分别是<code>Add</code>, <code>Del</code>, <code>Set</code>, <code>Get</code>。其中<code>Set</code>方法会对已有的值进行覆盖。</p>
+<p>除了<code>Get</code>方法外，还可以直接访问<code>Header</code>中某个key的值：</p>
+<pre class="line-numbers language-go"><code class="language-go">fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span>r<span class="token punctuation">.</span>Header<span class="token punctuation">[</span><span class="token string">"Accept-Encoding"</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>就像访问一个<code>map</code>一样。这种方式和<code>Get</code>的区别在于，直接访问得到的是一个字符串切片，而使用<code>Get</code>方法得到的是所有的值用逗号分割的字符串：</p>
+<pre class="line-numbers language-go"><code class="language-go">fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span>r<span class="token punctuation">.</span>Header<span class="token punctuation">[</span><span class="token string">"Accept-Encoding"</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span>r<span class="token punctuation">.</span>Header<span class="token punctuation">.</span><span class="token function">Get</span><span class="token punctuation">(</span><span class="token string">"Accept-Encoding"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>结果：</p>
+<pre class="line-numbers language-shell"><code class="language-shell">[gzip, deflate, br]
+gzip, deflate, br<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h3 id="4-Body"><a href="#4-Body" class="headerlink" title="4. Body"></a>4. Body</h3><p><code>Request</code>中的<code>Body</code>不仅是请求的Body，也是响应的Body，这里不展开描述。</p>
+<p><code>Body</code>是一个<code>io.ReaderCloser</code>接口，意味着可以调用<code>Read</code>和<code>Close</code>两个方法。下面的例子描述了如何读取请求中的Body：</p>
+<pre class="line-numbers language-go"><code class="language-go">length <span class="token operator">:=</span> r<span class="token punctuation">.</span>ContentLength
+body <span class="token operator">:=</span> <span class="token function">make</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">byte</span><span class="token punctuation">,</span> length<span class="token punctuation">)</span>
+r<span class="token punctuation">.</span>Body<span class="token punctuation">.</span><span class="token function">Read</span><span class="token punctuation">(</span>body<span class="token punctuation">)</span>
+fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token function">string</span><span class="token punctuation">(</span>body<span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p><code>Request</code>中有一个<code>ContentLength</code>字段，这个字段记录了Body的长度，可以通过这个字段指定长度来读取Body中的内容。</p>
+<p>GET请求没有Body，所以需要一个POST请求，可以使用curl：</p>
+<pre class="line-numbers language-shell"><code class="language-shell">curl -id "start=30&sort=time&rating=all&filter=all&mode=list" localhost:8080/world<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>就可以得到Body了：</p>
+<pre class="line-numbers language-shell"><code class="language-shell">start=30&sort=time&rating=all&filter=all&mode=list<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="5-Form-PostForm-amp-MultipartForm"><a href="#5-Form-PostForm-amp-MultipartForm" class="headerlink" title="5. Form, PostForm &amp; MultipartForm"></a>5. Form, PostForm &amp; MultipartForm</h3><p>前面几个字段在请求达到服务器的时候就通过一定的流程解析出来了，而<code>Request</code>中的这几个关于Form的字段不是自动解析的，需要手动调用各自对应的函数来解析。</p>
+<h4 id="5-1-概述"><a href="#5-1-概述" class="headerlink" title="5.1 概述"></a>5.1 概述</h4><p>这几个字段的定义如下：</p>
+<pre class="line-numbers language-go"><code class="language-go">Form url<span class="token punctuation">.</span>Values
+PostForm url<span class="token punctuation">.</span>Values
+MultipartForm <span class="token operator">*</span>multipart<span class="token punctuation">.</span>Form<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>其中<code>Form</code>和<code>PostForm</code>类型一样：</p>
+<pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">type</span> Values <span class="token keyword">map</span><span class="token punctuation">[</span><span class="token builtin">string</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">string</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>也就是一个<code>map</code>，key是字符串，而值是一个字符串切片。即，对于一个key来说，可以有多个值。</p>
+<p><code>MultipartForm</code>的类型不一样：</p>
+<pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">type</span> Form <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+    Value <span class="token keyword">map</span><span class="token punctuation">[</span><span class="token builtin">string</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">string</span>
+    File  <span class="token keyword">map</span><span class="token punctuation">[</span><span class="token builtin">string</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token operator">*</span>FileHeader
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>多了一个<code>File</code>字段，这是因为<code>MultipartForm</code>还需要存储文件。</p>
+<p>请求中的参数可以在URL中，也就是这种格式：<code>/people/valineliu/collect?start=30&amp;sort=time</code>，也可以在Body中，比如：<code>curl -id &quot;start=40&quot; localhost:8080/world</code>。同时请求消息中Body中的数据可以通过不同的格式编码发送给服务器。其中常用的有<code>application/x-www-form-urlencoded</code>和<code>multipart/form-data</code>。前一种格式可以将Body中的参数按照URL中参数的格式编码，而后者会将数据编码成一条MIME报文。</p>
+<p>这就导致，三种Form字段在不同的编码方式下能够获得的数据也是不一样的。</p>
+<h4 id="5-2-Form-amp-PostForm"><a href="#5-2-Form-amp-PostForm" class="headerlink" title="5.2 Form &amp; PostForm"></a>5.2 Form &amp; PostForm</h4><p>为了获得<code>Form</code>和<code>PostForm</code>字段，需要调用<code>ParseForm</code>方法：</p>
+<pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">func</span> <span class="token punctuation">(</span>r <span class="token operator">*</span>Request<span class="token punctuation">)</span> <span class="token function">ParseForm</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token builtin">error</span> <span class="token punctuation">{</span>
+    <span class="token keyword">var</span> err <span class="token builtin">error</span>
+    <span class="token keyword">if</span> r<span class="token punctuation">.</span>PostForm <span class="token operator">==</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> r<span class="token punctuation">.</span>Method <span class="token operator">==</span> <span class="token string">"POST"</span> <span class="token operator">||</span> r<span class="token punctuation">.</span>Method <span class="token operator">==</span> <span class="token string">"PUT"</span> <span class="token operator">||</span> r<span class="token punctuation">.</span>Method <span class="token operator">==</span> <span class="token string">"PATCH"</span> <span class="token punctuation">{</span>
+            r<span class="token punctuation">.</span>PostForm<span class="token punctuation">,</span> err <span class="token operator">=</span> <span class="token function">parsePostForm</span><span class="token punctuation">(</span>r<span class="token punctuation">)</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">if</span> r<span class="token punctuation">.</span>PostForm <span class="token operator">==</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+            r<span class="token punctuation">.</span>PostForm <span class="token operator">=</span> <span class="token function">make</span><span class="token punctuation">(</span>url<span class="token punctuation">.</span>Values<span class="token punctuation">)</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">if</span> r<span class="token punctuation">.</span>Form <span class="token operator">==</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token function">len</span><span class="token punctuation">(</span>r<span class="token punctuation">.</span>PostForm<span class="token punctuation">)</span> <span class="token operator">></span> <span class="token number">0</span> <span class="token punctuation">{</span>
+            r<span class="token punctuation">.</span>Form <span class="token operator">=</span> <span class="token function">make</span><span class="token punctuation">(</span>url<span class="token punctuation">.</span>Values<span class="token punctuation">)</span>
+            <span class="token function">copyValues</span><span class="token punctuation">(</span>r<span class="token punctuation">.</span>Form<span class="token punctuation">,</span> r<span class="token punctuation">.</span>PostForm<span class="token punctuation">)</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">var</span> newValues url<span class="token punctuation">.</span>Values
+        <span class="token keyword">if</span> r<span class="token punctuation">.</span>URL <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+            <span class="token keyword">var</span> e <span class="token builtin">error</span>
+            newValues<span class="token punctuation">,</span> e <span class="token operator">=</span> url<span class="token punctuation">.</span><span class="token function">ParseQuery</span><span class="token punctuation">(</span>r<span class="token punctuation">.</span>URL<span class="token punctuation">.</span>RawQuery<span class="token punctuation">)</span>
+            <span class="token keyword">if</span> err <span class="token operator">==</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+                err <span class="token operator">=</span> e
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">if</span> newValues <span class="token operator">==</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+            newValues <span class="token operator">=</span> <span class="token function">make</span><span class="token punctuation">(</span>url<span class="token punctuation">.</span>Values<span class="token punctuation">)</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">if</span> r<span class="token punctuation">.</span>Form <span class="token operator">==</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+            r<span class="token punctuation">.</span>Form <span class="token operator">=</span> newValues
+        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+            <span class="token function">copyValues</span><span class="token punctuation">(</span>r<span class="token punctuation">.</span>Form<span class="token punctuation">,</span> newValues<span class="token punctuation">)</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> err
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这个函数是幂等的，也就是多次调用效果一样。从这个解析过程可以发现：</p>
+<ul>
+<li>函数首先解析<code>PostForm</code>字段，然后解析<code>Form</code>字段；</li>
+<li>而在<code>parsePostForm()</code>函数中，只对Body中<code>application/x-www-form-urlencoded</code>编码的参数解析，其余编码格式下<code>PostForm</code>字段为空；</li>
+<li><code>Form</code>中包含<code>PostForm</code>中的信息，而且<code>PostForm</code>中的信息优先级高；</li>
+<li>URL中的参数只会到被解析到<code>Form</code>字段中。</li>
+</ul>
+<p>下面的例子演示了上面的分析：</p>
+<pre class="line-numbers language-go"><code class="language-go">r<span class="token punctuation">.</span><span class="token function">ParseForm</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+fmt<span class="token punctuation">.</span><span class="token function">Fprintln</span><span class="token punctuation">(</span>w<span class="token punctuation">,</span> r<span class="token punctuation">.</span>Form<span class="token punctuation">)</span>
+fmt<span class="token punctuation">.</span><span class="token function">Fprintln</span><span class="token punctuation">(</span>w<span class="token punctuation">,</span> r<span class="token punctuation">.</span>PostForm<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>使用curl模拟一个请求：</p>
+<pre class="line-numbers language-shell"><code class="language-shell">curl -id "start=30&mode=list" "localhost:8080/world?start=40&sort=time"<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>结果：</p>
+<pre class="line-numbers language-shell"><code class="language-shell">map[mode:[list] sort:[time] start:[30 40]]
+map[mode:[list] start:[30]]<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>第一个<code>map</code>是<code>Form</code>，第二个是<code>PostForm</code>，从结果可以看到两者的区别。</p>
+<h4 id="5-3-MultipartForm"><a href="#5-3-MultipartForm" class="headerlink" title="5.3 MultipartForm"></a>5.3 MultipartForm</h4><p>对于<code>MultipartForm</code>，需要调用<code>ParseMultipartForm</code>方法，这个方法会在需要的时候（也就是<code>Form</code>和<code>PostForm</code>为<code>nil</code>的时候）调用<code>ParseForm</code>方法先来解析<code>Form</code>和<code>PostForm</code>两个字段：</p>
+<pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">func</span> <span class="token punctuation">(</span>r <span class="token operator">*</span>Request<span class="token punctuation">)</span> <span class="token function">ParseMultipartForm</span><span class="token punctuation">(</span>maxMemory <span class="token builtin">int64</span><span class="token punctuation">)</span> <span class="token builtin">error</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> r<span class="token punctuation">.</span>MultipartForm <span class="token operator">==</span> multipartByReader <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> errors<span class="token punctuation">.</span><span class="token function">New</span><span class="token punctuation">(</span><span class="token string">"http: multipart handled by MultipartReader"</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">if</span> r<span class="token punctuation">.</span>Form <span class="token operator">==</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+        err <span class="token operator">:=</span> r<span class="token punctuation">.</span><span class="token function">ParseForm</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+            <span class="token keyword">return</span> err
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">if</span> r<span class="token punctuation">.</span>MultipartForm <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token boolean">nil</span>
+    <span class="token punctuation">}</span>
+
+    mr<span class="token punctuation">,</span> err <span class="token operator">:=</span> r<span class="token punctuation">.</span><span class="token function">multipartReader</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span>
+    <span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> err
+    <span class="token punctuation">}</span>
+
+    f<span class="token punctuation">,</span> err <span class="token operator">:=</span> mr<span class="token punctuation">.</span><span class="token function">ReadForm</span><span class="token punctuation">(</span>maxMemory<span class="token punctuation">)</span>
+    <span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> err
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">if</span> r<span class="token punctuation">.</span>PostForm <span class="token operator">==</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+        r<span class="token punctuation">.</span>PostForm <span class="token operator">=</span> <span class="token function">make</span><span class="token punctuation">(</span>url<span class="token punctuation">.</span>Values<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">for</span> k<span class="token punctuation">,</span> v <span class="token operator">:=</span> <span class="token keyword">range</span> f<span class="token punctuation">.</span>Value <span class="token punctuation">{</span>
+        r<span class="token punctuation">.</span>Form<span class="token punctuation">[</span>k<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">append</span><span class="token punctuation">(</span>r<span class="token punctuation">.</span>Form<span class="token punctuation">[</span>k<span class="token punctuation">]</span><span class="token punctuation">,</span> v<span class="token operator">...</span><span class="token punctuation">)</span>
+        <span class="token comment" spellcheck="true">// r.PostForm should also be populated. See Issue 9305.</span>
+        r<span class="token punctuation">.</span>PostForm<span class="token punctuation">[</span>k<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">append</span><span class="token punctuation">(</span>r<span class="token punctuation">.</span>PostForm<span class="token punctuation">[</span>k<span class="token punctuation">]</span><span class="token punctuation">,</span> v<span class="token operator">...</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+
+    r<span class="token punctuation">.</span>MultipartForm <span class="token operator">=</span> f
+
+    <span class="token keyword">return</span> <span class="token boolean">nil</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>同时需要一个最大读取字节数的参数。</p>
+<p>从这个解析过程可以看到：</p>
+<ul>
+<li>如果<code>Form</code>和<code>PostForm</code>为<code>nil</code>的话，这个函数就先调用<code>ParseForm</code>来进行解析；</li>
+<li>不过如果编码格式是<code>multipart/form-data</code>的话，<code>Form</code>中就只会有URL中的参数，而<code>PostForm</code>中啥也没有（暂时）；</li>
+<li><code>ParseMultipartForm</code>方法会解析Body中<code>multipart/form-data</code>格式的数据到<code>MultipartForm</code>字段中；</li>
+<li>最后还会将Body中的参数添加到<code>Form</code>和<code>PostForm</code>中。</li>
+</ul>
+<p>例子：</p>
+<pre class="line-numbers language-go"><code class="language-go">r<span class="token punctuation">.</span><span class="token function">ParseMultipartForm</span><span class="token punctuation">(</span><span class="token number">1024</span><span class="token punctuation">)</span>
+fmt<span class="token punctuation">.</span><span class="token function">Fprintln</span><span class="token punctuation">(</span>w<span class="token punctuation">,</span> r<span class="token punctuation">.</span>Form<span class="token punctuation">)</span>
+fmt<span class="token punctuation">.</span><span class="token function">Fprintln</span><span class="token punctuation">(</span>w<span class="token punctuation">,</span> r<span class="token punctuation">.</span>PostForm<span class="token punctuation">)</span>
+fmt<span class="token punctuation">.</span><span class="token function">Fprintln</span><span class="token punctuation">(</span>w<span class="token punctuation">,</span> r<span class="token punctuation">.</span>MultipartForm<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>使用curl模拟一个请求：</p>
+<pre class="line-numbers language-shell"><code class="language-shell">curl -F "start=30" -F "mode=list" -F upload=@hello "localhost:8080/world?start=40&sort=time"<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>其中前两个-F生成两个<code>multipart/form-data</code>格式的参数，而后一个-F上传一个文件。结果：</p>
+<pre class="line-numbers language-shell"><code class="language-shell">map[mode:[list] sort:[time] start:[40 30]]
+map[mode:[list] start:[30]]
+&{map[mode:[list] start:[30]] map[upload:[0xc0000fa140]]}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>前两个<code>map</code>还是和之前的一样，最后一个就是<code>MultipartForm</code>，这是两个<code>map</code>，一个是Body中的参数，一个是上传的文件。</p>
+<p>关于<code>Form</code>和之前有一个不同，就是<code>start</code>值的顺序。之前使用<code>ParseForm</code>解析的时候30在前而现在40在前。从两个函数的代码中我们可以看到这个结果的原因。</p>
+<h4 id="5-4-Another-Way"><a href="#5-4-Another-Way" class="headerlink" title="5.4 Another Way"></a>5.4 Another Way</h4><p>除了上面调用<code>ParseForm</code>和<code>ParseMultipartForm</code>函数外，还可以通过其它的方法获取值：<code>FormValue()</code>和<code>PostFormValue()</code>。两个方法的定义如下：</p>
+<pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">func</span> <span class="token punctuation">(</span>r <span class="token operator">*</span>Request<span class="token punctuation">)</span> <span class="token function">FormValue</span><span class="token punctuation">(</span>key <span class="token builtin">string</span><span class="token punctuation">)</span> <span class="token builtin">string</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> r<span class="token punctuation">.</span>Form <span class="token operator">==</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+        r<span class="token punctuation">.</span><span class="token function">ParseMultipartForm</span><span class="token punctuation">(</span>defaultMaxMemory<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">if</span> vs <span class="token operator">:=</span> r<span class="token punctuation">.</span>Form<span class="token punctuation">[</span>key<span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token function">len</span><span class="token punctuation">(</span>vs<span class="token punctuation">)</span> <span class="token operator">></span> <span class="token number">0</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> vs<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> <span class="token string">""</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token punctuation">(</span>r <span class="token operator">*</span>Request<span class="token punctuation">)</span> <span class="token function">PostFormValue</span><span class="token punctuation">(</span>key <span class="token builtin">string</span><span class="token punctuation">)</span> <span class="token builtin">string</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> r<span class="token punctuation">.</span>PostForm <span class="token operator">==</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+        r<span class="token punctuation">.</span><span class="token function">ParseMultipartForm</span><span class="token punctuation">(</span>defaultMaxMemory<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">if</span> vs <span class="token operator">:=</span> r<span class="token punctuation">.</span>PostForm<span class="token punctuation">[</span>key<span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token function">len</span><span class="token punctuation">(</span>vs<span class="token punctuation">)</span> <span class="token operator">></span> <span class="token number">0</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> vs<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> <span class="token string">""</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这两个函数都会在必要的时候调用<code>ParseMultipartForm</code>函数来进行解析。和前面的方法不同在于，这两个方法返回的是对应key的第一个value值，而不是一个字符串切片。</p>
+<p>例子：</p>
+<pre class="line-numbers language-go"><code class="language-go">fmt<span class="token punctuation">.</span><span class="token function">Fprintln</span><span class="token punctuation">(</span>w<span class="token punctuation">,</span> r<span class="token punctuation">.</span><span class="token function">FormValue</span><span class="token punctuation">(</span><span class="token string">"start"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+fmt<span class="token punctuation">.</span><span class="token function">Fprintln</span><span class="token punctuation">(</span>w<span class="token punctuation">,</span> r<span class="token punctuation">.</span><span class="token function">PostFormValue</span><span class="token punctuation">(</span><span class="token string">"start"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>结果：</p>
+<pre class="line-numbers language-shell"><code class="language-shell">40
+30<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>这个结果很奇怪是吧，所以对于既在URL中也在Body中的参数，在获取的时候需要小心一些。最好的办法就是参数只出现在一个地方，要么URL中，要么Body中。</p>
+<p>其实常用的编码还有<code>application/json</code>，也就是读取的Body数据可以解析成一个Json结构，这也很常见，不过不在这里细说了。</p>
+<img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/Programming/goweb8.png">
+
+<p>To Be Continued…</p>
+
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        Author:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="http://deuterium.fun" rel="external nofollow noreferrer">Valineliu</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        Link:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="http://deuterium.fun/2019/12/24/go-web-part-2-request/">http://deuterium.fun/2019/12/24/go-web-part-2-request/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        Reprint policy:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    All articles in this blog are used except for special statements
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    reprint polocy. If reproduced, please indicate source
+                    <a href="http://deuterium.fun" target="_blank">Valineliu</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>Copied successfully, please follow the reprint policy of this article</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">more</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/go/">
+                                    <span class="chip bg-color">go</span>
+                                </a>
+                            
+                                <a href="/tags/web/">
+                                    <span class="chip bg-color">web</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    
+    <div class="social-share" data-sites="wechat,weibo,douban" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+        <style>
+    .valine-card {
+        margin: 1.5rem auto;
+    }
+
+    .valine-card .card-content {
+        padding: 20px 20px 5px 20px;
+    }
+
+    #vcomments textarea {
+        box-sizing: border-box;
+        background: url("/medias/comment_bg.png") 100% 100% no-repeat;
+    }
+
+    #vcomments p {
+        margin: 2px 2px 10px;
+        font-size: 1.05rem;
+        line-height: 1.78rem;
+    }
+
+    #vcomments blockquote p {
+        text-indent: 0.2rem;
+    }
+
+    #vcomments a {
+        padding: 0 2px;
+        color: #4cbf30;
+        font-weight: 500;
+        text-decoration: none;
+    }
+
+    #vcomments img {
+        max-width: 100%;
+        height: auto;
+        cursor: pointer;
+    }
+
+    #vcomments ol li {
+        list-style-type: decimal;
+    }
+
+    #vcomments ol,
+    ul {
+        display: block;
+        padding-left: 2em;
+        word-spacing: 0.05rem;
+    }
+
+    #vcomments ul li,
+    ol li {
+        display: list-item;
+        line-height: 1.8rem;
+        font-size: 1rem;
+    }
+
+    #vcomments ul li {
+        list-style-type: disc;
+    }
+
+    #vcomments ul ul li {
+        list-style-type: circle;
+    }
+
+    #vcomments table, th, td {
+        padding: 12px 13px;
+        border: 1px solid #dfe2e5;
+    }
+
+    #vcomments table, th, td {
+        border: 0;
+    }
+
+    table tr:nth-child(2n), thead {
+        background-color: #fafafa;
+    }
+
+    #vcomments table th {
+        background-color: #f2f2f2;
+        min-width: 80px;
+    }
+
+    #vcomments table td {
+        min-width: 80px;
+    }
+
+    #vcomments h1 {
+        font-size: 1.85rem;
+        font-weight: bold;
+        line-height: 2.2rem;
+    }
+
+    #vcomments h2 {
+        font-size: 1.65rem;
+        font-weight: bold;
+        line-height: 1.9rem;
+    }
+
+    #vcomments h3 {
+        font-size: 1.45rem;
+        font-weight: bold;
+        line-height: 1.7rem;
+    }
+
+    #vcomments h4 {
+        font-size: 1.25rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    #vcomments h5 {
+        font-size: 1.1rem;
+        font-weight: bold;
+        line-height: 1.4rem;
+    }
+
+    #vcomments h6 {
+        font-size: 1rem;
+        line-height: 1.3rem;
+    }
+
+    #vcomments p {
+        font-size: 1rem;
+        line-height: 1.5rem;
+    }
+
+    #vcomments hr {
+        margin: 12px 0;
+        border: 0;
+        border-top: 1px solid #ccc;
+    }
+
+    #vcomments blockquote {
+        margin: 15px 0;
+        border-left: 5px solid #42b983;
+        padding: 1rem 0.8rem 0.3rem 0.8rem;
+        color: #666;
+        background-color: rgba(66, 185, 131, .1);
+    }
+
+    #vcomments pre {
+        font-family: monospace, monospace;
+        padding: 1.2em;
+        margin: .5em 0;
+        background: #272822;
+        overflow: auto;
+        border-radius: 0.3em;
+        tab-size: 4;
+    }
+
+    #vcomments code {
+        font-family: monospace, monospace;
+        padding: 1px 3px;
+        font-size: 0.92rem;
+        color: #e96900;
+        background-color: #f8f8f8;
+        border-radius: 2px;
+    }
+
+    #vcomments pre code {
+        font-family: monospace, monospace;
+        padding: 0;
+        color: #e8eaf6;
+        background-color: #272822;
+    }
+
+    #vcomments pre[class*="language-"] {
+        padding: 1.2em;
+        margin: .5em 0;
+    }
+
+    #vcomments code[class*="language-"],
+    pre[class*="language-"] {
+        color: #e8eaf6;
+    }
+
+    #vcomments [type="checkbox"]:not(:checked), [type="checkbox"]:checked {
+        position: inherit;
+        margin-left: -1.3rem;
+        margin-right: 0.4rem;
+        margin-top: -1px;
+        vertical-align: middle;
+        left: unset;
+        visibility: visible;
+    }
+
+    #vcomments b,
+    strong {
+        font-weight: bold;
+    }
+
+    #vcomments dfn {
+        font-style: italic;
+    }
+
+    #vcomments small {
+        font-size: 85%;
+    }
+
+    #vcomments cite {
+        font-style: normal;
+    }
+
+    #vcomments mark {
+        background-color: #fcf8e3;
+        padding: .2em;
+    }
+
+    #vcomments table, th, td {
+        padding: 12px 13px;
+        border: 1px solid #dfe2e5;
+    }
+
+    table tr:nth-child(2n), thead {
+        background-color: #fafafa;
+    }
+
+    #vcomments table th {
+        background-color: #f2f2f2;
+        min-width: 80px;
+    }
+
+    #vcomments table td {
+        min-width: 80px;
+    }
+
+    #vcomments [type="checkbox"]:not(:checked), [type="checkbox"]:checked {
+        position: inherit;
+        margin-left: -1.3rem;
+        margin-right: 0.4rem;
+        margin-top: -1px;
+        vertical-align: middle;
+        left: unset;
+        visibility: visible;
+    }
+</style>
+
+<div class="card valine-card" data-aos="fade-up">
+    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; left: 20px; top: 15px; padding-bottom: 5px;">
+        <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
+        <span>评论</span>
+    </div>
+    <div id="vcomments" class="card-content" style="display: grid">
+    </div>
+</div>
+
+<script src="/libs/valine/av-min.js"></script>
+<script src="/libs/valine/Valine.min.js"></script>
+<script>
+    new Valine({
+        el: '#vcomments',
+        appId: 'BFXDDa5GNPBSIaLTpmkrVlrz-gzGzoHsz',
+        appKey: '2Up07jbiLJPDxricj9CLg3Qw',
+        notify: 'false' === 'true',
+        verify: 'false' === 'true',
+        visitor: 'true' === 'true',
+        avatar: 'mm',
+        pageSize: '10',
+        lang: 'en',
+        placeholder: 'say someting...'
+    });
+</script>
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="far fa-dot-circle"></i>&nbsp;Current
+            </div>
+            <div class="card">
+                <a href="/2019/12/24/go-web-part-2-request/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/17.jpg" class="responsive-img" alt="Go Web (Part 2): Request">
+                        
+                        <span class="card-title">Go Web (Part 2): Request</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            在了解了使用net/http构建go web服务之后，这篇文章深入了解一下在Go中如何处理一个请求。
+
+
+1. 请求包含什么HTTP Message有Request和Response两种。这里详细看看Request Message，一个请求
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2019-12-24
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/programming/" class="post-category">
+                                    programming
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/go/">
+                        <span class="chip bg-color">go</span>
+                    </a>
+                    
+                    <a href="/tags/web/">
+                        <span class="chip bg-color">web</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                Next&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2019/12/20/go-web-part-1-handler-servemux/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="Go Web (Part 1): Handler & ServeMux">
+                        
+                        <span class="card-title">Go Web (Part 1): Handler & ServeMux</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            1. Begin使用Go语言的标准库net/http可以快速构建一个简单的web服务。这篇文章从零开始构建一个简单的web服务器，并主要聚焦于处理器Handler和多路复用器ServeMux。
+在开始之前，MindMap里一无所有：
+
+
+2
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2019-12-20
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/programming/" class="post-category">
+                                    programming
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/go/">
+                        <span class="chip bg-color">go</span>
+                    </a>
+                    
+                    <a href="/tags/web/">
+                        <span class="chip bg-color">web</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+    
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+<!-- 代码块折行 -->
+
+<style type="text/css">
+code[class*="language-"], pre[class*="language-"] { white-space: pre !important; }
+</style>
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;You Will See...</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+    <footer class="page-footer bg-color">
+    <div class="container row center-align">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            <span id="year">2019</span>
+            <a href="http://deuterium.fun" target="_blank">Valineliu</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+            
+            
+            
+            
+            
+            <br>
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link ">
+
+
+    <a href="mailto:1749118121@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;Search</span>
+            <input type="search" id="searchInput" name="s" placeholder="Please enter a search keyword"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
