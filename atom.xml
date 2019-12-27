@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://deuterium.fun/"/>
-  <updated>2019-12-24T05:27:00.706Z</updated>
+  <updated>2019-12-27T04:14:06.532Z</updated>
   <id>http://deuterium.fun/</id>
   
   <author>
@@ -15,6 +15,37 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Year Reading in 2019</title>
+    <link href="http://deuterium.fun/2019/12/27/year-reading-in-2019/"/>
+    <id>http://deuterium.fun/2019/12/27/year-reading-in-2019/</id>
+    <published>2019-12-27T04:01:00.000Z</published>
+    <updated>2019-12-27T04:14:06.532Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;又是一年岁暮时。&lt;/p&gt;
+&lt;p&gt;最近才意识到，便随着2019年的过去，一个时代也过去了。&lt;/p&gt;
+&lt;p&gt;年初定的超过2017年的读书计划，接近但是没有完成（2017年120本，2019年113本，2018年太惨了28本）。&lt;/p&gt;
+&lt;p&gt;一个华丽的柱状图：&lt;/p&gt;
+&lt;p&gt;&lt;
+        
+      
+    
+    </summary>
+    
+    
+      <category term="life" scheme="http://deuterium.fun/categories/life/"/>
+    
+    
+      <category term="reading" scheme="http://deuterium.fun/tags/reading/"/>
+    
+  </entry>
   
   <entry>
     <title>Go Web (Part 2): Request</title>
@@ -125,9 +156,9 @@
       <category term="mysql" scheme="http://deuterium.fun/categories/mysql/"/>
     
     
-      <category term="mysql" scheme="http://deuterium.fun/tags/mysql/"/>
-    
       <category term="tips" scheme="http://deuterium.fun/tags/tips/"/>
+    
+      <category term="mysql" scheme="http://deuterium.fun/tags/mysql/"/>
     
   </entry>
   
@@ -184,9 +215,9 @@
       <category term="redis" scheme="http://deuterium.fun/categories/redis/"/>
     
     
-      <category term="tips" scheme="http://deuterium.fun/tags/tips/"/>
-    
       <category term="redis" scheme="http://deuterium.fun/tags/redis/"/>
+    
+      <category term="tips" scheme="http://deuterium.fun/tags/tips/"/>
     
   </entry>
   
