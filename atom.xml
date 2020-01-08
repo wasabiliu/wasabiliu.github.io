@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://deuterium.fun/"/>
-  <updated>2020-01-02T09:07:33.593Z</updated>
+  <updated>2020-01-08T09:00:29.113Z</updated>
   <id>http://deuterium.fun/</id>
   
   <author>
@@ -15,6 +15,37 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Go Web (part 4): Cookie</title>
+    <link href="http://deuterium.fun/2020/01/08/go-web-part-4-cookie/"/>
+    <id>http://deuterium.fun/2020/01/08/go-web-part-4-cookie/</id>
+    <published>2020-01-08T08:59:55.000Z</published>
+    <updated>2020-01-08T09:00:29.113Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;HTTP是一个无状态的协议。&lt;/p&gt;
+&lt;p&gt;这意味着服务器不会记录客户的状态。但是有时候服务器需要知道客户端的状态，这个时候就可以使用Cookie了。&lt;/p&gt;
+&lt;img
+        
+      
+    
+    </summary>
+    
+    
+      <category term="programming" scheme="http://deuterium.fun/categories/programming/"/>
+    
+    
+      <category term="go" scheme="http://deuterium.fun/tags/go/"/>
+    
+      <category term="web" scheme="http://deuterium.fun/tags/web/"/>
+    
+  </entry>
   
   <entry>
     <title>Go Web (Part 3): response</title>
@@ -186,9 +217,9 @@
       <category term="mysql" scheme="http://deuterium.fun/categories/mysql/"/>
     
     
-      <category term="mysql" scheme="http://deuterium.fun/tags/mysql/"/>
-    
       <category term="tips" scheme="http://deuterium.fun/tags/tips/"/>
+    
+      <category term="mysql" scheme="http://deuterium.fun/tags/mysql/"/>
     
   </entry>
   
