@@ -4,7 +4,7 @@
   
     
     <entry>
-      <title>Go Web (part 4): Cookie</title>
+      <title>Go Web (Part 4): Cookie</title>
       <link href="/2020/01/08/go-web-part-4-cookie/"/>
       <url>/2020/01/08/go-web-part-4-cookie/</url>
       
@@ -178,9 +178,9 @@
       
         <tags>
             
-            <tag> mysql </tag>
-            
             <tag> tips </tag>
+            
+            <tag> mysql </tag>
             
         </tags>
       
@@ -232,9 +232,9 @@
       
         <tags>
             
-            <tag> tips </tag>
-            
             <tag> redis </tag>
+            
+            <tag> tips </tag>
             
         </tags>
       

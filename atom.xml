@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://deuterium.fun/"/>
-  <updated>2020-01-08T09:00:29.113Z</updated>
+  <updated>2020-01-09T07:21:32.852Z</updated>
   <id>http://deuterium.fun/</id>
   
   <author>
@@ -17,11 +17,11 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>Go Web (part 4): Cookie</title>
+    <title>Go Web (Part 4): Cookie</title>
     <link href="http://deuterium.fun/2020/01/08/go-web-part-4-cookie/"/>
     <id>http://deuterium.fun/2020/01/08/go-web-part-4-cookie/</id>
     <published>2020-01-08T08:59:55.000Z</published>
-    <updated>2020-01-08T09:00:29.113Z</updated>
+    <updated>2020-01-09T07:21:32.852Z</updated>
     
     <summary type="html">
     
@@ -217,9 +217,9 @@
       <category term="mysql" scheme="http://deuterium.fun/categories/mysql/"/>
     
     
-      <category term="mysql" scheme="http://deuterium.fun/tags/mysql/"/>
-    
       <category term="tips" scheme="http://deuterium.fun/tags/tips/"/>
+    
+      <category term="mysql" scheme="http://deuterium.fun/tags/mysql/"/>
     
   </entry>
   
@@ -276,9 +276,9 @@
       <category term="redis" scheme="http://deuterium.fun/categories/redis/"/>
     
     
-      <category term="tips" scheme="http://deuterium.fun/tags/tips/"/>
-    
       <category term="redis" scheme="http://deuterium.fun/tags/redis/"/>
+    
+      <category term="tips" scheme="http://deuterium.fun/tags/tips/"/>
     
   </entry>
   
