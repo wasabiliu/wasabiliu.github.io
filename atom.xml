@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://deuterium.fun/"/>
-  <updated>2020-01-09T07:21:32.852Z</updated>
+  <updated>2020-01-15T02:44:46.567Z</updated>
   <id>http://deuterium.fun/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>SSL and TLS (Part 1): Brief Intro</title>
+    <link href="http://deuterium.fun/2020/01/15/ssl-and-tls-part-1-brief-intro/"/>
+    <id>http://deuterium.fun/2020/01/15/ssl-and-tls-part-1-brief-intro/</id>
+    <published>2020-01-15T02:43:21.000Z</published>
+    <updated>2020-01-15T02:44:46.567Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;在万物互联的时代，We don’t connect to the Internet, we &lt;em&gt;are&lt;/em&gt; the Internet.&lt;/p&gt;
+&lt;p&gt;如此重要的互联网，需要一种协议来保护传输中的信息安全，那就是SSL（Secure Socket
+        
+      
+    
+    </summary>
+    
+    
+      <category term="cryptography" scheme="http://deuterium.fun/categories/cryptography/"/>
+    
+    
+      <category term="tls" scheme="http://deuterium.fun/tags/tls/"/>
+    
+  </entry>
   
   <entry>
     <title>Go Web (Part 4): Cookie</title>
@@ -276,9 +304,9 @@
       <category term="redis" scheme="http://deuterium.fun/categories/redis/"/>
     
     
-      <category term="redis" scheme="http://deuterium.fun/tags/redis/"/>
-    
       <category term="tips" scheme="http://deuterium.fun/tags/tips/"/>
+    
+      <category term="redis" scheme="http://deuterium.fun/tags/redis/"/>
     
   </entry>
   

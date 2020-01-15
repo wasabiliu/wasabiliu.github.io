@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>SSL and TLS (Part 1): Brief Intro</title>
+      <link href="/2020/01/15/ssl-and-tls-part-1-brief-intro/"/>
+      <url>/2020/01/15/ssl-and-tls-part-1-brief-intro/</url>
+      
+        <content type="html"><![CDATA[<p>在万物互联的时代，We don’t connect to the Internet, we <em>are</em> the Internet.</p><p>如此重要的互联网，需要一种协议来保护传输中的信息安全，那就是SSL（Secure Socket Layer）和TLS（Transport Layer Security）。</p><p>这篇文章就简单介绍一下SSL/TLS。</p><h3 id="1-一开始，我们裸奔"><a href="#1-一开始，我们裸奔" class="headerlink" title="1. 一开始，我们裸奔"></a>1. 一开始，我们裸奔</h3><p>当互联网刚开始设计的时候，并没有将安全考虑进去。所以我们的数据都是明文传输的。这在一开始接入的节点很少的时候没有问题，大家依赖君子协议也能很好地工作。</p><p>但是随着接入节点的增多以及使用互联网的业务越来越重要，这种“裸奔”越来越不合适。所以，需要一种方法对传输的数据进行加密。</p><p>未加密时，网络模型如下：</p><img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/Cryptography/network.PNG"><p>既然有五层，那就有多个地方可以完成加密的操作。这样，就引出了第一个问题：哪里加密？</p><h3 id="2-Protect-the-Transport"><a href="#2-Protect-the-Transport" class="headerlink" title="2. Protect the Transport"></a>2. Protect the Transport</h3><p>SSL/TLS是在传输层（Transport Layer）上面应用层（Application Layer）下面对数据进行加密的：</p><img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/Cryptography/network_tls.PNG"><p>这也是TLS名字的由来。</p><p>从这里也可以看出网络分层的优势：每一层只关注自己的任务即可而不需要操心其他。应用层只需要把数据交给TLS层即可，TLS负责加密，然后数据就这么一层一层下发直到传输到对面节点，对面节点逆序处理，就可以得到原始数据了。</p><p>如果不需要加密，那么去除TLS层，不会影响其他层的工作。</p><p>TLS的主要目标有四个：</p><ol><li><strong>加密安全（Cryptographic Security）</strong>：主要职责，保证通信链路的安全；</li><li><strong>互通性（Interoperability）</strong>：独立开发人员可以通过共同的加密参数使用不同的开发工具开发出可以一起工作的程序或库；</li><li><strong>可扩展性（Extensibility）</strong>：TLS支持多种加密方法，这需要TLS具有可扩展性，方便加密方法的变更；</li><li><strong>高效性（Efficiency）</strong>：由于加密是一个耗时的操作，因此TLS需要把加密的额外性能消耗降到最低。</li></ol><p>接下来，看看SSL和TLS的历史，以及两者之间的关系。</p><h3 id="3-A-Brief-History-of-SSL-TLS"><a href="#3-A-Brief-History-of-SSL-TLS" class="headerlink" title="3. A Brief History of SSL/TLS"></a>3. A Brief History of SSL/TLS</h3><ol><li>1994年网景公司（Netscape）发布SSL协议，由于严重的安全缺陷SSL 1.0没有应用；</li><li>1995年发布SSL 2.0，第一次在网景公司的浏览器上应用；</li><li>1996年发布全新的SSL 3.0版本；</li><li>1996年五月，成立TLS工作组，将SSL标准化；</li><li>1999年，发布TLS 1.0；</li><li>2006年发布TLS 1.1；</li><li>2008年发布TLS 1.2；</li><li>2018年发布TLS 1.3。</li></ol><p>这里，我们使用TLS这个名称。</p><h3 id="4-好的，加密吧"><a href="#4-好的，加密吧" class="headerlink" title="4. 好的，加密吧"></a>4. 好的，加密吧</h3><p>一种加密方法，在正确部署与使用的情况下，需要解决三个问题：</p><ol><li><strong>保密性（Confidentiality）</strong>：消息不能再裸奔了，不能让人一看就知道是啥；</li><li><strong>真实性（Authenticity）</strong>：我要知道你说你是谁是不是真的；</li><li><strong>完整性（Integrity）</strong>：保护传输链路的安全，消息不能被篡改，即使被篡改也能发现。</li></ol><p>为了解决这些问题，我们需要讨论一下密码学。不过只是在较高的层次上来谈论，忽略一些底层的细节，当需要的时候再详细讨论。毕竟，密码学是一门涉及很广也和数学有很多关联的科学。</p><p>To Be Continued…</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> cryptography </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> tls </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Go Web (Part 4): Cookie</title>
       <link href="/2020/01/08/go-web-part-4-cookie/"/>
       <url>/2020/01/08/go-web-part-4-cookie/</url>
@@ -232,9 +257,9 @@
       
         <tags>
             
-            <tag> redis </tag>
-            
             <tag> tips </tag>
+            
+            <tag> redis </tag>
             
         </tags>
       
