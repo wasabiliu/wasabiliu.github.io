@@ -1,0 +1,1524 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="Data Types in MySQL, Deuterium">
+    <meta name="description" content="1. 开始为了能更好地理解与使用MySQL，根据MySQL文档花点时间整理了一下MySQL的数据类型。MySQL中一共有五大类数据类型，如下图：
+
+
+这篇文章只对其中的数字类型、字符串类型和时间类型进行总结。
+在这些数据类型的使用中，有几个">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Data Types in MySQL | Deuterium</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+    
+    <script src="/libs/jquery/jquery.min.js"></script>
+    
+<link rel="alternate" href="/atom.xml" title="Deuterium" type="application/atom+xml">
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper head-container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">Deuterium</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>Home</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>Tags</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>Categories</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>Archives</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>About</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>Contact</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>Friends</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="Search" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">Deuterium</div>
+        <div class="logo-desc">
+            
+            Software and anecdotes.
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			Home
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			Tags
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			Categories
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			Archives
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			About
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			Contact
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			Friends
+		</a>
+          
+        </li>
+        
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/20.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <div class="description center-align post-title">
+                        Data Types in MySQL
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        height: calc(100vh - 250px);
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #3B5998;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #3B5998;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #3B5998;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/mysql/">
+                                <span class="chip bg-color">mysql</span>
+                            </a>
+                        
+                            <a href="/tags/data-type/">
+                                <span class="chip bg-color">data_type</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/mysql/" class="post-category">
+                                mysql
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
+                    2019-12-16
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
+                    4.1k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>Read Times:&nbsp;&nbsp;
+                    15 Min
+                </div>
+                
+				
+                
+            </div>
+            
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h3 id="1-开始"><a href="#1-开始" class="headerlink" title="1. 开始"></a>1. 开始</h3><p>为了能更好地理解与使用MySQL，根据MySQL文档花点时间整理了一下MySQL的数据类型。MySQL中一共有五大类数据类型，如下图：</p>
+<img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/MySQL/mysql_datatypes.PNG">
+
+<p>这篇文章只对其中的数字类型、字符串类型和时间类型进行总结。</p>
+<p>在这些数据类型的使用中，有几个需要提前知道的地方：</p>
+<ol>
+<li>在整数中，<em><code>M</code></em>代表最大的展示宽度；而在浮点数和定点数中，<em><code>M</code></em>代表可以存储的总位数（也就是精度,precision）；对于字符串类型，<em><code>M</code></em>代表所能存储的最长字符数。不同类型的<em><code>M</code></em>也是不一样的；</li>
+<li><em><code>D</code></em>适用于浮点数和定点数，表示小数点后面的位数。<em><code>D</code></em>最大值是30，但是不能大于<em><code>M-2</code></em>；</li>
+<li><em><code>fsp</code></em>适用于时间类型，表示小于秒的精度。这个值在0和6之间，也就是说MySQL的时间可以精确到微秒级；</li>
+<li>类型定义中的<code>[</code>和<code>]</code>表示可选项。</li>
+</ol>
+<p>不管什么数据类型，计算机的存储都是一样的，不同在于对于底层存储数据的解释不同。</p>
+<p>接下来，详细看看各种数据类型是怎么存储的，以及MySQL是怎么解释的。</p>
+<h3 id="2-Numeric类型"><a href="#2-Numeric类型" class="headerlink" title="2. Numeric类型"></a>2. Numeric类型</h3><p>数字类型还可以细分成如下的几种类型：整数、实数和位数据类型。</p>
+<p>数字类型支持有符号和无符号属性，分别是<code>UNSIGNED</code>和<code>SIGNED</code>。其中<code>SIGNED</code>可以不写在类型定义中，默认就是有符号的。</p>
+<h4 id="2-1-Integer类型"><a href="#2-1-Integer类型" class="headerlink" title="2.1 Integer类型"></a>2.1 Integer类型</h4><p>整数类型根据所占空间大小可以分为五种：<code>TINYINT</code>, <code>SMALLINT</code>, <code>MEDIUMINT</code>, <code>INT</code>, <code>BIGINT</code>。其中<code>INT</code>也是<code>INTEGER</code>。</p>
+<p>按照有无符号又可以分为两种：<code>SIGNED</code>和<code>UNSIGNED</code>，其中默认是有符号的，只需要在指定无符号时使用<code>UNSIGNED</code>。</p>
+<p>整数类型基本情况如下表：</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Bytes</th>
+<th>Min Signed</th>
+<th>Max Signed</th>
+<th>Min Unsigned</th>
+<th>Max Unsigned</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>TINYINT</code></td>
+<td>1</td>
+<td>-128</td>
+<td>127</td>
+<td>0</td>
+<td>255</td>
+</tr>
+<tr>
+<td><code>SMALLINT</code></td>
+<td>2</td>
+<td>-32768</td>
+<td>32767</td>
+<td>0</td>
+<td>65535</td>
+</tr>
+<tr>
+<td><code>MEDIUMINT</code></td>
+<td>3</td>
+<td>-8388608</td>
+<td>8388607</td>
+<td>0</td>
+<td>16777215</td>
+</tr>
+<tr>
+<td><code>INT</code></td>
+<td>4</td>
+<td>-2147483648</td>
+<td>2147483647</td>
+<td>0</td>
+<td>4294967295</td>
+</tr>
+<tr>
+<td><code>BIGINT</code></td>
+<td>8</td>
+<td>-2^63</td>
+<td>2^63-1</td>
+<td>0</td>
+<td>2^64-1</td>
+</tr>
+</tbody></table>
+<p>有符号与无符号类型使用相同的存储空间，也具有相同的性能，可以根据需要来选择。不过如果选择了无符号类型，当插入的数据是负数时，会保存为0，需要注意。</p>
+<p>对于整数的<em><code>M</code></em>，比如<code>INT(11)</code>，对于大多数应用这是没有意义的，因为这不会限制值的合法范围，只是规定了MySQL的一些交互工具（比如MySQL命令行客户端）用来显示字符的个数。对于存储和计算来说，<code>INT(1)</code>和<code>INT(11)</code>是相同的。</p>
+<p>还有一个类型，<code>BOOL</code>(也可以是<code>BOOLEAN</code>)，这个类型和<code>TINYINT(1)</code>一样，0为<code>false</code>，非零为<code>true</code>。但是在MySQL中，<code>TRUE</code>就是1<code>FALSE</code>就是0：</p>
+<pre class="line-numbers language-mysql"><code class="language-mysql">SELECT IF(2 = TRUE, 'true', 'false');<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>结果是<code>false</code>。</p>
+<h4 id="2-2-实数类型"><a href="#2-2-实数类型" class="headerlink" title="2.2 实数类型"></a>2.2 实数类型</h4><p>MySQL中除了整数还可以储存实数。对于实数，MySQL既支持精确类型（定点），也支持不精确类型（浮点）。</p>
+<p>对于精确实数类型，MySQL中有<code>DECIMAL</code>，也可以叫做<code>DEC</code>和<code>NUMERIC</code>。</p>
+<p><code>DECIMAL</code>类型定义如下：</p>
+<pre class="line-numbers language-mysql"><code class="language-mysql">salary DECIMAL(5,2)<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>其中5就是精度2就是小数点后面的位数。精度也就是数字的总位数，这样<code>salary</code>的范围就是<code>-999.99</code>到<code>999.99</code>。</p>
+<p>对于不精确类型，MySQL有<code>FLOAT</code>和<code>DOUBLE</code>类型，其中<code>FLOAT</code>使用4个字节（也有可能使用8个字节），而<code>DOUBLE</code>使用8个字节进行存储。</p>
+<p>对于<code>FLOAT</code>，还可以这样来指定类型：<code>FLOAT(p)</code>，可以用来指定存储空间大小，具体的大小和<code>p</code>有关。</p>
+<p>浮点类型通常在相同精度时比<code>DECIMAL</code>所需空间少，所以应该尽量在需要精确计算时使用<code>DECIMAL</code>。</p>
+<p>下面列出了不同类型所占的空间：</p>
+<table>
+<thead>
+<tr>
+<th>Data Type</th>
+<th>Storage Required</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>FLOAT(p)</code></td>
+<td><code>0&lt;=p&lt;=24</code>时4个字节，<code>25&lt;=p&lt;=53</code>时8个字节</td>
+</tr>
+<tr>
+<td><code>FLOAT</code></td>
+<td>4个字节</td>
+</tr>
+<tr>
+<td><code>DOUBLE</code></td>
+<td>8个字节</td>
+</tr>
+</tbody></table>
+<p>对于<code>DECIMAL</code>情况有些复杂，MySQL将数字打包成二进制字符串来存储，每9个数字使用4个字节，并且对于整数部分和小数部分分开计算。计算规则如下：</p>
+<ol>
+<li>每9个数字使用4个字节；</li>
+<li>不够9个数字的通过下面的表格确定；</li>
+<li>将整数部分和小数部分所占空间相加即是整体空间。</li>
+</ol>
+<p>不够9个数字的部分所占空间：</p>
+<table>
+<thead>
+<tr>
+<th>Leftover Digits</th>
+<th>Number of Bytes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>1-2</td>
+<td>1</td>
+</tr>
+<tr>
+<td>3-4</td>
+<td>2</td>
+</tr>
+<tr>
+<td>5-6</td>
+<td>3</td>
+</tr>
+<tr>
+<td>7-8</td>
+<td>4</td>
+</tr>
+</tbody></table>
+<p>比如，对于123.123，整数部分3个数字不够9个，查表使用2个字节；同理小数部分也使用2个字节，一共4个字节。</p>
+<p>对于12345.1，整数部分使用3个字节，小数部分使用1个字节，一共4个字节。</p>
+<h4 id="2-3-位数据类型"><a href="#2-3-位数据类型" class="headerlink" title="2.3 位数据类型"></a>2.3 位数据类型</h4><p><code>BIT</code>类型可以存储比特位，<code>BIT(M)</code>可以存储<code>M</code>个比特位，其中<code>M</code>可以取1到64之间的任意值。。</p>
+<p>对于<code>BIT</code>类型，不同的存储引擎存储方式不同。MyISAM会把所有的比特位打包存储，所以19个单独的<code>BIT</code>列只需要19位来存储，所以一共3个字节就可以了；但是对于InnoDB来说，会为每个<code>BIT</code>列使用一个足够小的最小整数类型来存储，所以不能节省空间。</p>
+<p>还有一点需要注意的是，MySQL是使用字符串来存储的，而不是ASCII码的”0”或”1”。但是在数字上下文的场景使用时，结果是把位字符串转换成了数字。比如，如果存储一个<code>b&#39;00111001&#39;</code>（二进制值是57）到<code>BIT(8)</code>中并检索使用，得到的内容是字符码为57的字符串，也就是得到了字符”9”，但是在数字上下文中，得到的是57：</p>
+<pre class="line-numbers language-mysql"><code class="language-mysql">CREATE TABLE bittest(a bit(8));
+INSERT INTO bittest VALUES (b'00111001');
+SELECT a, a+0 FROM bittest;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>结果：</p>
+<pre class="line-numbers language-shell"><code class="language-shell">+------+------+
+| a    | a+0  |
++------+------+
+| 9    |   57 |
++------+------+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>一个建议就是，尽可能不使用<code>BIT</code>类型。</p>
+<h3 id="3-String类型"><a href="#3-String类型" class="headerlink" title="3. String类型"></a>3. String类型</h3><h4 id="3-1-VARCHAR和CHAR类型"><a href="#3-1-VARCHAR和CHAR类型" class="headerlink" title="3.1 VARCHAR和CHAR类型"></a>3.1 <code>VARCHAR</code>和<code>CHAR</code>类型</h4><p><code>VARCHAR</code>和<code>CHAR</code>是两种主要的类型，虽然相似，但是在好多方面各不相同。而且，两种类型在磁盘和内存中的存储方式也和存储引擎有关，这里的描述主要是InnoDB和MyISAM。</p>
+<p><strong>区别一：<code>VARCHAR</code>是变长的，<code>CHAR</code>是定长的。</strong></p>
+<p><code>VARDCHAR</code>根据存储的内容使用不同的空间，最长长度定义时指定；而<code>CHAR</code>使用定义时指定的空间。如果存储的值超过了指定的空间，两种类型都会截断超过的部分。</p>
+<p><strong>区别二：两种类型所能存储的最长字符串不同。</strong></p>
+<p><code>VARCHAR</code>可以最多存储65535个字符；而<code>CHAR</code>最多能存储255个字符。最长字符都可以在定义时指定。</p>
+<p><strong>区别三：填充方式</strong></p>
+<p>由于<code>CHAR</code>是定长的，如果存储的值不够指定长度，会在末尾填充空格；而<code>VARCHAR</code>不会填充空格。</p>
+<p><strong>区别四：空间占用</strong></p>
+<p><code>CHAR</code>是定长的，所以指定的长度就是真正需要的空间，不过还和使用的字符集有关。如果使用latin1字符集，那么<code>CHAR(4)</code>就使用4个字节存储。</p>
+<p><code>VARCHAR</code>是变长的，所以需要额外记录字符串的长度。对于字符数小于等于255，额外需要一个字节存储长度；字符数超过255，需要两个字节。</p>
+<p><strong>区别五：末尾空格</strong></p>
+<p>在区别三种提到了<code>CHAR</code>会在后面使用空格填充，但是如果数据本身后面就有空格的话，两个类型处理方式就不同了。<code>CHAR</code>当然会保存空格，但是在检索时会把空格去掉；而<code>VARCHAR</code>不会：存入什么，得到什么。</p>
+<pre class="line-numbers language-mysql"><code class="language-mysql">CREATE TABLE vc (v VARCHAR(4), c CHAR(4));
+INSERT INTO vc VALUES ('ab  ', 'ab  ');
+SELECT CONCAT('(', v, ')'), CONCAT('(', c, ')') FROM vc;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>结果：</p>
+<pre class="line-numbers language-shell"><code class="language-shell">+---------------------+---------------------+
+| CONCAT('(', v, ')') | CONCAT('(', c, ')') |
++---------------------+---------------------+
+| (ab  )              | (ab)                |
++---------------------+---------------------+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>下面的表格演示了两者的区别：</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th><code>CHAR(4)</code></th>
+<th>Storage Required</th>
+<th><code>VARCHAR(4)</code></th>
+<th>Storage Required</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>&#39;&#39;</code></td>
+<td><code>&#39;    &#39;</code></td>
+<td>4 bytes</td>
+<td><code>&#39;&#39;</code></td>
+<td>1 byte</td>
+</tr>
+<tr>
+<td><code>&#39;ab&#39;</code></td>
+<td><code>&#39;ab  &#39;</code></td>
+<td>4 bytes</td>
+<td><code>&#39;ab&#39;</code></td>
+<td>3 bytes</td>
+</tr>
+<tr>
+<td><code>abcd</code></td>
+<td><code>&#39;abcd&#39;</code></td>
+<td>4 bytes</td>
+<td><code>&#39;abcd&#39;</code></td>
+<td>5 bytes</td>
+</tr>
+<tr>
+<td><code>abcdefgh</code></td>
+<td><code>&#39;abcd&#39;</code></td>
+<td>4 bytes</td>
+<td><code>&#39;abcd&#39;</code></td>
+<td>5 bytes</td>
+</tr>
+</tbody></table>
+<p><code>VARCHAR</code>可以节省空间，不过由于是变长的，在更新时可能会比原来的长，这就需要额外的操作。如果一个行占用的空间增长，并且在页中没有更多的空间的话，不同的存储引擎处理方式不同。MyISAM会将行拆分成不同的片段存储；InnoDB则需要分裂页来使行可以放进页内。</p>
+<p><code>CHAR</code>适合存储很短的字符串，或者所有值都接近同一个长度，比如MD5值。对于经常变更的数据，<code>CHAR</code>也比<code>VARCHAR</code>好，因为不会产品碎片。</p>
+<h4 id="3-2-VARBINARY和BINARY类型"><a href="#3-2-VARBINARY和BINARY类型" class="headerlink" title="3.2 VARBINARY和BINARY类型"></a>3.2 <code>VARBINARY</code>和<code>BINARY</code>类型</h4><p><code>VARBINARY</code>和<code>BINARY</code>两种类型和<code>VARCHAR</code>和<code>CHAR</code>类似，不同在于，前两者储存的是二进制字符串（二进制字符码），而后两者存储的是常规字符串（字符）。</p>
+<p>这样有一个问题就是，虽然前两者的长度限制和后两者的一样，但是前两者计算的是字节数，而后两者计算的字符数，这在有些单个字符使用多个字节的字符集中会有所不同。</p>
+<p>还有一点需要注意，<code>BINARY</code>会在数据后面填充<code>\0</code>而不是空格，在检索的时候也不会删除后面的<code>\0</code>。</p>
+<p>二进制字符的优势在于比较。MySQL比较<code>BINARY</code>字符串时，每次按一个字节，并且根据该字节的数值比较。这会比字符比较更快。</p>
+<h4 id="3-3-BLOB和TEXT类型"><a href="#3-3-BLOB和TEXT类型" class="headerlink" title="3.3 BLOB和TEXT类型"></a>3.3 <code>BLOB</code>和<code>TEXT</code>类型</h4><p><code>BLOB</code>和<code>TEXT</code>都是为了存储很大的数据而设计的字符串数据类型，分别采用二进制和字符方式存储。</p>
+<p>其实它们也有各自的类型族：<code>TINYBLOB</code>、<code>BLOB</code>、<code>MEDIUMBLOB</code>、<code>LONGBLOB</code>和<code>TINYTEXT</code>、<code>TEXT</code>、<code>MEDIUMTEXT</code>和<code>LONGTEXT</code>。</p>
+<p>当<code>BLOG</code>和<code>TEXT</code>过大时，InnoDB会使用专门的“外部”存储区域来进行存储，此时每个值在行内需要1-4个字节来存储一个指针，指向外部存储区域的实际值。</p>
+<p>MySQL对于<code>BLOB</code>和<code>TEXT</code>列进行排序与其它类型不同：只对最前面的<code>max_sort_length</code>字节而不是整个字符串进行排序。</p>
+<p>MySQL不能将<code>BLOB</code>和<code>TEXT</code>列全部长度的字符串进行索引，也不能使用这些索引消除排序。</p>
+<h4 id="3-4-ENUM类型"><a href="#3-4-ENUM类型" class="headerlink" title="3.4 ENUM类型"></a>3.4 <code>ENUM</code>类型</h4><p>有时候可以使用枚举类型代替常用的字符串类型。枚举类型可以把一些不重复的字符串存储成一个预定义的集合。枚举类型使用一个或两个字节来编码枚举值，最多可以用65535个不同的枚举值。</p>
+<p>创建一个枚举值：</p>
+<pre class="line-numbers language-mysql"><code class="language-mysql">CREATE TABLE shirts (
+    name VARCHAR(40),
+    size ENUM('x-small', 'small', 'medium', 'large', 'x-large')
+);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这也是使用枚举类型的一个缺点，当需要增加枚举值时，只能使用<code>ALTER TABLE</code>：</p>
+<pre class="line-numbers language-mysql"><code class="language-mysql">ALTER TABLE shirts MODIFY COLUMN size ENUM('x-small', 'small', 'medium', 'large', 'x-large', 'xx-large');<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>存储枚举值时使用的是数字而不是对应的字符串：</p>
+<pre class="line-numbers language-mysql"><code class="language-mysql">INSERT INTO shirts (name, size) VALUES ('dress shirt','large'), ('t-shirt','medium'),
+  ('polo shirt','small');
+SELECT * FROM shirts;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>结果：</p>
+<pre class="line-numbers language-shell"><code class="language-shell">+-------------+--------+
+| name        | size   |
++-------------+--------+
+| dress shirt | large  |
+| t-shirt     | medium |
+| polo shirt  | small  |
++-------------+--------+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>不过在数字上下文中，可以看到真实存储的值：</p>
+<pre class="line-numbers language-mysql"><code class="language-mysql">SELECT size+0 FROM shirts;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>结果：</p>
+<pre class="line-numbers language-mysql"><code class="language-mysql">+--------+
+| size+0 |
++--------+
+|      4 |
+|      3 |
+|      2 |
++--------+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>因此：<strong>千万不要使用数字作为枚举值</strong>。</p>
+<p>还有一点，枚举字段是根据存储的数字来排序的而不是定义的字符串：</p>
+<pre class="line-numbers language-mysql"><code class="language-mysql">SELECT size FROM shirts ORDER BY size;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>结果：</p>
+<pre class="line-numbers language-shell"><code class="language-shell">+--------+
+| size   |
++--------+
+| small  |
+| medium |
+| large  |
++--------+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="3-5-SET类型"><a href="#3-5-SET类型" class="headerlink" title="3.5 SET类型"></a>3.5 <code>SET</code>类型</h4><p>一位可以存储一个只有<code>true/false</code>值，如果有很多<code>true/false</code>值的话，可以使用<code>SET</code>类型，它在MySQL中打包存储，可以有效节省空间，最多可以存储64个<code>true/false</code>值，只需要8个字节。</p>
+<p>和<code>ENUM</code>一样，一个主要的缺点是添加新的定义时需要使用<code>ALTER TABLE</code>。而且，也不能在<code>SET</code>上使用索引。</p>
+<p>作为一个替代方案，可以使用一个整数来包装一系列的位，然后再应用中操作这个整数。不过是使用这个方法还是使用<code>SET</code>依据每个人的偏好。</p>
+<h3 id="4-Date-and-Time类型"><a href="#4-Date-and-Time类型" class="headerlink" title="4. Date and Time类型"></a>4. Date and Time类型</h3><p>MySQL中的时间和日期类型有如下几种：<code>DATE</code>、<code>TIME</code>、<code>DATETIME</code>、<code>TIMESTAMP</code>和<code>YEAR</code>。每种类型都有自己对应的零值和取值范围：</p>
+<table>
+<thead>
+<tr>
+<th>Data Type</th>
+<th>“Zero” Value</th>
+<th>Time Range</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>Date</code></td>
+<td><code>&#39;0000-00-00&#39;</code></td>
+<td><code>&#39;1000-01-01&#39;</code> 到<code>&#39;9999-12-31&#39;</code></td>
+</tr>
+<tr>
+<td><code>TIME</code></td>
+<td><code>&#39;00:00:00&#39;</code></td>
+<td><code>&#39;-838：59：59&#39;</code>到<code>&#39;838:59:59&#39;</code></td>
+</tr>
+<tr>
+<td><code>DATETIME</code></td>
+<td><code>&#39;0000-00-00 00:00:00&#39;</code></td>
+<td><code>&#39;1000-01-01 00:00:00&#39;</code>到<code>&#39;9999-12-31 23:59:59&#39;</code></td>
+</tr>
+<tr>
+<td><code>TIMESTAMP</code></td>
+<td><code>&#39;0000-00-00 00:00:00&#39;</code></td>
+<td><code>&#39;1970-01-01 00:00:01&#39;</code>到<code>&#39;2038-01-19 03:14:07&#39;</code></td>
+</tr>
+<tr>
+<td><code>YEAR</code></td>
+<td><code>0000</code></td>
+<td><code>&#39;1901&#39;</code>到<code>&#39;2155&#39;</code>或<code>&#39;0&#39;</code>到<code>&#39;99&#39;</code></td>
+</tr>
+</tbody></table>
+<h4 id="4-1-DATE、DATETIME和TIMESTAMP类型"><a href="#4-1-DATE、DATETIME和TIMESTAMP类型" class="headerlink" title="4.1 DATE、DATETIME和TIMESTAMP类型"></a>4.1 <code>DATE</code>、<code>DATETIME</code>和<code>TIMESTAMP</code>类型</h4><p>这三种类型都含有年月日的信息，但是三种类型又有一些不同。</p>
+<p><code>DATE</code>类型只有日期而没有时间；<code>DATETIME</code>和<code>TIMESTAMP</code>除了日期还有具体的时间。</p>
+<p><code>DATETIME</code>和<code>TIMESTAMP</code>的一个区别是两者的范围不同。<code>DATETIME</code>将日期存储为<code>YYYYMMDDHHMMSS</code>格式的整数中，使用8个字节；而<code>TIMESTAMP</code>使用4个字节存储从1970年1月1日以来的秒数，所以范围小了很多。</p>
+<p>另外一个区别就是<code>TIMESTAMP</code>依赖时区而<code>DATETIME</code>不包含时区。MySQL服务器、操作系统以及客户端连接都可以设置时区。</p>
+<p><code>TIMESTAMP</code>也有一些<code>DATETIME</code>没有的属性，比如可以设置插入和更新时<code>TIMESTAMP</code>列的行为。</p>
+<p>在MySQL 5.6之后<code>DATETIME</code>和<code>TIMESTAMP</code>增加了时间的精确度，在原来秒的基础上精确度增加到了微秒级别，不过需要在定义中指定精确度，比如<code>DATETIME(6)</code>，括号中的数字就是时间的精确度，取值范围是0-6。</p>
+<p>如果指定了额外的精确度的话，MySQL需要额外的空间来存储，所需的空间和精度有关：</p>
+<table>
+<thead>
+<tr>
+<th>fsp</th>
+<th>Storage Required</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>0 bytes</td>
+</tr>
+<tr>
+<td>1, 2</td>
+<td>1 byte</td>
+</tr>
+<tr>
+<td>3, 4</td>
+<td>2 bytes</td>
+</tr>
+<tr>
+<td>5, 6</td>
+<td>3 bytes</td>
+</tr>
+</tbody></table>
+<h4 id="4-2-TIME类型"><a href="#4-2-TIME类型" class="headerlink" title="4.2 TIME类型"></a>4.2 <code>TIME</code>类型</h4><p><code>TIME</code>类型的存储范围并不是感觉上的<code>&#39;00:00:00&#39;</code>到<code>&#39;23:59:59&#39;</code>，而是<code>&#39;-838：59：59&#39;</code>到<code>&#39;838:59:59&#39;</code>，这样就可以表示是两个事件之间的时间差了。</p>
+<p>MySQL中<code>TIME</code>的格式是<code>hh:mm:ss</code>，使用3个字节来存储。</p>
+<p>在对<code>TIME</code>列进行赋值时，需要注意的是，<code>11:12</code>的结果是<code>&#39;11:12:00&#39;</code>，而不是<code>00:11:12</code>；<code>&#39;1112&#39;</code>的结果是<code>&#39;00:11:12&#39;</code>；<code>&#39;12&#39;</code>的结果是<code>&#39;00:00:12&#39;</code>。不过建议不要这么做。</p>
+<p>同样，<code>TIME</code>类型在MySQL 5.6 版本之后添加了微秒级的精度，只需要在定义的时候指定精度即可，所需的额外空间就是上面的表格。</p>
+<h4 id="4-3-YEAR类型"><a href="#4-3-YEAR类型" class="headerlink" title="4.3 YEAR类型"></a>4.3 <code>YEAR</code>类型</h4><p><code>YEAR</code>类型是使用1个字节来存储的数据类型，用来表示年份。在MySQL中，有两种：<code>YEAR(4)</code>和<code>YEAR(2)</code>。</p>
+<p><code>YEAR(4)</code>可以表示的范围是<code>&#39;1901&#39;</code>到<code>&#39;2155&#39;</code>；</p>
+<p><code>YEAR(2)</code>可以的取值范围是<code>&#39;0&#39;</code>到<code>&#39;99&#39;</code>，可以表示的范围是<code>&#39;1970&#39;</code>到<code>&#39;2069&#39;</code>。</p>
+<p>由于范围小，尽量不要使用<code>YEAR(2)</code>。</p>
+<h3 id="5-选择优化的数据类型"><a href="#5-选择优化的数据类型" class="headerlink" title="5. 选择优化的数据类型"></a>5. 选择优化的数据类型</h3><p>MySQL支持的数据类型非常多，选择正确的类型对于性能来说也很重要。下面是选择数据类型时的一些原则。</p>
+<ol>
+<li>一般情况下，应该尽量使用可以正确存储数据的最小数据类型；</li>
+<li>使用简单的数据类型。比如，使用MySQL的内建类型来存储时间而不是字符串，使用整型次数IP地址而不是字符串；</li>
+<li>通常情况下最好指定列为<code>NOT NULL</code>，除非真的需要存储<code>NULL</code>值；</li>
+<li>尽量使用相同的数据类型来存储相似或相关的值，尤其是需要在关联条件中使用的列；</li>
+<li>注意可变长字符串，其在临时表和排序时可能导致悲观的按最大长度分配内存；</li>
+<li>避免使用MySQL已经遗弃的特性，比如指定浮点数的精度，或者整数的显示宽度；</li>
+<li>小心使用<code>ENUM</code>和<code>SET</code>，不要滥用；</li>
+<li>谨慎使用<code>BIT</code>，对于大部分应用，最好避免使用这个类型。</li>
+</ol>
+
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        Author:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="http://deuterium.fun" rel="external nofollow noreferrer">Valineliu</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        Link:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="http://deuterium.fun/data-types-in-mysql/">http://deuterium.fun/data-types-in-mysql/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        Reprint policy:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    All articles in this blog are used except for special statements
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    reprint polocy. If reproduced, please indicate source
+                    <a href="http://deuterium.fun" target="_blank">Valineliu</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>Copied successfully, please follow the reprint policy of this article</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">more</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/mysql/">
+                                    <span class="chip bg-color">mysql</span>
+                                </a>
+                            
+                                <a href="/tags/data-type/">
+                                    <span class="chip bg-color">data_type</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    
+    <div class="social-share" data-sites="wechat,weibo,douban" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+        <style>
+    .valine-card {
+        margin: 1.5rem auto;
+    }
+
+    .valine-card .card-content {
+        padding: 20px 20px 5px 20px;
+    }
+
+    #vcomments textarea {
+        box-sizing: border-box;
+        background: url("/medias/comment_bg.png") 100% 100% no-repeat;
+    }
+
+    #vcomments p {
+        margin: 2px 2px 10px;
+        font-size: 1.05rem;
+        line-height: 1.78rem;
+    }
+
+    #vcomments blockquote p {
+        text-indent: 0.2rem;
+    }
+
+    #vcomments a {
+        padding: 0 2px;
+        color: #4cbf30;
+        font-weight: 500;
+        text-decoration: none;
+    }
+
+    #vcomments img {
+        max-width: 100%;
+        height: auto;
+        cursor: pointer;
+    }
+
+    #vcomments ol li {
+        list-style-type: decimal;
+    }
+
+    #vcomments ol,
+    ul {
+        display: block;
+        padding-left: 2em;
+        word-spacing: 0.05rem;
+    }
+
+    #vcomments ul li,
+    ol li {
+        display: list-item;
+        line-height: 1.8rem;
+        font-size: 1rem;
+    }
+
+    #vcomments ul li {
+        list-style-type: disc;
+    }
+
+    #vcomments ul ul li {
+        list-style-type: circle;
+    }
+
+    #vcomments table, th, td {
+        padding: 12px 13px;
+        border: 1px solid #dfe2e5;
+    }
+
+    #vcomments table, th, td {
+        border: 0;
+    }
+
+    table tr:nth-child(2n), thead {
+        background-color: #fafafa;
+    }
+
+    #vcomments table th {
+        background-color: #f2f2f2;
+        min-width: 80px;
+    }
+
+    #vcomments table td {
+        min-width: 80px;
+    }
+
+    #vcomments h1 {
+        font-size: 1.85rem;
+        font-weight: bold;
+        line-height: 2.2rem;
+    }
+
+    #vcomments h2 {
+        font-size: 1.65rem;
+        font-weight: bold;
+        line-height: 1.9rem;
+    }
+
+    #vcomments h3 {
+        font-size: 1.45rem;
+        font-weight: bold;
+        line-height: 1.7rem;
+    }
+
+    #vcomments h4 {
+        font-size: 1.25rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    #vcomments h5 {
+        font-size: 1.1rem;
+        font-weight: bold;
+        line-height: 1.4rem;
+    }
+
+    #vcomments h6 {
+        font-size: 1rem;
+        line-height: 1.3rem;
+    }
+
+    #vcomments p {
+        font-size: 1rem;
+        line-height: 1.5rem;
+    }
+
+    #vcomments hr {
+        margin: 12px 0;
+        border: 0;
+        border-top: 1px solid #ccc;
+    }
+
+    #vcomments blockquote {
+        margin: 15px 0;
+        border-left: 5px solid #42b983;
+        padding: 1rem 0.8rem 0.3rem 0.8rem;
+        color: #666;
+        background-color: rgba(66, 185, 131, .1);
+    }
+
+    #vcomments pre {
+        font-family: monospace, monospace;
+        padding: 1.2em;
+        margin: .5em 0;
+        background: #272822;
+        overflow: auto;
+        border-radius: 0.3em;
+        tab-size: 4;
+    }
+
+    #vcomments code {
+        font-family: monospace, monospace;
+        padding: 1px 3px;
+        font-size: 0.92rem;
+        color: #e96900;
+        background-color: #f8f8f8;
+        border-radius: 2px;
+    }
+
+    #vcomments pre code {
+        font-family: monospace, monospace;
+        padding: 0;
+        color: #e8eaf6;
+        background-color: #272822;
+    }
+
+    #vcomments pre[class*="language-"] {
+        padding: 1.2em;
+        margin: .5em 0;
+    }
+
+    #vcomments code[class*="language-"],
+    pre[class*="language-"] {
+        color: #e8eaf6;
+    }
+
+    #vcomments [type="checkbox"]:not(:checked), [type="checkbox"]:checked {
+        position: inherit;
+        margin-left: -1.3rem;
+        margin-right: 0.4rem;
+        margin-top: -1px;
+        vertical-align: middle;
+        left: unset;
+        visibility: visible;
+    }
+
+    #vcomments b,
+    strong {
+        font-weight: bold;
+    }
+
+    #vcomments dfn {
+        font-style: italic;
+    }
+
+    #vcomments small {
+        font-size: 85%;
+    }
+
+    #vcomments cite {
+        font-style: normal;
+    }
+
+    #vcomments mark {
+        background-color: #fcf8e3;
+        padding: .2em;
+    }
+
+    #vcomments table, th, td {
+        padding: 12px 13px;
+        border: 1px solid #dfe2e5;
+    }
+
+    table tr:nth-child(2n), thead {
+        background-color: #fafafa;
+    }
+
+    #vcomments table th {
+        background-color: #f2f2f2;
+        min-width: 80px;
+    }
+
+    #vcomments table td {
+        min-width: 80px;
+    }
+
+    #vcomments [type="checkbox"]:not(:checked), [type="checkbox"]:checked {
+        position: inherit;
+        margin-left: -1.3rem;
+        margin-right: 0.4rem;
+        margin-top: -1px;
+        vertical-align: middle;
+        left: unset;
+        visibility: visible;
+    }
+</style>
+
+<div class="card valine-card" data-aos="fade-up">
+    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; left: 20px; top: 15px; padding-bottom: 5px;">
+        <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
+        <span>评论</span>
+    </div>
+    <div id="vcomments" class="card-content" style="display: grid">
+    </div>
+</div>
+
+<script src="/libs/valine/av-min.js"></script>
+<script src="/libs/valine/Valine.min.js"></script>
+<script>
+    new Valine({
+        el: '#vcomments',
+        appId: 'BFXDDa5GNPBSIaLTpmkrVlrz-gzGzoHsz',
+        appKey: '2Up07jbiLJPDxricj9CLg3Qw',
+        notify: 'false' === 'true',
+        verify: 'false' === 'true',
+        visitor: 'true' === 'true',
+        avatar: 'mm',
+        pageSize: '10',
+        lang: 'en',
+        placeholder: 'say someting...'
+    });
+</script>
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
+            <div class="card">
+                <a href="/files-to-mysql/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/22.jpg" class="responsive-img" alt="Files to MySQL">
+                        
+                        <span class="card-title">Files to MySQL</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            问题：把一个本地的文件（比如.txt或.csv文件）导入到指定的一张MySQL表中。可以使用mysqlimport或者LOAD DATA命令来完成。这篇文章仅仅是简单介绍一下mysqlimport和LOAD DATA的简单用法。关于LOAD
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2019-12-17
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/mysql/" class="post-category">
+                                    mysql
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/mysql/">
+                        <span class="chip bg-color">mysql</span>
+                    </a>
+                    
+                    <a href="/tags/tips/">
+                        <span class="chip bg-color">tips</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                Next&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/file-to-redis/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="File to Redis">
+                        
+                        <span class="card-title">File to Redis</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            问题是这样的，现在需要把一个文件里的所有数据上传到redis的set中，文件里存储的就是ID，每行一个：
+head id.list
+10000
+10001
+10002
+10003
+10004
+10005
+10006
+10007
+10008
+
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2019-12-10
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/redis/" class="post-category">
+                                    redis
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/redis/">
+                        <span class="chip bg-color">redis</span>
+                    </a>
+                    
+                    <a href="/tags/tips/">
+                        <span class="chip bg-color">tips</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+    
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+<!-- 代码块折行 -->
+
+<style type="text/css">
+code[class*="language-"], pre[class*="language-"] { white-space: pre !important; }
+</style>
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;You Will See...</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+    <footer class="page-footer bg-color">
+    <div class="container row center-align">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            <span id="year">2020</span>
+            <a href="http://deuterium.fun" target="_blank">Valineliu</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+            
+            
+            
+            
+            
+            <br>
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link ">
+
+
+    <a href="mailto:1749118121@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;Search</span>
+            <input type="search" id="searchInput" name="s" placeholder="Please enter a search keyword"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
