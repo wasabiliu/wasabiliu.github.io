@@ -4,8 +4,12 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="What Happens When Using LOAD DATA, Deuterium">
-    <meta name="description" content="在之前的文章Files to MySQL中简单介绍了mysqlimport和LOAD DATA的使用，也知道了mysqlimport其实就是使用了LOAD DATA语句。在这篇文章中详细介绍一下LOAD DATA这个语句，来看看当使用这个语">
+    <meta name="keywords" content="SSL and TLS (Part 2): Cryptography, Deuterium">
+    <meta name="description" content="在SSL and TLS (Part 1): Brief Intro中简单介绍了一下SSL/TLS，并以需要解决的三个问题结尾。这三个问题是：
+
+保密性（Confidentiality）
+真实性（Authenticity）
+完整性（Inte">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -13,7 +17,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>What Happens When Using LOAD DATA | Deuterium</title>
+    <title>SSL and TLS (Part 2): Cryptography | Deuterium</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -242,13 +246,13 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/21.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/8.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
                     <div class="description center-align post-title">
-                        What Happens When Using LOAD DATA
+                        SSL and TLS (Part 2): Cryptography
                     </div>
                 </div>
             </div>
@@ -366,8 +370,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/mysql/">
-                                <span class="chip bg-color">mysql</span>
+                            <a href="/tags/tls/">
+                                <span class="chip bg-color">tls</span>
                             </a>
                         
                     </div>
@@ -378,8 +382,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/mysql/" class="post-category">
-                                mysql
+                            <a href="/categories/cryptography/" class="post-category">
+                                cryptography
                             </a>
                         
                     </div>
@@ -391,7 +395,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
-                    2019-12-18
+                    2020-01-19
                 </div>
                 
 
@@ -400,14 +404,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    1.4k
+                    3.8k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>Read Times:&nbsp;&nbsp;
-                    5 Min
+                    13 Min
                 </div>
                 
 				
@@ -418,132 +422,114 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>在之前的文章<a href="http://deuterium.fun/2019/12/17/files-to-mysql/">Files to MySQL</a>中简单介绍了mysqlimport和<code>LOAD DATA</code>的使用，也知道了mysqlimport其实就是使用了<code>LOAD DATA</code>语句。在这篇文章中详细介绍一下<code>LOAD DATA</code>这个语句，来看看当使用这个语句导入数据时到底发生了什么以及一些需要注意的地方。</p>
-<h3 id="1-从Manual开始"><a href="#1-从Manual开始" class="headerlink" title="1. 从Manual开始"></a>1. 从Manual开始</h3><p>在<a href="https://dev.mysql.com/doc/refman/8.0/en/load-data.html" target="_blank" rel="noopener">MySQL手册</a>中详细介绍了<code>LOAD DATA</code>这个语句。下面是这个语句的格式：</p>
-<pre class="line-numbers language-mysql"><code class="language-mysql">LOAD DATA
-    [LOW_PRIORITY | CONCURRENT] [LOCAL]
-    INFILE 'file_name'
-    [REPLACE | IGNORE]
-    INTO TABLE tbl_name
-    [PARTITION (partition_name [, partition_name] ...)]
-    [CHARACTER SET charset_name]
-    [{FIELDS | COLUMNS}
-        [TERMINATED BY 'string']
-        [[OPTIONALLY] ENCLOSED BY 'char']
-        [ESCAPED BY 'char']
-    ]
-    [LINES
-        [STARTING BY 'string']
-        [TERMINATED BY 'string']
-    ]
-    [IGNORE number {LINES | ROWS}]
-    [(col_name_or_user_var
-        [, col_name_or_user_var] ...)]
-    [SET col_name={expr | DEFAULT},
-        [, col_name={expr | DEFAULT}] ...]<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>参数还是挺多的，可以在手册里看到详细的介绍。不管怎么样，可以使用这个语句来导入数据了。</p>
-<h3 id="2-文件放在哪"><a href="#2-文件放在哪" class="headerlink" title="2. 文件放在哪"></a>2. 文件放在哪</h3><p>像之前一样，创建一个测试表和测试文件：one_piece表和one_piece.txt文件。</p>
-<p>然后，这个文件放在哪呢？</p>
-<p>毕竟现在涉及到两台机器：mysql client机器和server机器。</p>
-<p>在手册上写着：</p>
-<blockquote>
-<p>If <code>LOCAL</code> is specified, the file is read by the client program on the client host and sent to the server.</p>
-</blockquote>
-<p>就是说MySQL根据<code>LOCAL</code>这个参数来标识在哪里去找这个文件。如果指定了<code>LOCAL</code>就在客户端上找，否则就在服务器上找。</p>
-<h3 id="3-在server上"><a href="#3-在server上" class="headerlink" title="3. 在server上"></a>3. 在server上</h3><p>首先现在服务器上尝试。先看看MySQL存放数据的地方：</p>
-<pre class="line-numbers language-mysql"><code class="language-mysql">SELECT @@datadir;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>结果：</p>
-<pre class="line-numbers language-shell"><code class="language-shell">+------------------------+
-| @@datadir              |
-+------------------------+
-| /usr/local/mysql/data/ |
-+------------------------+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>在我的机器上，目录是这个。</p>
-<p>然后把文件放在这个目录下的test目录下，这个test就是对应的数据库。</p>
-<p>然后导入数据：</p>
-<pre class="line-numbers language-mysql"><code class="language-mysql">LOAD DATA INFILE 'one_piece.txt' 
-INTO TABLE one_piece 
-FIELDS TERMINATED BY '\t' 
-IGNORE 1 LINES 
-(no,name);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>结果：</p>
-<pre class="line-numbers language-shell"><code class="language-shell">ERROR 1290 (HY000): The MySQL server is running with the --secure-file-priv option so it cannot execute this statement<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>好的，那看看<code>secure_file_priv</code>是什么：</p>
-<pre class="line-numbers language-mysql"><code class="language-mysql">SELECT @@secure_file_priv;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>结果：</p>
-<pre class="line-numbers language-shell"><code class="language-shell">+--------------------+
-| @@secure_file_priv |
-+--------------------+
-| NULL               |
-+--------------------+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>结果是NULL，这意味着不允许MySQL从文件系统里读取文件，当然是为了安全。</p>
-<p>可以在启动mysql服务的时候设置这个值来允许mysql读取文件：</p>
-<pre class="line-numbers language-shell"><code class="language-shell">/usr/local/mysql/bin/mysqld --user=_mysql --basedir=/usr/local/mysql \
---datadir=/usr/local/mysql/data \
---plugin-dir=/usr/local/mysql/lib/plugin \
---log-error=/usr/local/mysql/data/mysqld.local.err \
---pid-file=/usr/local/mysql/data/mysqld.local.pid \
---secure-file-priv=/usr/local/mysql/data<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>这样查看<code>secure_file_priv</code>就是设置的值了：</p>
-<pre class="line-numbers language-shell"><code class="language-shell">+------------------------+
-| @@secure_file_priv     |
-+------------------------+
-| /usr/local/mysql/data/ |
-+------------------------+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>然后导入数据就可以了：</p>
-<pre class="line-numbers language-shell"><code class="language-shell">Query OK, 10 rows affected (0.08 sec)
-Records: 10  Deleted: 0  Skipped: 0  Warnings: 0<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<p>MySQL的默认设置是不允许这么操作的，这也可以理解。上面这么操作主要是为了演示从服务器里导入数据的过程，实际不建议这么操作，都是在客户端导入文件到MySQL服务器。</p>
-<h3 id="4-在client上"><a href="#4-在client上" class="headerlink" title="4. 在client上"></a>4. 在client上</h3><p>由于一些原因我们不能在MySQL服务器上导入文件，这个时候需要在客户端上来导入文件了，这也是<code>LOCAL</code>选项的含义。从客户端导入数据到MySQL服务器的过程中涉及到一些步骤，如下图：</p>
-<img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/MySQL/load_data.png">
-
-<p>简单来说涉及到下面的几个步骤：</p>
+                <p>在<a href="https://deuterium.fun/ssl-and-tls-part-1-brief-intro/">SSL and TLS (Part 1): Brief Intro</a>中简单介绍了一下SSL/TLS，并以需要解决的三个问题结尾。这三个问题是：</p>
 <ol>
-<li>客户端发送<code>COM_QUERY</code>到服务端来执行命令，在这个例子中就是<code>LOAD DATA LOCAL INFILE xxx</code>；</li>
-<li>服务端发送一个特殊的响应<code>OxFB</code>和文件名给客户端，来告诉客户端发送的文件名；</li>
-<li>客户端开始将文件内容发送给服务端；</li>
-<li>客户端发送完文件内容后，发送一个空包来通知服务端文件发文完毕；</li>
-<li>服务端开始执行命令，执行完毕后返回一个结果（OK或者错误）。</li>
+<li><strong>保密性（Confidentiality）</strong></li>
+<li><strong>真实性（Authenticity）</strong></li>
+<li><strong>完整性（Integrity）</strong></li>
 </ol>
-<p>可是为什么服务端要把发送的文件名给客户端呢？客户端不知道应该发送哪个文件吗？</p>
-<p>是这样的，SQL语句分析起来比较麻烦，所以MySQL把SQL的解析都放在了服务端，服务端解析完了告诉客户端，这样客户端就不需要解析复杂的SQL语句了。</p>
-<p>好的，开始使用<code>LOCAL</code>导入数据：</p>
-<pre class="line-numbers language-mysql"><code class="language-mysql">LOAD DATA INFILE 'one_piece.txt' 
-LOCAL
-INTO TABLE one_piece 
-FIELDS TERMINATED BY '\t' 
-IGNORE 1 LINES 
-(no,name);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>结果：</p>
-<pre class="line-numbers language-shell"><code class="language-shell">ERROR 1148 (42000): The used command is not allowed with this MySQL version<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>失败了，不过这个错误信息不好看到底是什么错误。其实这个错误是有关安全的一些设置。</p>
-<h3 id="5-为了安全"><a href="#5-为了安全" class="headerlink" title="5. 为了安全"></a>5. 为了安全</h3><p>在手册上，有关于<code>LOAD DATA</code>的一些<a href="https://dev.mysql.com/doc/refman/8.0/en/load-data-local.html" target="_blank" rel="noopener">安全设置</a>：</p>
+<p>这篇文章中，我们主要在密码学的角度，来看看如果通过密码学来解决上面的三个问题。</p>
+<h3 id="1-角色登场"><a href="#1-角色登场" class="headerlink" title="1. 角色登场"></a>1. 角色登场</h3><p>在解决问题之前，先看看在一个简单的场景中，都会有哪些角色。</p>
+<p>首先是通信的双方。Alice和Bob通过互联网愉快地沟通。</p>
+<p>由于通信链路的不安全，任何中间节点的人都可以监听Alice和Bob之间的对话，这也是SSL/TLS需要避免的问题。这里，链路中间多了一个中间人（Man in the Middle），我们把他叫做Mallory。</p>
+<p>这样，一个简单的场景包含两个角色三个参与者：两个通信人Alice和Bob，一个中间人Mallory：</p>
+<img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/Cryptography/mallory.png">
+
+<h3 id="2-对称加密（私钥加密）"><a href="#2-对称加密（私钥加密）" class="headerlink" title="2. 对称加密（私钥加密）"></a>2. 对称加密（私钥加密）</h3><p>就像钥匙和锁一样，一个简单的加密思路就是一把钥匙（secret key，秘钥）既可以将需要加密的文本（plaintext，明文）加密成别人看不出来的文本（ciphertext，密文）；同时也可以使用密钥将密文解密成明文。就像下面的过程：</p>
+<img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/Cryptography/symmetric_encryption.png">
+
+<p>这就是对称加密算法（symmetric encryption），也叫私钥加密（private-key cryptography）。对称的意思是说一个秘钥即可以加密又可以解密；而私钥意味着，这个秘钥是需要保密的，不能让别人知道。</p>
+<p>这样，如果Alice和Bob之间有一个只有他们两个人才知道的密钥并通过这个密钥进行加密，那么不知道密钥的Mallory是不知道他俩之间的通信内容的。</p>
+<p>对称加密算法历史悠久，著名的就是凯撒密码。这是一种替换加密算法（substitution cipher），即使用字母表后三位的字母来替换明文中的字母。比如将明文中的a替换为d，以此类推。在这种加密算法中，没有密钥（其实也可以说3就是密钥），算法的安全性依赖于加密方法的保密性。如果敌人知道加密算法了，那么也就会解密了。</p>
+<p>随着密码学的发展，一个加密算法需要满足下面的特征才能算是安全的：</p>
 <blockquote>
-<p>The <code>local_infile</code> system variable controls server-side <code>LOCAL</code> capability. Depending on the <code>local_infile</code> setting, the server refuses or permits local data loading by clients that have <code>LOCAL</code> enabled on the client side. By default, <code>local_infile</code> is disabled.</p>
+<p>一个攻击者即使知道关于加密算法的所有细节，但是不知道密钥，算法仍是安全的。</p>
 </blockquote>
-<p>这个是MySQL 8.0版本的说明，<code>local_infile</code>默认是不开启的，在之前的版本中都是默认开启的：</p>
-<pre class="line-numbers language-mysql"><code class="language-mysql">SELECT @@local_infile;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>结果：</p>
-<pre class="line-numbers language-shell"><code class="language-shell">+----------------+
-| @@local_infile |
-+----------------+
-|              0 |
-+----------------+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>了解了，设置<code>local_infile=1</code>试试：</p>
-<pre class="line-numbers language-mysql"><code class="language-mysql">SET GLOBAL local_infile=1;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>然后重试导入数据。结果：</p>
-<pre class="line-numbers language-shell"><code class="language-shell">ERROR 1148 (42000): The used command is not allowed with this MySQL version<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>怎么还错了呢？</p>
-<p>在上面客户端和服务端数据交换的过程中可以知道，这个过程涉及到客户端和服务端两个机器，上面的设置只是设置了服务端允许客户端发送文件，但是客户端也需要允许服务端来读取这个文件：</p>
-<blockquote>
-<p>For the <strong>mysql</strong> client, local data loading is disabled by default. To disable or enable it explicitly, use the <code>--local-infile=0</code> or <code>--local-infile[=1\]</code> option.</p>
-</blockquote>
-<p>也就是说，对于mysql客户端，启动的时候需要设置一下<code>--local-infile</code>：</p>
-<pre class="line-numbers language-shell"><code class="language-shell">mysql -u root -p --local_infile<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>然后再试一次。结果：</p>
-<pre class="line-numbers language-shell"><code class="language-shell">Query OK, 10 rows affected (0.05 sec)
-Records: 10  Deleted: 0  Skipped: 0  Warnings: 0<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<p>终于成功了。</p>
+<p>这时，密文的安全性依赖于密钥。如果密钥是从一个非常大的可选空间中选择的，并且破解这个密钥需要巨大的计算能力，那么这个加密算法就是计算安全的。</p>
+<p>这样，如果我们有一个计算安全的加密算法，我们就解决了第一个问题：<strong>保密性</strong>，只要我们保证密钥的安全即可。</p>
+<h4 id="2-1-流密码和分组密码"><a href="#2-1-流密码和分组密码" class="headerlink" title="2.1. 流密码和分组密码"></a>2.1. 流密码和分组密码</h4><p>加密算法可以分为两种：流密码（stream cipher）和分组密码（block cipher）。</p>
+<h5 id="2-1-1-流密码"><a href="#2-1-1-流密码" class="headerlink" title="2.1.1 流密码"></a>2.1.1 流密码</h5><p>流密码（stream cipher），从名字就可以想象出这种加密算法的加密方式。把加密算法当做一个机器，每来一个字节明文经过这个机器，就输出一个字节的密文，直到所有的明文都经过加密。对于解密，就是过程反过来。</p>
+<p>RC4是一种比较知名的流密码，它的加密过程如下：</p>
+<img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/Cryptography/rc4.png">
+
+<p>算法的核心是一个有限长度的随机密钥流（keystream），然后用这个keystream对明文进行异或操作得到密文。解密的时候使用密文亦或keystream就可以得到明文了。</p>
+<p>这个算法的一个特点是每个keystream只能使用一次，重复使用会增大被破解的概率。</p>
+<p>RC4算法现在已经是不安全的了。</p>
+<h5 id="2-1-2-分组密码"><a href="#2-1-2-分组密码" class="headerlink" title="2.1.2 分组密码"></a>2.1.2 分组密码</h5><p>分组密码（block cipher），就是对一块一块的明文进行加密得到一块一块的密文。现代的分组密码的分组大小一般是128位（16字节）。分组密码也可以看做是一个机器，输入一个分组的明文，机器一顿操作得到一个分组的密文。如果key一致，那么对于不同的明文，都会有唯一对应的密文。</p>
+<p>分组密码有一些缺点：</p>
+<ol>
+<li>只能加密一定长度的明文。使用分组密码需要对变长明文进行一定操作来满足要求（就是下面的padding填充）；</li>
+<li>分组密码是确定的，明文相同，那么对应的密文也相同。这个特性增大了被攻击的概率。</li>
+</ol>
+<p>同时，分组密码也是好多加密方法的基础，比如哈希函数，消息验证码，伪随机数生成器，甚至流密码。</p>
+<p>比较著名的分组密码是AES（Advanced Encryption Standard），分组的大小有128位，192位和256位可供选择。</p>
+<p>在实际应用中，分组密码通常通过分组密码模式（block cipher mode）的方式来使用。模式就是在分组密码的基础上扩展的加密方式，使之方便使用。这里只介绍两个模式：ECB和CBC模式。</p>
+<h6 id="2-1-2-1-Electronic-Codebook-Mode"><a href="#2-1-2-1-Electronic-Codebook-Mode" class="headerlink" title="2.1.2.1 Electronic Codebook Mode"></a>2.1.2.1 Electronic Codebook Mode</h6><p>ECB，电子密码本模式，是最简单的加密模式。只对满足一定条件长度的明文进行加密，不满足的需要先使用padding方式填充。</p>
+<p>加密时将明文分成一定长度的块，然后分别加密。</p>
+<p>简单是它的缺点。</p>
+<h6 id="2-1-2-2-Cipher-Block-Chaining-Mode"><a href="#2-1-2-2-Cipher-Block-Chaining-Mode" class="headerlink" title="2.1.2.2 Cipher Block Chaining Mode"></a>2.1.2.2 Cipher Block Chaining Mode</h6><p>CBC，密码块链模式，通过引入初始向量值（initialization vector，IV）的方式来解决分组密码的确定性，这样，即使明文相同，不同时间加密后的密文也不一样：</p>
+<img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/Cryptography/cbc.png">
+
+<p>初始向量IV的值是随机生成的（<strong>这里，又引出一个问题，怎么生成一个随机值呢？</strong>）。从上图可以看出Chaining是怎么形成的。</p>
+<h4 id="2-1-3-Padding"><a href="#2-1-3-Padding" class="headerlink" title="2.1.3 Padding"></a>2.1.3 Padding</h4><p>使用分组密码时，如果明文长度不满足条件，需要对明文进行padding操作。比如，AES需要的输入是128位，同时生成128位的密文。如果明文不是128位的倍数，那么就需要对最后一个不足128位的分组进行填充。</p>
+<p>为了能让Bob知道Alice对最后一个分组填充了多少数据，填充的内容不能是随机的。在TLS中，最后一个字节标识填充字节的长度（除了最后一个字节），然后填充字节的内容和长度一致。比如：</p>
+<img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/Cryptography/cbc.png">
+
+<p>Bob收到密文解密后查看最后一个分组的最后一个字节，内容是3，表示还需要去掉三个字节。这样就得到了明文。</p>
+<h3 id="3-哈希函数"><a href="#3-哈希函数" class="headerlink" title="3. 哈希函数"></a>3. 哈希函数</h3><p>哈希函数（hash function）是一个将任意长的输入转换成固定长度输出的函数，结果也可以简单的叫哈希值（hash）。在编程语言中哈希函数很常用，但是这些都不适合在加密中使用。密码学中的哈希函数应该满足下面的要求：</p>
+<ol>
+<li><strong>Preimage Resistance</strong>：就是说，给定一个哈希值，很难找到一个输入可以生成这个哈希值；</li>
+<li><strong>Second Preimage Resistance</strong>：给定一个输入和对应的哈希值，很难找到一个不同的输入可以生成同样的哈希值；</li>
+<li><strong>Collision Resistance</strong>：很难找到两个不同的输入可以得到相同的哈希值。</li>
+</ol>
+<p>哈希函数对于比较大文件来说很有用。不用直接比较两个大文件，比较两个文件的哈希值就可以了。哈希函数也可以叫做指纹（fingerprints）、消息摘要（message digests）或摘要（digests）。</p>
+<p>现在常用的哈希函数有SHA1，生成160位的结果，推荐使用更强的版本SHA256。</p>
+<h3 id="4-消息验证码"><a href="#4-消息验证码" class="headerlink" title="4. 消息验证码"></a>4. 消息验证码</h3><p>哈希函数可以用于验证数据的完整性，因为对原始数据的一点点修改都会导致哈希值发生很大的变化。但是这需要数据和哈希值分开传输，否则Mallory就可以同时修改数据和对应的哈希值。</p>
+<p>消息验证码（message authentication codes，MAC）在哈希函数的基础上增加了认证，也就是需要有一个hashing key，只有拥有hashing key的人才可以生成一个有效的MAC。</p>
+<p>这样，当一个MAC和数据一起传输的时候，接收者Bob就可以通过hashing key和收到的MAC来检查数据是否被修改过。</p>
+<p>使用哈希函数的消息验证码叫做HMAC（hash-based message authentication code）。实际上，HMAC通过安全的方式将hashing key和数据组合在一起。</p>
+<p>这样，我们就解决了第三个问题：<strong>完整性</strong>。</p>
+<h3 id="5-非对称加密（公钥加密）"><a href="#5-非对称加密（公钥加密）" class="headerlink" title="5. 非对称加密（公钥加密）"></a>5. 非对称加密（公钥加密）</h3><p>对称加密的一个优点是加密速度快。但是当参与通信的人越来越多的时候，对称加密就会有如下的缺点：</p>
+<ol>
+<li>如果同一个群体成员使用相同的秘钥的话，那么随着成员的增加，密钥泄漏的风险也在增加；</li>
+<li>如果不使用同一个密钥，每两个人使用一个密钥，那么随着成员的增加，秘钥将爆炸增长；</li>
+<li>对于无人值守系统不能使用对称加密来保护数据。因为同一个秘钥既可以加密也可以解密。</li>
+</ol>
+<p>非对称加密（asymmetric encryption，public-key cryptography）使用两个秘钥来进行加密和解密，一个秘钥是私有的，叫做私钥（private key），只能由私钥的所有者知道；另一个是公钥（public key），所有人都可以知道。</p>
+<p>如果使用公钥加密，那么只有对应的私钥所有者才能解密；如果使用私钥加密，那么所有人都可以解密，因为私钥对应的公钥是公开的，所有人都可以知道。后一个加密方式可以当做一个数字签名，因为只有私钥持有人才可以用私钥加密。</p>
+<p>非对称加密过程如下：</p>
+<img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/Cryptography/asymmetric_encryption.png">
+
+<p>使用非对称加密可以解决大规模群体间的加密问题。任何人都可以使用公钥对私钥持有人发送加密消息；如果对方使用私钥加密，那么你也可以确切地知道对方是谁。</p>
+<p>不过，非对称加密也有缺点：加密很慢，不适合大量数据。</p>
+<p>RSA是现在最出名的非对称加密算法，推荐的秘钥长度是2048位。</p>
+<h3 id="6-数字签名"><a href="#6-数字签名" class="headerlink" title="6. 数字签名"></a>6. 数字签名</h3><p>数字签名（digital signature）是一种密码学方案，用来验证消息的真实性。MAC也可以用来验证消息的真实性，不过需要一个事先准备好私有的hashing key，这就是它的一个缺点。</p>
+<p>通过非对称加密可以达到数字签名的作用。比如，使用RSA的私钥加密，那么只有对应的公钥才能解密：</p>
+<ol>
+<li>计算一个需要签名的文件或数据的哈希值，不管文件或数据多大，哈希值总是固定长度的。比如SHA256的值就是256位；</li>
+<li>将一些基本信息和哈希值放在一起，比如生成这个哈希值的算法；</li>
+<li>将上面的数据使用私钥加密，结果就可以用来验证原始数据的真实性了。</li>
+</ol>
+<p>接收者使用公钥解密，得到使用的哈希函数，用这个函数对文件或数据计算哈希值，如果这个值和接收到的哈希值一致，说明文件没有问题。</p>
+<p>有了数字签名，我们就解决了第二个问题：<strong>真实性</strong>。</p>
+<h3 id="7-生成随机数"><a href="#7-生成随机数" class="headerlink" title="7. 生成随机数"></a>7. 生成随机数</h3><p>密码学中秘钥是一个重要的数据，需要随机生成。这就需要有一个随机数生成器。但是计算机生成的随机数有一定的可预测性，不能生成真随机数（true of random number），只能生成伪随机数（pseudorandom number）。通过seeding来生成伪随机数的过程就是伪随机数生成器（pseudorandom number generator，PRNG）。密码学中对随机数要求更高，需要使用密码学伪随机数生成器（cryptographic pseudorandom number generator，CPRNG）。</p>
+<h3 id="8-混合在一起"><a href="#8-混合在一起" class="headerlink" title="8. 混合在一起"></a>8. 混合在一起</h3><p>前面介绍的内容都可以叫做密码原语（cryptographic primitive）。比如对称加密、哈希函数和非对称加密等。这些加密原语只做一件事情，单独使用不能保证通信的安全。因此，可以将一些密码原语组合在一起使用，形成加密方案或加密协议。</p>
+<p>这里通过一个简单的例子，组合上面的密码原语构成一个加密协议，来保证Alice和Bob之间的通信安全。</p>
+<p>首先Alice和Bob使用对称加密算法对数据进行加密，比如使用AES。这样，Mallory就不能通过观察的方式直接查看内容了。</p>
+<p>但是Mallory可以劫持Alice和Bob之间的通信，篡改通信的内容而不会被Alice和Bob发现。不行，需要改进。</p>
+<p>为了保证数据的完整性，Alice和Bob可以使用只有他们两人知道的hashing key对消息生成一个MAC，将MAC和加密后的密文一起传输，这样Mallory就不能篡改了，不然Alice和Bob就会发现。</p>
+<p>不过Mallory还可以将劫持到的消息丢弃或重放，这时我们可以使用一个序列号，在计算MAC的时候把序列号放进去。这样当我们发现序列号缺失的时候，就知道了数据有丢失；序列号重复的时候，就检测到了一个重放攻击。最后，Alice和Bob使用一个特殊的消息标识会话结束。</p>
+<p>到现在为止都还好，但是Alice和Bob怎么交换秘钥呢？首先可以在对话开始前使用公钥加密的方法传输一些信息，并验证对方是否是想要对话的人。这样就保证了真实性。</p>
+<p>然后就可以通过秘钥交换协议来构造对称加密的秘钥了。常用的秘钥交换协议有RSA和Diffie-Hellman (DH)。</p>
+<p>这样，我们就有了一个安全通信协议：</p>
+<ol>
+<li>第一次握手验证真实性并构造一个加密的秘钥；</li>
+<li>使用秘钥加密数据并构造MAC，保证保密性和完整性；</li>
+<li>会话结束时使用特殊的会话终止消息标识。</li>
+</ol>
+<p>这其实就和SSL/TLS的做法差不多了。</p>
+<p>这篇文章从密码学的角度讨论了一些基本的密码学知识，并讨论如何使用这些基本的密码学方法构造一个可用的安全通信协议。对相应的密码学细节没有深入讨论，只是简单叙述。</p>
+<p>To Be Continued…</p>
 
             </div>
             <hr/>
@@ -569,7 +555,7 @@ Records: 10  Deleted: 0  Skipped: 0  Warnings: 0<span aria-hidden="true" class="
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://deuterium.fun/what-happens-when-using-load-data/">http://deuterium.fun/what-happens-when-using-load-data/</a>
+                    <a href="http://deuterium.fun/ssl-and-tls-part-2-cryptography/">http://deuterium.fun/ssl-and-tls-part-2-cryptography/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -607,8 +593,8 @@ Records: 10  Deleted: 0  Skipped: 0  Warnings: 0<span aria-hidden="true" class="
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/mysql/">
-                                    <span class="chip bg-color">mysql</span>
+                                <a href="/tags/tls/">
+                                    <span class="chip bg-color">tls</span>
                                 </a>
                             
                         </div>
@@ -912,54 +898,52 @@ Records: 10  Deleted: 0  Skipped: 0  Warnings: 0<span aria-hidden="true" class="
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
+                <i class="far fa-dot-circle"></i>&nbsp;Current
+            </div>
             <div class="card">
-                <a href="/go-web-part-1-handler-servemux/">
+                <a href="/ssl-and-tls-part-2-cryptography/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="Go Web (Part 1): Handler & ServeMux">
+                        <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="SSL and TLS (Part 2): Cryptography">
                         
-                        <span class="card-title">Go Web (Part 1): Handler & ServeMux</span>
+                        <span class="card-title">SSL and TLS (Part 2): Cryptography</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            1. Begin使用Go语言的标准库net/http可以快速构建一个简单的web服务。这篇文章从零开始构建一个简单的web服务器，并主要聚焦于处理器Handler和多路复用器ServeMux。
-在开始之前，MindMap里一无所有：
+                            在SSL and TLS (Part 1): Brief Intro中简单介绍了一下SSL/TLS，并以需要解决的三个问题结尾。这三个问题是：
 
-
-2
+保密性（Confidentiality）
+真实性（Authenticity）
+完整性（Inte
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2019-12-20
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-01-19
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/programming/" class="post-category">
-                                    programming
+                            <a href="/categories/cryptography/" class="post-category">
+                                    cryptography
                                 </a>
                             
                             
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/go/">
-                        <span class="chip bg-color">go</span>
-                    </a>
-                    
-                    <a href="/tags/web/">
-                        <span class="chip bg-color">web</span>
+                    <a href="/tags/tls/">
+                        <span class="chip bg-color">tls</span>
                     </a>
                     
                 </div>
@@ -973,31 +957,32 @@ Records: 10  Deleted: 0  Skipped: 0  Warnings: 0<span aria-hidden="true" class="
                 Next&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/files-to-mysql/">
+                <a href="/ssl-and-tls-part-1-brief-intro/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/22.jpg" class="responsive-img" alt="Files to MySQL">
+                        <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="SSL and TLS (Part 1): Brief Intro">
                         
-                        <span class="card-title">Files to MySQL</span>
+                        <span class="card-title">SSL and TLS (Part 1): Brief Intro</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            问题：把一个本地的文件（比如.txt或.csv文件）导入到指定的一张MySQL表中。可以使用mysqlimport或者LOAD DATA命令来完成。这篇文章仅仅是简单介绍一下mysqlimport和LOAD DATA的简单用法。关于LOAD
+                            在万物互联的时代，We don’t connect to the Internet, we are the Internet.
+如此重要的互联网，需要一种协议来保护传输中的信息安全，那就是SSL（Secure Socket Layer）和T
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2019-12-17
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-01-15
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/mysql/" class="post-category">
-                                    mysql
+                            <a href="/categories/cryptography/" class="post-category">
+                                    cryptography
                                 </a>
                             
                             
@@ -1007,12 +992,8 @@ Records: 10  Deleted: 0  Skipped: 0  Warnings: 0<span aria-hidden="true" class="
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/tips/">
-                        <span class="chip bg-color">tips</span>
-                    </a>
-                    
-                    <a href="/tags/mysql/">
-                        <span class="chip bg-color">mysql</span>
+                    <a href="/tags/tls/">
+                        <span class="chip bg-color">tls</span>
                     </a>
                     
                 </div>
