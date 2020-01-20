@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://deuterium.fun/"/>
-  <updated>2020-01-20T11:29:28.184Z</updated>
+  <updated>2020-01-20T11:39:34.290Z</updated>
   <id>http://deuterium.fun/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="http://deuterium.fun/ssl-and-tls-part-3-protocol/"/>
     <id>http://deuterium.fun/ssl-and-tls-part-3-protocol/</id>
     <published>2020-01-20T11:29:05.000Z</published>
-    <updated>2020-01-20T11:29:28.184Z</updated>
+    <updated>2020-01-20T11:39:34.290Z</updated>
     
     <summary type="html">
     
@@ -358,9 +358,9 @@
       <category term="redis" scheme="http://deuterium.fun/categories/redis/"/>
     
     
-      <category term="tips" scheme="http://deuterium.fun/tags/tips/"/>
-    
       <category term="redis" scheme="http://deuterium.fun/tags/redis/"/>
+    
+      <category term="tips" scheme="http://deuterium.fun/tags/tips/"/>
     
   </entry>
   

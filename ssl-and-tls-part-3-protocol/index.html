@@ -422,7 +422,6 @@
                 <p>在前面的文章中，我们从密码学的角度讨论了一些主要的密码原语（cryptographic primitive），最后通过组合这些密码原语构成一个可用的安全通信协议。</p>
 <p>这篇文章更进一步，看看TLS是怎么做的。不过TLS的细节太多了也有点难，这里只是在较高的层次上给出一个清晰的认识，不深入复杂的细节。</p>
 <h2 id="1-Record-Protocol"><a href="#1-Record-Protocol" class="headerlink" title="1. Record Protocol"></a>1. Record Protocol</h2><p>像网络模型里其它层一样，TLS也需要一个协议来对数据进行封装。这就是Record Protocol，每个TLS record结构如下：</p>
-<p><img src="https://tva1.sinaimg.cn/large/006tNbRwly1gb31ehxy2dj31bq0gyaaq.jpg" alt="tls_record"></p>
 <img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/Cryptography/tls_record.png">
 
 <p>如果数据过长，TLS会将数据分成大小合适的两条record；如果数据少的话也会合并到一起构成一个record。</p>
@@ -453,7 +452,6 @@
 </ol>
 <p>其中，第2和第3步在一个操作中完成，叫做秘钥交换（key exchange）。分成这两个是为了强调认证的过程，毕竟真实性是很重要的一部分。</p>
 <p>下图展示了一个未认证的client和一个已认证的server之间的Full Handshake流程：</p>
-<p><img src="https://tva1.sinaimg.cn/large/006tNbRwly1gb32axpjmyj319f0u0juc.jpg" alt="full_handshake"></p>
 <img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/Cryptography/full_handshake.png">
 
 <ol>
@@ -523,14 +521,12 @@
 <p>Finished中有一个<code>verify_data</code>字段，这个字段是通过下面的方法计算得到的，可以用来保证数据的完整性，并在有中间人修改时可以检测到：</p>
 <pre><code>verify_data = PRF(master_secret, finished_label, Hash(handshake_message))</code></pre><p>其中<code>PRF()</code>是为随机函数（pseudorandom function），可以生成任意长度的随机数；<code>finished_label</code>对于不同的消息值也不同（client发送的就是”client finished”，server发送的就是”server finished”）；<code>Hash()</code>是协商好的哈希函数。</p>
 <h3 id="2-3-Client-Authentication"><a href="#2-3-Client-Authentication" class="headerlink" title="2.3 Client Authentication"></a>2.3 Client Authentication</h3><p>server是必须认证的，client的认证是可选的。不过server可以通过发送一个CertificateRequest来请求对client进行认证。然后client发送自己的Certificate消息。整体的流程如下：</p>
-<p><img src="https://tva1.sinaimg.cn/large/006tNbRwly1gb33oh5vzvj311m0u0gpb.jpg" alt="client_authentication"></p>
 <img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/Cryptography/client_authentication.png">
 
 <h4 id="2-3-1-CertificateRequest"><a href="#2-3-1-CertificateRequest" class="headerlink" title="2.3.1 CertificateRequest"></a>2.3.1 CertificateRequest</h4><p>server通过发送这个消息来请求对client进行认证。</p>
 <h4 id="2-3-2-CertificateVerify"><a href="#2-3-2-CertificateVerify" class="headerlink" title="2.3.2 CertificateVerify"></a>2.3.2 CertificateVerify</h4><p>client发送这个消息来对自己的身份进行认证。这个消息包含对到目前为止收到的Handshake消息的签名。这样server就可以进行认证了。</p>
 <h3 id="2-4-Session-Resumption"><a href="#2-4-Session-Resumption" class="headerlink" title="2.4 Session Resumption"></a>2.4 Session Resumption</h3><p>由于加密算法的协商和参数的选择，一个完整的握手需要两个RTT（round-trip time）。同时，握手期间的加解密操作也很耗时，如果能复用之间协商的结果的话，那就可以减轻负担了。</p>
 <p>在一个完整握手过程中，如果server希望复用，那么就可以在ServerHello中返回一个session ID给client，然后将数据保存起来。如果client希望复用，在ClientHello中加上那个session ID就可以了：</p>
-<p><img src="https://tva1.sinaimg.cn/large/006tNbRwly1gb33xwlncoj31b40my767.jpg" alt="session_resumption"></p>
 <img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/Cryptography/session_resumption.png">
 
 <p>这样只有一个RTT就完成了握手。</p>
@@ -538,7 +534,6 @@
 <p>这里简单描述了一个握手的整个过程。握手完成之后，就可以安全地通信了。</p>
 <h2 id="3-加密"><a href="#3-加密" class="headerlink" title="3. 加密"></a>3. 加密</h2><p>完成了认证和秘钥交换，就可以进行加密操作了。TLS支持多种加密算法，常用的是AES，有三种不同类型的加密，stream，block和authenticated。在TLS中，数据的完整性校验也包含在加密过程中。</p>
 <h3 id="3-1-Stream-Encryption"><a href="#3-1-Stream-Encryption" class="headerlink" title="3.1 Stream Encryption"></a>3.1 Stream Encryption</h3><p>流密码的加密过程如下：</p>
-<p><img src="https://tva1.sinaimg.cn/large/006tNbRwly1gb353qas0nj31bm0logmr.jpg" alt="stream_encryption"></p>
 <img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/Cryptography/stream_encryption.png">
 
 <p>有两个步骤：</p>
@@ -555,7 +550,6 @@
 <li>发送IV和密文。</li>
 </ol>
 <p>如图：</p>
-<p><img src="https://tva1.sinaimg.cn/large/006tNbRwly1gb35by7hakj31aw0lajsl.jpg" alt="block_encryption"></p>
 <img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/Cryptography/block_encryption.png">
 
 <p>这里有个问题就是，padding没有放在计算MAC之内。</p>
@@ -565,7 +559,6 @@
 <li>对明文加密，同时使用认证算法将序列号和header添加进来；</li>
 <li>将密文和nonce一起发送。</li>
 </ol>
-<p><img src="https://tva1.sinaimg.cn/large/006tNbRwly1gb35jwddfjj31bi0fmjs9.jpg" alt="authenticated_encryption"></p>
 <img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/Cryptography/authenticated_encryption.png">
 
 <h2 id="4-密码学操作"><a href="#4-密码学操作" class="headerlink" title="4. 密码学操作"></a>4. 密码学操作</h2><p>上面是在较高的层次的层次上讨论TLS是怎么做的。接下来从密码学的角度看看一些操作。</p>
@@ -597,7 +590,6 @@ A(i) = HMAC_hash(secret, A(i-1))</code></pre><p>由于使用了<code>seed</code>
 <li>verify_data的长度</li>
 </ul>
 <p>一个cipher suite的名字就指出了上面那些内容的具体实现：</p>
-<p><img src="https://tva1.sinaimg.cn/large/006tNbRwly1gb38nbo5wxj31b8096wfq.jpg" alt="cipher_suite_name"></p>
 <img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/Cryptography/cipher_suite_name.png">
 
 <p>下表列出了一些常见的cipher suite：</p>
