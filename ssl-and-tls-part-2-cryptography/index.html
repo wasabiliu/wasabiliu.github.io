@@ -404,7 +404,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    3.8k
+                    3.7k
                 </div>
                 
 
@@ -447,15 +447,15 @@
 </blockquote>
 <p>这时，密文的安全性依赖于密钥。如果密钥是从一个非常大的可选空间中选择的，并且破解这个密钥需要巨大的计算能力，那么这个加密算法就是计算安全的。</p>
 <p>这样，如果我们有一个计算安全的加密算法，我们就解决了第一个问题：<strong>保密性</strong>，只要我们保证密钥的安全即可。</p>
-<h3 id="2-1-流密码和分组密码"><a href="#2-1-流密码和分组密码" class="headerlink" title="2.1. 流密码和分组密码"></a>2.1. 流密码和分组密码</h3><p>加密算法可以分为两种：流密码（stream cipher）和分组密码（block cipher）。</p>
-<h4 id="2-1-1-流密码"><a href="#2-1-1-流密码" class="headerlink" title="2.1.1 流密码"></a>2.1.1 流密码</h4><p>流密码（stream cipher），从名字就可以想象出这种加密算法的加密方式。把加密算法当做一个机器，每来一个字节明文经过这个机器，就输出一个字节的密文，直到所有的明文都经过加密。对于解密，就是过程反过来。</p>
+<p>加密算法可以分为两种：流密码（stream cipher）和分组密码（block cipher）。</p>
+<h3 id="2-1-流密码"><a href="#2-1-流密码" class="headerlink" title="2.1 流密码"></a>2.1 流密码</h3><p>流密码（stream cipher），从名字就可以想象出这种加密算法的加密方式。把加密算法当做一个机器，每来一个字节明文经过这个机器，就输出一个字节的密文，直到所有的明文都经过加密。对于解密，就是过程反过来。</p>
 <p>RC4是一种比较知名的流密码，它的加密过程如下：</p>
 <img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/Cryptography/rc4.png">
 
 <p>算法的核心是一个有限长度的随机密钥流（keystream），然后用这个keystream对明文进行异或操作得到密文。解密的时候使用密文亦或keystream就可以得到明文了。</p>
 <p>这个算法的一个特点是每个keystream只能使用一次，重复使用会增大被破解的概率。</p>
 <p>RC4算法现在已经是不安全的了。</p>
-<h4 id="2-1-2-分组密码"><a href="#2-1-2-分组密码" class="headerlink" title="2.1.2 分组密码"></a>2.1.2 分组密码</h4><p>分组密码（block cipher），就是对一块一块的明文进行加密得到一块一块的密文。现代的分组密码的分组大小一般是128位（16字节）。分组密码也可以看做是一个机器，输入一个分组的明文，机器一顿操作得到一个分组的密文。如果key一致，那么对于不同的明文，都会有唯一对应的密文。</p>
+<h3 id="2-2-分组密码"><a href="#2-2-分组密码" class="headerlink" title="2.2 分组密码"></a>2.2 分组密码</h3><p>分组密码（block cipher），就是对一块一块的明文进行加密得到一块一块的密文。现代的分组密码的分组大小一般是128位（16字节）。分组密码也可以看做是一个机器，输入一个分组的明文，机器一顿操作得到一个分组的密文。如果key一致，那么对于不同的明文，都会有唯一对应的密文。</p>
 <p>分组密码有一些缺点：</p>
 <ol>
 <li>只能加密一定长度的明文。使用分组密码需要对变长明文进行一定操作来满足要求（就是下面的padding填充）；</li>
@@ -464,16 +464,16 @@
 <p>同时，分组密码也是好多加密方法的基础，比如哈希函数，消息验证码，伪随机数生成器，甚至流密码。</p>
 <p>比较著名的分组密码是AES（Advanced Encryption Standard），分组的大小有128位，192位和256位可供选择。</p>
 <p>在实际应用中，分组密码通常通过分组密码模式（block cipher mode）的方式来使用。模式就是在分组密码的基础上扩展的加密方式，使之方便使用。这里只介绍两个模式：ECB和CBC模式。</p>
-<h5 id="2-1-2-1-Electronic-Codebook-Mode"><a href="#2-1-2-1-Electronic-Codebook-Mode" class="headerlink" title="2.1.2.1 Electronic Codebook Mode"></a>2.1.2.1 Electronic Codebook Mode</h5><p>ECB，电子密码本模式，是最简单的加密模式。只对满足一定条件长度的明文进行加密，不满足的需要先使用padding方式填充。</p>
+<h4 id="2-2-1-Electronic-Codebook-Mode"><a href="#2-2-1-Electronic-Codebook-Mode" class="headerlink" title="2.2.1 Electronic Codebook Mode"></a>2.2.1 Electronic Codebook Mode</h4><p>ECB，电子密码本模式，是最简单的加密模式。只对满足一定条件长度的明文进行加密，不满足的需要先使用padding方式填充。</p>
 <p>加密时将明文分成一定长度的块，然后分别加密。</p>
 <p>简单是它的缺点。</p>
-<h5 id="2-1-2-2-Cipher-Block-Chaining-Mode"><a href="#2-1-2-2-Cipher-Block-Chaining-Mode" class="headerlink" title="2.1.2.2 Cipher Block Chaining Mode"></a>2.1.2.2 Cipher Block Chaining Mode</h5><p>CBC，密码块链模式，通过引入初始向量值（initialization vector，IV）的方式来解决分组密码的确定性，这样，即使明文相同，不同时间加密后的密文也不一样：</p>
+<h4 id="2-2-2-Cipher-Block-Chaining-Mode"><a href="#2-2-2-Cipher-Block-Chaining-Mode" class="headerlink" title="2.2.2 Cipher Block Chaining Mode"></a>2.2.2 Cipher Block Chaining Mode</h4><p>CBC，密码块链模式，通过引入初始向量值（initialization vector，IV）的方式来解决分组密码的确定性，这样，即使明文相同，不同时间加密后的密文也不一样：</p>
 <img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/Cryptography/cbc.png">
 
 <p>初始向量IV的值是随机生成的（<strong>这里，又引出一个问题，怎么生成一个随机值呢？</strong>）。从上图可以看出Chaining是怎么形成的。</p>
-<h4 id="2-1-3-Padding"><a href="#2-1-3-Padding" class="headerlink" title="2.1.3 Padding"></a>2.1.3 Padding</h4><p>使用分组密码时，如果明文长度不满足条件，需要对明文进行padding操作。比如，AES需要的输入是128位，同时生成128位的密文。如果明文不是128位的倍数，那么就需要对最后一个不足128位的分组进行填充。</p>
+<h3 id="2-3-Padding"><a href="#2-3-Padding" class="headerlink" title="2.3 Padding"></a>2.3 Padding</h3><p>使用分组密码时，如果明文长度不满足条件，需要对明文进行padding操作。比如，AES需要的输入是128位，同时生成128位的密文。如果明文不是128位的倍数，那么就需要对最后一个不足128位的分组进行填充。</p>
 <p>为了能让Bob知道Alice对最后一个分组填充了多少数据，填充的内容不能是随机的。在TLS中，最后一个字节标识填充字节的长度（除了最后一个字节），然后填充字节的内容和长度一致。比如：</p>
-<img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/Cryptography/cbc.png">
+<img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/Cryptography/tlb_padding.png">
 
 <p>Bob收到密文解密后查看最后一个分组的最后一个字节，内容是3，表示还需要去掉三个字节。这样就得到了明文。</p>
 <h2 id="3-哈希函数"><a href="#3-哈希函数" class="headerlink" title="3. 哈希函数"></a>3. 哈希函数</h2><p>哈希函数（hash function）是一个将任意长的输入转换成固定长度输出的函数，结果也可以简单的叫哈希值（hash）。在编程语言中哈希函数很常用，但是这些都不适合在加密中使用。密码学中的哈希函数应该满足下面的要求：</p>
