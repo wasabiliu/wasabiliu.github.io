@@ -48,7 +48,7 @@
     <link href="http://deuterium.fun/ssl-and-tls-part-2-cryptography/"/>
     <id>http://deuterium.fun/ssl-and-tls-part-2-cryptography/</id>
     <published>2020-01-19T09:45:18.000Z</published>
-    <updated>2020-01-19T09:46:09.647Z</updated>
+    <updated>2020-01-21T03:04:32.879Z</updated>
     
     <summary type="html">
     
@@ -358,9 +358,9 @@
       <category term="redis" scheme="http://deuterium.fun/categories/redis/"/>
     
     
-      <category term="redis" scheme="http://deuterium.fun/tags/redis/"/>
-    
       <category term="tips" scheme="http://deuterium.fun/tags/tips/"/>
+    
+      <category term="redis" scheme="http://deuterium.fun/tags/redis/"/>
     
   </entry>
   
