@@ -4,9 +4,12 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="SSL and TLS (Part 3): Protocol, Deuterium">
-    <meta name="description" content="在前面的文章中，我们从密码学的角度讨论了一些主要的密码原语（cryptographic primitive），最后通过组合这些密码原语构成一个可用的安全通信协议。
-这篇文章更进一步，看看TLS是怎么做的。不过TLS的细节太多了也有点难，这里">
+    <meta name="keywords" content="Roman Republic, Deuterium">
+    <meta name="description" content="1. 王政时期（753BC-509BC）1.1. 建国之王：罗慕路斯（753BC-716BC）杀死弟弟瑞摩斯成为罗马唯一的王。
+台伯河：发源于亚平宁山脉，全长300多公里。自罗马向前流经约30公里，经过奥斯提亚注入地中海。
+罗马七山丘：
+
+">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -14,7 +17,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>SSL and TLS (Part 3): Protocol | Deuterium</title>
+    <title>Roman Republic | Deuterium</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -243,13 +246,13 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/21.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/1.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
                     <div class="description center-align post-title">
-                        SSL and TLS (Part 3): Protocol
+                        Roman Republic
                     </div>
                 </div>
             </div>
@@ -367,8 +370,12 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/tls/">
-                                <span class="chip bg-color">tls</span>
+                            <a href="/tags/history/">
+                                <span class="chip bg-color">history</span>
+                            </a>
+                        
+                            <a href="/tags/rome/">
+                                <span class="chip bg-color">rome</span>
                             </a>
                         
                     </div>
@@ -379,8 +386,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/cryptography/" class="post-category">
-                                cryptography
+                            <a href="/categories/reading/" class="post-category">
+                                reading
                             </a>
                         
                     </div>
@@ -392,7 +399,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
-                    2020-01-20
+                    2020-03-02
                 </div>
                 
 
@@ -401,14 +408,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    3.1k
+                    3.6k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>Read Times:&nbsp;&nbsp;
-                    11 Min
+                    12 Min
                 </div>
                 
 				
@@ -419,235 +426,235 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>在前面的文章中，我们从密码学的角度讨论了一些主要的密码原语（cryptographic primitive），最后通过组合这些密码原语构成一个可用的安全通信协议。</p>
-<p>这篇文章更进一步，看看TLS是怎么做的。不过TLS的细节太多了也有点难，这里只是在较高的层次上给出一个清晰的认识，不深入复杂的细节。</p>
-<h2 id="1-Record-Protocol"><a href="#1-Record-Protocol" class="headerlink" title="1. Record Protocol"></a>1. Record Protocol</h2><p>像网络模型里其它层一样，TLS也需要一个协议来对数据进行封装。这就是Record Protocol，每个TLS record结构如下：</p>
-<img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/Cryptography/tls_record.png">
-
-<p>如果数据过长，TLS会将数据分成大小合适的两条record；如果数据少的话也会合并到一起构成一个record。</p>
-<p>record中的data就是使用Alice和Bob协商的方法和参数加密后的数据了。这样，只要有一个建立好的TLS链接，后续传输的数据都是安全的了。</p>
-<p>那么接下来的问题就是，<strong>TLS是怎么建立一条安全的链接的</strong>。</p>
-<h2 id="2-Handshake-Protocol"><a href="#2-Handshake-Protocol" class="headerlink" title="2. Handshake Protocol"></a>2. Handshake Protocol</h2><p>Handshake Protocol是TLS中最重要的一个协议。在这个过程中，通信的双方，Alice和Bob需要商量好一个具体的方法以及参数，用来在接下来的通信过程中对数据进行加密。这就是Handshake Protocol的目的。</p>
-<p>根据支持的协议和配置的不同，Handshake Protocol主要有三种变形：</p>
-<ol>
-<li>full handshake with server authentication（和一个认证的服务器来一次完整的握手）；</li>
-<li>handshake with client and server authentication（一个认证的client和一个认证的server之前的握手）</li>
-<li>abbreviated handshake that resumes an earlier session（之前握过手，这次就可以简单点了）。</li>
-</ol>
-<p>在讨论握手细节之前，看看消息的格式。</p>
-<h3 id="2-1-Message"><a href="#2-1-Message" class="headerlink" title="2.1 Message"></a>2.1 Message</h3><p>Handshake Protocol的消息格式如下：</p>
-<pre class="line-numbers language-c"><code class="language-c"><span class="token keyword">struct</span><span class="token punctuation">{</span>
-    HandshakeType msg_type<span class="token punctuation">;</span>        <span class="token comment" spellcheck="true">/* handshake type */</span>
-    uint24 length<span class="token punctuation">;</span>                <span class="token comment" spellcheck="true">/* remaining bytes in message */</span>
-    HandshakeMessage message<span class="token punctuation">;</span>
-<span class="token punctuation">}</span> Handshake<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>在协商的过程中会有不同的阶段，也有不同类型的消息，每个消息都有自己的格式。<code>message</code>字段的内容根据消息类型而定。</p>
-<h3 id="2-2-Full-Handshake"><a href="#2-2-Full-Handshake" class="headerlink" title="2.2 Full Handshake"></a>2.2 Full Handshake</h3><p>好的，两个之前完全陌生的人见面了，需要“完整地握一次手”认识一下。</p>
-<p>在一个Full Handshake过程中，client和server主要完成下面的四步操作：</p>
-<ol>
-<li>交换容量（capabilities）并确定其他连接参数；</li>
-<li>认证证书，或者使用其他方式进行认证（<strong>真实性</strong>）；</li>
-<li>协商构造一个master secret，用来对会话进行加密（<strong>保密性</strong>）；</li>
-<li>验证Handshake消息的完整性（<strong>完整性</strong>）。</li>
-</ol>
-<p>其中，第2和第3步在一个操作中完成，叫做秘钥交换（key exchange）。分成这两个是为了强调认证的过程，毕竟真实性是很重要的一部分。</p>
-<p>下图展示了一个未认证的client和一个已认证的server之间的Full Handshake流程：</p>
-<img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/Cryptography/full_handshake.png">
-
-<ol>
-<li>client开启会话并向server发送自己的容量，其中还有很多额外的信息；</li>
-<li>server选择连接的参数；</li>
-<li>server发送自己的证书链（必要的时候）；</li>
-<li>根据选择的参数，server发送生成master secret需要的额外信息；</li>
-<li>server发送一条信息标识协商结束；</li>
-<li>client发送生成master secret需要的额外信息；</li>
-<li>client开启加密模式并通知server；</li>
-<li>client对自己发送和收到的Handshake消息生成一个MAC并发送给server；</li>
-<li>server开启加密模式并通知client；</li>
-<li>server对自己发送和收到的Handshake消息生成一个MAC并发送给client。</li>
-</ol>
-<p>到目前为止，如果没有错误的话，那么一个安全的连接就建立了。接下来详细看看Handshake消息的细节。</p>
-<h4 id="2-2-1-ClientHello"><a href="#2-2-1-ClientHello" class="headerlink" title="2.2.1 ClientHello"></a>2.2.1 ClientHello</h4><p>作为握手的第一个消息，ClientHello包含一些重要的参数和首选项。</p>
-<p>毕竟是要和sever协商一个加密的方法，所以client需要告诉server，我都支持哪些加密算法。之外，如果不是第一次建立连接，希望复用之前协商的结果的话，就应该有个字段标识出之前保存的会话（session）。这就大概包含了主要的信息：</p>
-<table>
-<thead>
-<tr>
-<th>字段</th>
-<th>含义</th>
-<th>备注</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Version</td>
-<td>版本</td>
-<td>比如TLS 1.2</td>
-</tr>
-<tr>
-<td>Random</td>
-<td>随机信息</td>
-<td>包含一个随机字符串（32字节）</td>
-</tr>
-<tr>
-<td>Session ID</td>
-<td>会话ID</td>
-<td>第一次为空，如果希望复用的话就使用对应的ID</td>
-</tr>
-<tr>
-<td>Cipher suites</td>
-<td>支持的加密算法</td>
-<td></td>
-</tr>
-<tr>
-<td>Extensions</td>
-<td>扩展模块</td>
-<td>其他的信息可以放在这个模块中</td>
-</tr>
-</tbody></table>
-<h4 id="2-2-2-ServerHello"><a href="#2-2-2-ServerHello" class="headerlink" title="2.2.2 ServerHello"></a>2.2.2 ServerHello</h4><p>对于server，当收到一个ClientHello后，就需要作出回应。因为client在ClientHello中列出了支持的算法，这里server需要选择一个，加上其他的参数一起通知给client，这就是ServerHello的作用。</p>
-<p>ServerHello和ClientHello的消息格式大致相同。</p>
-<h4 id="2-2-3-Certificate"><a href="#2-2-3-Certificate" class="headerlink" title="2.2.3 Certificate"></a>2.2.3 Certificate</h4><p>连接参数和加密算法商量好之后，server需要发送证书给client，以便client来做认证。这就是Certificate消息的作用。</p>
-<p>server需要保证发送的证书和之前协商好的加密算法匹配。常用的证书是X.509格式的。</p>
-<p>大多数情况下使用的是公钥加密算法来进行认证（RSA或ECDSA）。</p>
-<p>Certificate消息是可选的，因为有的认证方法不需要证书。</p>
-<h4 id="2-2-4-SeverKeyExchange"><a href="#2-2-4-SeverKeyExchange" class="headerlink" title="2.2.4 SeverKeyExchange"></a>2.2.4 SeverKeyExchange</h4><p>好的，发送完Certificate之后，client认证了server。接下来就可以开始秘钥交换了（key exchange）。这就是ServerKeyExchange消息的作用。随着使用的秘钥交换协议的不同，这个消息的格式也不一样。知道这个消息的作用就好了。</p>
-<p>ServerKeyExchange也是可选的。</p>
-<h4 id="2-2-5-ServerHelloDone"><a href="#2-2-5-ServerHelloDone" class="headerlink" title="2.2.5 ServerHelloDone"></a>2.2.5 ServerHelloDone</h4><p>到这里，server要做的就暂时结束了，接下来就发送一个ServerHelloDone通知一下client，然后等着client的进一步消息。</p>
-<h4 id="2-2-6-ClientKeyExchange"><a href="#2-2-6-ClientKeyExchange" class="headerlink" title="2.2.6 ClientKeyExchange"></a>2.2.6 ClientKeyExchange</h4><p>秘钥交换是需要通信的双方一起的。server发送完ServerKeyExchange之后，需要client发送自己的消息，这就是ClientKeyExchange。</p>
-<p>这里对秘钥交换多说一些。在TLS中，会话的安全依赖于一个48位长的秘钥，叫做master secret。但是在秘钥交换过程中交换的不是这个master secret，而是另一个值，premaster secret，通过这个值client和server能够计算出master secret。</p>
-<p>TLS支持多种秘钥交换算法比如RSA、DHE_RSA、ECDHE_RSA和ECDHE_ECDSA等。不用管细节了，这些算法都挺复杂的。</p>
-<h4 id="2-2-7-ChangeCipherSpec"><a href="#2-2-7-ChangeCipherSpec" class="headerlink" title="2.2.7 ChangeCipherSpec"></a>2.2.7 ChangeCipherSpec</h4><p>当client接收了ServerKeyExchange并生成自己的ClientKeyExchange之后，那就完成了秘钥交换（具体是怎么做的就不展开了）。根据协商好的秘钥，就可以对后序的数据加密了。同时，对于server来说，收到ClientKeyExchange之后也可以获得通信的秘钥了，然后就可以是所有这个秘钥加密通信了。</p>
-<p>这就是ChangeCipherSpec的作用。不过ChangeCipherSpec不是Handshake Message。</p>
-<h4 id="2-2-8-Finished"><a href="#2-2-8-Finished" class="headerlink" title="2.2.8 Finished"></a>2.2.8 Finished</h4><p>秘钥交换完了，那握手就可以结束了。不过，前面的过程我们实现了保密性和真实性，还少了完整性，这就是Finished达到的目标。</p>
-<p>Finished中有一个<code>verify_data</code>字段，这个字段是通过下面的方法计算得到的，可以用来保证数据的完整性，并在有中间人修改时可以检测到：</p>
-<pre><code>verify_data = PRF(master_secret, finished_label, Hash(handshake_message))</code></pre><p>其中<code>PRF()</code>是为随机函数（pseudorandom function），可以生成任意长度的随机数；<code>finished_label</code>对于不同的消息值也不同（client发送的就是”client finished”，server发送的就是”server finished”）；<code>Hash()</code>是协商好的哈希函数。</p>
-<h3 id="2-3-Client-Authentication"><a href="#2-3-Client-Authentication" class="headerlink" title="2.3 Client Authentication"></a>2.3 Client Authentication</h3><p>server是必须认证的，client的认证是可选的。不过server可以通过发送一个CertificateRequest来请求对client进行认证。然后client发送自己的Certificate消息。整体的流程如下：</p>
-<img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/Cryptography/client_authentication.png">
-
-<h4 id="2-3-1-CertificateRequest"><a href="#2-3-1-CertificateRequest" class="headerlink" title="2.3.1 CertificateRequest"></a>2.3.1 CertificateRequest</h4><p>server通过发送这个消息来请求对client进行认证。</p>
-<h4 id="2-3-2-CertificateVerify"><a href="#2-3-2-CertificateVerify" class="headerlink" title="2.3.2 CertificateVerify"></a>2.3.2 CertificateVerify</h4><p>client发送这个消息来对自己的身份进行认证。这个消息包含对到目前为止收到的Handshake消息的签名。这样server就可以进行认证了。</p>
-<h3 id="2-4-Session-Resumption"><a href="#2-4-Session-Resumption" class="headerlink" title="2.4 Session Resumption"></a>2.4 Session Resumption</h3><p>由于加密算法的协商和参数的选择，一个完整的握手需要两个RTT（round-trip time）。同时，握手期间的加解密操作也很耗时，如果能复用之间协商的结果的话，那就可以减轻负担了。</p>
-<p>在一个完整握手过程中，如果server希望复用，那么就可以在ServerHello中返回一个session ID给client，然后将数据保存起来。如果client希望复用，在ClientHello中加上那个session ID就可以了：</p>
-<img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/Cryptography/session_resumption.png">
-
-<p>这样只有一个RTT就完成了握手。</p>
-<p>除了session ID，还可以使用session tickets的方式来恢复会话。在TLS 1.3中，使用的是PSK（Pre-Shared Key）。</p>
-<p>这里简单描述了一个握手的整个过程。握手完成之后，就可以安全地通信了。</p>
-<h2 id="3-加密"><a href="#3-加密" class="headerlink" title="3. 加密"></a>3. 加密</h2><p>完成了认证和秘钥交换，就可以进行加密操作了。TLS支持多种加密算法，常用的是AES，有三种不同类型的加密，stream，block和authenticated。在TLS中，数据的完整性校验也包含在加密过程中。</p>
-<h3 id="3-1-Stream-Encryption"><a href="#3-1-Stream-Encryption" class="headerlink" title="3.1 Stream Encryption"></a>3.1 Stream Encryption</h3><p>流密码的加密过程如下：</p>
-<img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/Cryptography/stream_encryption.png">
-
-<p>有两个步骤：</p>
-<ol>
-<li>将序列号（Sequence Number）、头部Header和明文数据组合在一起生成MAC，由于Header数据没有被加密，在计算MAC过程中包含Header可以防止Header被篡改；包含序列号可以防止重放攻击；</li>
-<li>明文数据和第一步计算出来的MAC放在一起加密得到密文。</li>
-</ol>
-<h3 id="3-2-Block-Encryption"><a href="#3-2-Block-Encryption" class="headerlink" title="3.2 Block Encryption"></a>3.2 Block Encryption</h3><p>使用分组密码的流程如下：</p>
-<ol>
-<li>计算序列号、header和明文的MAC（和流密码一样）；</li>
-<li>由于使用分组密码，可能需要填充padding操作（通常分组是16字节）；</li>
-<li>生成初始向量（initialization vector，IV），长度和分组一样长；</li>
-<li>使用CBC模式加密明文，MAC和padding；</li>
-<li>发送IV和密文。</li>
-</ol>
-<p>如图：</p>
-<img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/Cryptography/block_encryption.png">
-
-<p>这里有个问题就是，padding没有放在计算MAC之内。</p>
-<h3 id="3-3-Authenticated-Encryption"><a href="#3-3-Authenticated-Encryption" class="headerlink" title="3.3 Authenticated Encryption"></a>3.3 Authenticated Encryption</h3><p>认证密码把加密和完整性校验放在了一起，全称叫做authenticated encryption with associated data(AEAD)。过程如下：</p>
-<ol>
-<li>生成一个64位的nonce；</li>
-<li>对明文加密，同时使用认证算法将序列号和header添加进来；</li>
-<li>将密文和nonce一起发送。</li>
-</ol>
-<img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/Cryptography/authenticated_encryption.png">
-
-<h2 id="4-密码学操作"><a href="#4-密码学操作" class="headerlink" title="4. 密码学操作"></a>4. 密码学操作</h2><p>上面是在较高的层次的层次上讨论TLS是怎么做的。接下来从密码学的角度看看一些操作。</p>
-<h3 id="4-1-伪随机函数"><a href="#4-1-伪随机函数" class="headerlink" title="4.1 伪随机函数"></a>4.1 伪随机函数</h3><p>前面我们说过了伪随机函数PRF（pseudorandom function），用来产生任意长度的伪随机数。从TLS 1.2开始，所有的算法都需要指定自己的PRF。TLS 1.2中，PRF定义在P_hash函数上的：</p>
-<pre><code>PRF(secret, label, seed) = P_hash(secret, label + seed)</code></pre><p>三个参数，<code>secret</code>，<code>label</code>和<code>seed</code>。</p>
-<p>而<code>P_hash</code>函数是基于HMAC的：</p>
-<pre><code>P_hash(secret, seed) = HMAC_hash(secret, A(1) + seed) +
-                       HMAC_hash(secret, A(2) + seed) +
-                       HMAC_hash(secret, A(3) + seed) + ...</code></pre><p>其中<code>A(i)</code>函数定义如下：</p>
-<pre><code>A(1) = HMAC_hash(secret, seed)
-A(2) = HMAC_hash(secret, A(1))
-...
-A(i) = HMAC_hash(secret, A(i-1))</code></pre><p>由于使用了<code>seed</code>和<code>label</code>，同一个<code>secret</code>可以使用多次。</p>
-<h3 id="4-2-Master-Secret"><a href="#4-2-Master-Secret" class="headerlink" title="4.2 Master Secret"></a>4.2 Master Secret</h3><p>之前说过，秘钥交换的不是master secret，而是premaster secret，然后生成master secret。通过下面的方法可以生成48字节长的master secret：</p>
-<pre><code>master_secret = PRF(pre_master_secret, &quot;master secret&quot;, ClientHello.random + ServerHello.random)</code></pre><h3 id="4-3-生成秘钥"><a href="#4-3-生成秘钥" class="headerlink" title="4.3 生成秘钥"></a>4.3 生成秘钥</h3><p>有了master secret之后，就可以生成秘钥了：</p>
-<pre><code>key_block = PRF(SecurityParamters.master_secret,
-                &quot;key expansion&quot;,
-                SecurityParameters.server_random + SecurityParameters.client_random)</code></pre><p>生成的key_block可以分成六部分：两个MAC秘钥，两个加密秘钥还有两个初始化变量（IV）。不同的秘钥用于不同的操作，这样可以防止秘钥的重复使用。</p>
-<h2 id="5-Cipher-Suites"><a href="#5-Cipher-Suites" class="headerlink" title="5. Cipher Suites"></a>5. Cipher Suites</h2><p>最后，介绍一下加密算法。一个cipher suite就是一组密码原语以及定义实现的参数的组合。主要包括下面的东西：</p>
+                <h1 id="1-王政时期（753BC-509BC）"><a href="#1-王政时期（753BC-509BC）" class="headerlink" title="1. 王政时期（753BC-509BC）"></a>1. 王政时期（753BC-509BC）</h1><h2 id="1-1-建国之王：罗慕路斯（753BC-716BC）"><a href="#1-1-建国之王：罗慕路斯（753BC-716BC）" class="headerlink" title="1.1. 建国之王：罗慕路斯（753BC-716BC）"></a>1.1. 建国之王：罗慕路斯（753BC-716BC）</h2><p>杀死弟弟瑞摩斯成为罗马唯一的王。</p>
+<p>台伯河：发源于亚平宁山脉，全长300多公里。自罗马向前流经约30公里，经过奥斯提亚注入地中海。</p>
+<p>罗马七山丘：</p>
 <ul>
-<li>认证方法（Authentication method）</li>
-<li>秘钥交换方法（Key exchange method）</li>
-<li>加密算法（Encryption algorithm）</li>
-<li>加密秘钥长度（Encryption key size）</li>
-<li>密码模式（Cipher mode）</li>
-<li>MAC算法（MAC algorithm）</li>
-<li>PRF</li>
-<li>Finished消息使用的哈希函数</li>
-<li>verify_data的长度</li>
+<li>奎里尔诺山</li>
+<li>维弥纳山</li>
+<li>埃斯奎利山</li>
+<li>卡匹托尔山</li>
+<li>西里欧山</li>
+<li>阿文庭山</li>
 </ul>
-<p>一个cipher suite的名字就指出了上面那些内容的具体实现：</p>
-<img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/Cryptography/cipher_suite_name.png">
+<p>建国纪念日：公元前753年4月21日。</p>
+<p>国王、元老院和市民大会</p>
+<p>国王：宗教祭祀、军事和政治的最高领导人，由市民大会投票选举产生。</p>
+<p>元老院：不是政府官职，向国王提出忠告和建议，不需要通过市民大会的选举，100人。</p>
+<p>市民大会：全体罗马市民。选出国王和各级政府官员，没有制定政策的权力，但是对国王听取元老院的建议后制定出来的政策有赞成和反对的表决权力。对外关系的战和也需要征得市民大会的同意。</p>
+<p>和萨宾的四次战争。</p>
+<p>同化萨宾人。</p>
+<h2 id="1-2-努马（716BC-672BC）"><a href="#1-2-努马（716BC-672BC）" class="headerlink" title="1.2. 努马（716BC-672BC）"></a>1.2. 努马（716BC-672BC）</h2><p>战神雅努斯神殿</p>
+<p>宗教改革</p>
+<p>罗马众神：</p>
+<ul>
+<li>诸神之王朱庇特</li>
+<li>其妻朱诺女神（幸福婚姻和妇女的保护神）</li>
+<li>美和爱的女神维纳斯</li>
+<li>狩猎女神戴安娜</li>
+<li>学问和艺术之神阿波罗</li>
+<li>智慧女神雅典娜</li>
+<li>战神马尔斯（雅努斯呢？）</li>
+<li>谷物女神克瑞斯</li>
+<li>酒神巴克斯</li>
+<li>商业旅行保护神墨丘利</li>
+<li>医神阿斯克勒庇俄斯</li>
+<li>维里普拉卡女神（调解夫妻矛盾的保护神）</li>
+<li>协和女神</li>
+</ul>
+<h2 id="1-3-托里斯·奥斯蒂吕斯（672BC-642BC）"><a href="#1-3-托里斯·奥斯蒂吕斯（672BC-642BC）" class="headerlink" title="1.3. 托里斯·奥斯蒂吕斯（672BC-642BC）"></a>1.3. 托里斯·奥斯蒂吕斯（672BC-642BC）</h2><p>攻占阿鲁巴，拉丁民族的大本营。</p>
+<h2 id="1-4-安库斯·马尔西乌斯（642BC-616BC）"><a href="#1-4-安库斯·马尔西乌斯（642BC-616BC）" class="headerlink" title="1.4. 安库斯·马尔西乌斯（642BC-616BC）"></a>1.4. 安库斯·马尔西乌斯（642BC-616BC）</h2><p>托里斯女婿、努马外孙，萨宾人。</p>
+<p>建造台伯河上第一座桥。</p>
+<p>征服了奥斯提亚，罗马有了港口。</p>
+<h2 id="1-5-塔克文·普利斯库斯（616BC-578BC）"><a href="#1-5-塔克文·普利斯库斯（616BC-578BC）" class="headerlink" title="1.5. 塔克文·普利斯库斯（616BC-578BC）"></a>1.5. 塔克文·普利斯库斯（616BC-578BC）</h2><p>增加元老院人数到200人。</p>
+<p>被先王安库斯的两个儿子暗杀。</p>
+<h2 id="1-6-塞尔维乌斯·图利乌斯（578BC-543BC）"><a href="#1-6-塞尔维乌斯·图利乌斯（578BC-543BC）" class="headerlink" title="1.6. 塞尔维乌斯·图利乌斯（578BC-543BC）"></a>1.6. 塞尔维乌斯·图利乌斯（578BC-543BC）</h2><p>先王塔克文的养子。</p>
+<p>没有经过市民大会的选举，只通过元老院的决议就登上了王位。</p>
+<p>罗马城墙：塞尔维乌斯城墙。</p>
+<p>罗马选举制不是一人一票制，按军团的最小单位百人队一票。</p>
+<p>选举制度：</p>
+<p>（此处有图）</p>
+<p>被女儿图里亚杀死。</p>
+<h2 id="1-7-最后的国王：傲慢者塔克文（543BC-509BC）"><a href="#1-7-最后的国王：傲慢者塔克文（543BC-509BC）" class="headerlink" title="1.7. 最后的国王：傲慢者塔克文（543BC-509BC）"></a>1.7. 最后的国王：傲慢者塔克文（543BC-509BC）</h2><p>第五代国王的儿子，先王塞尔维乌斯的女婿，妻子图里亚。</p>
+<p>没有市民大会的选举，也没有元老院的同意。</p>
+<p>儿子赛克斯图斯侮辱了科拉提努斯的妻子琉克蕾西亚，琉克蕾西亚自杀。</p>
+<p>被罗马人民驱逐。</p>
+<h1 id="2-罗马共和国（509BC-27BC）"><a href="#2-罗马共和国（509BC-27BC）" class="headerlink" title="2. 罗马共和国（509BC-27BC）"></a>2. 罗马共和国（509BC-27BC）</h1><h2 id="2-1-共和政体的创始人：布鲁图斯"><a href="#2-1-共和政体的创始人：布鲁图斯" class="headerlink" title="2.1. 共和政体的创始人：布鲁图斯"></a>2.1. 共和政体的创始人：布鲁图斯</h2><p>509BC年第一位执政官。</p>
+<p>执政官任期一年。</p>
+<p>杀死参与王政复辟的两个儿子。</p>
+<p>在和傲慢者塔克文的战争中战死。</p>
+<h2 id="2-2-亲民者瓦莱利乌斯"><a href="#2-2-亲民者瓦莱利乌斯" class="headerlink" title="2.2. 亲民者瓦莱利乌斯"></a>2.2. 亲民者瓦莱利乌斯</h2><p>509BC年到503BC年担任四届执政官。</p>
+<p>挫败塔克文和伊特鲁里亚联邦的丘西国王波塞纳的复辟计划。</p>
+<h2 id="2-3-寡头政治下的贵族与平民的对立"><a href="#2-3-寡头政治下的贵族与平民的对立" class="headerlink" title="2.3. 寡头政治下的贵族与平民的对立"></a>2.3. 寡头政治下的贵族与平民的对立</h2><p>公元前494年，罗马与邻近部落的战争中，平民拒绝服兵役，平民运动。</p>
+<p>独裁官任期六个月。</p>
+<p>第二个独裁官，亲民者瓦莱利乌斯的弟弟，马尼乌斯。</p>
+<p>设立护民官，由公民大会选举产生，两人。</p>
+<p>公元前五世纪中叶，考察雅典。</p>
+<p>454BC年，成立一个由贵族和平民组成的十人立法委员会。</p>
+<p>451BC年，十人立法委员会颁布法典，刻在10个铜表上。</p>
+<p>449BC年，新增两表，著名的《十二铜表法》。</p>
+<p>445BC年，允许贵族和平民之间的通婚。</p>
+<p>贵族保护人，平民被保护人。</p>
+<h2 id="2-4-六人军事指挥官"><a href="#2-4-六人军事指挥官" class="headerlink" title="2.4. 六人军事指挥官"></a>2.4. 六人军事指挥官</h2><p>410BC年到360BC年，由六个军事指挥官取代两个执政官。</p>
+<h2 id="2-5-高卢人的入侵"><a href="#2-5-高卢人的入侵" class="headerlink" title="2.5. 高卢人的入侵"></a>2.5. 高卢人的入侵</h2><p>凯尔特人是希腊人的称呼，罗马人叫做高卢人。</p>
+<p>396BC年，独裁官马克斯·弗瑞耶斯·卡米卢斯经过十年战争，罗马消灭了伊特鲁里亚人的城市维爱，直接与凯尔特人接壤。</p>
+<p>卡米卢斯五次担任独裁官，举行过四次凯旋仪式，被誉为仅次于罗慕路斯的罗马的第二个创建者。</p>
+<p>390BC年，高卢人攻克罗马，占领七个月。</p>
+<p>待解决问题：</p>
+<ol>
+<li>在注重防卫的同时，重建被毁的罗马；</li>
+<li>与叛离的旧同盟各部族作战，以此确保边境安全；</li>
+<li>消除贵族与平民之间的对立，实现社会安定和舆论统一。</li>
+</ol>
+<h2 id="2-6-政治改革"><a href="#2-6-政治改革" class="headerlink" title="2.6. 政治改革"></a>2.6. 政治改革</h2><p>367BC年，实施《李锡尼法》</p>
+<ol>
+<li>废除六人军事指挥官，恢复两人执政官。明确罗马实行寡头政治；</li>
+<li>规定共和国政府的所有要职向平民出身的人开放。</li>
+</ol>
+<p>古罗马广场内的协和神殿，纪念《李锡尼法》的实施。</p>
+<p>366BC年，第一个平民执政官。</p>
+<p>356BC年，第一个平民独裁官。</p>
+<p>351BC年，第一个平民财务官。</p>
+<p>332BC年，第一个平民法务官。</p>
+<p>322BC年，禁止因无法还清欠债而剥夺其人身自由。</p>
+<p>287BC年，《霍腾休斯法》平民大会通过的决议可以成为国家的法令。</p>
+<h2 id="2-7-罗马政体"><a href="#2-7-罗马政体" class="headerlink" title="2.7. 罗马政体"></a>2.7. 罗马政体</h2><p>公元前四世纪中叶，罗马的共和政体趋于完善。</p>
+<h3 id="2-7-1-罗马的选举制"><a href="#2-7-1-罗马的选举制" class="headerlink" title="2.7.1. 罗马的选举制"></a>2.7.1. 罗马的选举制</h3><p>采用按照收入的多少纳税。</p>
+<p>百人队构成一票。</p>
+<p>市民大会的总投票数是193票，只要有97票就过半数。</p>
+<p>只要第一等级意见一致，就控制了过半的票。</p>
+<h3 id="2-7-2-执政官（Consul）"><a href="#2-7-2-执政官（Consul）" class="headerlink" title="2.7.2. 执政官（Consul）"></a>2.7.2. 执政官（Consul）</h3><p>市民大会选举产生，元老院批准后就职，任期一年，允许再选，年龄下限40岁，两人。</p>
+<p>召开市民大会，内政的最高领导人。</p>
+<p>也是军队的指挥官，前执政官。</p>
+<p>12个刀斧手做开路先锋。</p>
+<h3 id="2-7-3-独裁官（Dictator）"><a href="#2-7-3-独裁官（Dictator）" class="headerlink" title="2.7.3. 独裁官（Dictator）"></a>2.7.3. 独裁官（Dictator）</h3><p>国家处于非常紧急时期任命的官职，独裁官由两位执政官中的一个指定。</p>
+<p>无权决定改变政体，任何问题上享有绝对的决定权。</p>
+<p>一人，任期六个月。</p>
+<p>24个刀斧手做开路先锋。</p>
+<p>509BC年到390BC年，只任命过7位独裁官。</p>
+<h3 id="2-7-4-法务官（Praetor）"><a href="#2-7-4-法务官（Praetor）" class="headerlink" title="2.7.4. 法务官（Praetor）"></a>2.7.4. 法务官（Praetor）</h3><p>任期一年，40岁以上。</p>
+<p>最初1人，后逐渐扩增至16人。</p>
+<p>除了执政官没有扩增外，其余几乎所有官职都扩增了。</p>
+<p>执政官上前线时管理后方，后变为司法负责人。</p>
+<p>执政官不在时，法务官担任议长，召集在首都罗马举行的市民大会。</p>
+<h3 id="2-7-5-财务检察官（Quaestor）"><a href="#2-7-5-财务检察官（Quaestor）" class="headerlink" title="2.7.5. 财务检察官（Quaestor）"></a>2.7.5. 财务检察官（Quaestor）</h3><p>最初2人，共和末期增加到40人。</p>
+<p>任期一年，30岁以上。</p>
+<p>负责前线的财务。</p>
+<h3 id="2-7-6-财务官（Censor）"><a href="#2-7-6-财务官（Censor）" class="headerlink" title="2.7.6. 财务官（Censor）"></a>2.7.6. 财务官（Censor）</h3><p>最初为人口调查而设，每五年进行一次人口调查选举一次。</p>
+<p>任期一年半以上，两人。</p>
+<p>仅次于执政官的权力。</p>
+<h3 id="2-7-7-按察官（Aedilis）"><a href="#2-7-7-按察官（Aedilis）" class="headerlink" title="2.7.7. 按察官（Aedilis）"></a>2.7.7. 按察官（Aedilis）</h3><p>四人，贵族和平民各两人。</p>
+<p>任期一年，30岁以上。</p>
+<p>策划组织庆祝和祭祀活动；公共安全；保障粮食的供给；负责道路维修、交通整顿和上下水道管理；对各种违法行为作出罚款金额的决定；对市场进行严格监管；在共和末期担任向无产者无偿配送小麦。</p>
+<h3 id="2-7-8-护民官（Tribunus-Plebis）"><a href="#2-7-8-护民官（Tribunus-Plebis）" class="headerlink" title="2.7.8. 护民官（Tribunus Plebis）"></a>2.7.8. 护民官（Tribunus Plebis）</h3><p>平民大会上产生（贵族也可以参加市民大会）。</p>
+<p>任期一年，年龄没有限制，两人，后来增加到10人。</p>
+<p>保护平民的权利，有权对征服所做的决定行使否决权，战时不可以。</p>
+<p>护民官任期结束后，通常转为元老院议员。</p>
+<h3 id="2-7-9-元老院（Senatus）"><a href="#2-7-9-元老院（Senatus）" class="headerlink" title="2.7.9. 元老院（Senatus）"></a>2.7.9. 元老院（Senatus）</h3><p>元老院以及罗马市民（SPQR）：Senatus, Populus, Que, Romanus</p>
+<p>只有元老院议员不需要选举，任期终身。</p>
+<h2 id="2-8-罗马联盟"><a href="#2-8-罗马联盟" class="headerlink" title="2.8. 罗马联盟"></a>2.8. 罗马联盟</h2><p>同盟国只需与罗马缔结协议，加盟国之间不可以。</p>
+<p>338BC年成立。</p>
+<h3 id="2-8-1-盟主罗马"><a href="#2-8-1-盟主罗马" class="headerlink" title="2.8.1 盟主罗马"></a>2.8.1 盟主罗马</h3><p>只要是自由民，部分贵族和平民，都有罗马市民权。有服兵役的义务。</p>
+<p>享有投票权和被选举权，以及参与国政的权利。</p>
+<h3 id="2-8-2-旧拉丁同盟的加盟国"><a href="#2-8-2-旧拉丁同盟的加盟国" class="headerlink" title="2.8.2 旧拉丁同盟的加盟国"></a>2.8.2 旧拉丁同盟的加盟国</h3><p>BC390年背离罗马之后又被罗马打败的国家。</p>
+<p>与罗马有相同的语言、宗教和习俗。</p>
+<p>完全的罗马市民权。</p>
+<h3 id="2-8-3-自治城市"><a href="#2-8-3-自治城市" class="headerlink" title="2.8.3 自治城市"></a>2.8.3 自治城市</h3><p>无投票权的罗马市民权。</p>
+<p>没有选举权和被选举权。</p>
+<p>准罗马市民，三年后可以得到罗马市民权。</p>
+<h3 id="2-8-4-殖民地"><a href="#2-8-4-殖民地" class="headerlink" title="2.8.4 殖民地"></a>2.8.4 殖民地</h3><p>只有被认为战略上非常重要的地方，罗马市民团才回开展殖民建设。是罗马殖民地。</p>
+<p>具有完全的罗马市民权。</p>
+<p>拉丁殖民地：罗马联盟其他加盟国的人民建设的殖民地。</p>
+<h3 id="2-8-5-统称“同盟国”的国家"><a href="#2-8-5-统称“同盟国”的国家" class="headerlink" title="2.8.5 统称“同盟国”的国家"></a>2.8.5 统称“同盟国”的国家</h3><p>当时叫做“同盟市”。</p>
+<p>350BC年以后被罗马打败的国家。</p>
+<p>具有完全的国内自治，允许保留自己的语言、宗教和习俗。</p>
+<p>只需要提供兵力。</p>
+<h2 id="2-9-对意大利中南部的征服"><a href="#2-9-对意大利中南部的征服" class="headerlink" title="2.9 对意大利中南部的征服"></a>2.9 对意大利中南部的征服</h2><p>主要有意大利中南部山岳地带的萨莫奈人，和伊庇鲁斯国王皮洛士。</p>
+<h3 id="2-9-1-萨莫奈人"><a href="#2-9-1-萨莫奈人" class="headerlink" title="2.9.1 萨莫奈人"></a>2.9.1 萨莫奈人</h3><p>第一次萨莫奈战争（343BC-341BC）</p>
+<p>第二次萨莫奈战争（327BC-304BC）</p>
+<p>321BC年考地乌姆耻辱</p>
+<p>第三次萨莫奈战争（298BC-290BC）</p>
+<p>北边高卢人、伊特鲁里亚人和翁布里亚人参战，南部萨莫奈人参战。</p>
+<p>297BC年，昆图斯·费边第五次当选执政官，另一人是德西乌斯第四次当选（平民）。</p>
+<h3 id="2-9-2-意大利南部希腊"><a href="#2-9-2-意大利南部希腊" class="headerlink" title="2.9.2 意大利南部希腊"></a>2.9.2 意大利南部希腊</h3><p>塔兰托和希腊北部的伊庇鲁斯国王皮洛士。</p>
+<p>皮洛士战争（280BC-275BC）</p>
+<p>272BC年，罗马攻陷塔兰托。</p>
+<p>270BC年，完成卢孔比河以南意大利半岛的统一。</p>
+<h2 id="2-10-布匿战争"><a href="#2-10-布匿战争" class="headerlink" title="2.10 布匿战争"></a>2.10 布匿战争</h2><p>罗马和迦太基争夺地中海霸权的战争。</p>
+<h3 id="2-10-1-第一次布匿战争（264BC-241BC）"><a href="#2-10-1-第一次布匿战争（264BC-241BC）" class="headerlink" title="2.10.1 第一次布匿战争（264BC-241BC）"></a>2.10.1 第一次布匿战争（264BC-241BC）</h3><img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/History/%E7%AC%AC%E4%B8%80%E6%AC%A1%E5%B8%83%E5%8C%BF%E6%88%98%E4%BA%89%E5%89%8D%E7%9A%84%E7%BD%97%E9%A9%AC%E5%92%8C%E8%BF%A6%E5%A4%AA%E5%9F%BA.png">
 
-<p>下表列出了一些常见的cipher suite：</p>
-<table>
-<thead>
-<tr>
-<th>Cipher Suite Name</th>
-<th>Auth</th>
-<th>KX</th>
-<th>Cipher</th>
-<th>MAC</th>
-<th>PRF</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256</td>
-<td>RSA</td>
-<td>ECDHE</td>
-<td>AES-128-GCM</td>
-<td>-</td>
-<td>SHA256</td>
-</tr>
-<tr>
-<td>TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384</td>
-<td>ECDSA</td>
-<td>ECDHE</td>
-<td>AES-256-GCM</td>
-<td>-</td>
-<td>SHA384</td>
-</tr>
-<tr>
-<td>TLS_DHE_RSA_WITH_3DES_EDE_CBC_SHA</td>
-<td>RSA</td>
-<td>DHE</td>
-<td>3DES-EDE-CBC</td>
-<td>SHA1</td>
-<td>Protocol</td>
-</tr>
-<tr>
-<td>TLS_RSA_WITH_AES_128_CBC_SHA</td>
-<td>RSA</td>
-<td>RSA</td>
-<td>AES-128_CBC</td>
-<td>SHA1</td>
-<td>Protocol</td>
-</tr>
-<tr>
-<td>TLS_ECDHE_ECDSA_WITH_AES_128_CCM</td>
-<td>ECDSA</td>
-<td>ECDHE</td>
-<td>AES-128-CCM</td>
-<td>-</td>
-<td>SHA256</td>
-</tr>
-</tbody></table>
-<p>好了，到现在为止我们对TLS是如何操作的有了一个大概的认识。</p>
-<p>To Be Continued…</p>
+<p>288BC年，一群叙拉古雇佣兵占领墨西拿。</p>
+<p>265BC年，叙拉古国王希伦二世出兵墨西拿驱逐雇佣兵。</p>
+<p>265BC年，墨西拿向罗马求救。</p>
+<p>264BC年，第一次布匿战争开始。</p>
+<p>262BC年，阿格里真托战役。</p>
+<p>260BC年，米列海战（现在的米拉佐，罗马海军获胜，第一次使用乌鸦吊桥）。</p>
+<p>257BC年，巴勒莫海战（罗马海军获胜）。</p>
+<p>256BC年，埃克诺穆斯海战（现在的利卡塔，罗马海军获胜）。</p>
+<p>256BC年，罗马远征军登陆非洲，战败。</p>
+<p>241BC年，埃加迪群岛海战（罗马海军获胜）。</p>
+<p>结果：罗马获得西西里岛、萨丁岛和科西嘉岛。</p>
+<h3 id="2-10-2-第二次布匿战争（汉尼拔战争，218BC-202BC）"><a href="#2-10-2-第二次布匿战争（汉尼拔战争，218BC-202BC）" class="headerlink" title="2.10.2 第二次布匿战争（汉尼拔战争，218BC-202BC）"></a>2.10.2 第二次布匿战争（汉尼拔战争，218BC-202BC）</h3><img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/History/%E7%AC%AC%E4%BA%8C%E6%AC%A1%E5%B8%83%E5%8C%BF%E6%88%98%E4%BA%89%E5%89%8D%E7%9A%84%E7%BD%97%E9%A9%AC%E5%92%8C%E8%BF%A6%E5%A4%AA%E5%9F%BA.png">
 
+<p>218BC年，汉尼拔从西班牙出发，跨过阿尔卑斯山，进入意大利。</p>
+<p>218BC年，提契诺河战役（汉尼拔获胜）。</p>
+<p>218BC年，特雷比亚河战役（汉尼拔获胜）。</p>
+<p>217BC年，特拉西梅诺湖战役（汉尼拔获胜）。</p>
+<p>216BC年，坎尼会战（汉尼拔获胜）。</p>
+<p>大西庇阿，普布利乌斯·科尔内利乌斯·西庇阿（235BC-183BC），阿非利加努斯。</p>
+<p>征服西班牙</p>
+<p>征战非洲</p>
+<p>202BC，扎马战役（西庇阿获胜）。</p>
+<p>结果：迦太基只剩下非洲，海军解散，任何自卫战争需征得罗马同意。罗马成为地中海最强大的国家。</p>
+<h3 id="2-10-3-第三次布匿战争（149BC-146BC）"><a href="#2-10-3-第三次布匿战争（149BC-146BC）" class="headerlink" title="2.10.3 第三次布匿战争（149BC-146BC）"></a>2.10.3 第三次布匿战争（149BC-146BC）</h3><p>三年围城战，迦太基灭亡。</p>
+<h2 id="2-11-马其顿战争"><a href="#2-11-马其顿战争" class="headerlink" title="2.11 马其顿战争"></a>2.11 马其顿战争</h2><p>第一次马其顿战争（214BC-205BC），马其顿和汉尼拔结盟。</p>
+<p>第二次马其顿战争（200BC-196BC）。</p>
+<p>塞琉古战争（192BC-188BC），罗马和叙利亚塞琉古王朝的战争。</p>
+<p>第三次马其顿战争（171BC-168BC）。</p>
+<p>第四次马其顿战争（150BC-148BC），战后，马其顿成为罗马的一个行省。</p>
+<h2 id="2-12-格拉古兄弟改革"><a href="#2-12-格拉古兄弟改革" class="headerlink" title="2.12 格拉古兄弟改革"></a>2.12 格拉古兄弟改革</h2><p>格拉古兄弟是大西庇阿的外孙。</p>
+<h3 id="2-12-1-第一次改革：提比略·格拉古"><a href="#2-12-1-第一次改革：提比略·格拉古" class="headerlink" title="2.12.1 第一次改革：提比略·格拉古"></a>2.12.1 第一次改革：提比略·格拉古</h3><p>提比略·格拉古（168BC-133BC）</p>
+<p>133BC年当选护民官，提出土地法案，每户所占公有土地不可以超过1000尤格（约650英亩）。超过部分国家补偿并收回，发放给贫穷农民，三人委员会负责处理。</p>
+<p>被反对派杀死，改革终止。</p>
+<h3 id="2-12-2-第二次改革：盖约·格拉古"><a href="#2-12-2-第二次改革：盖约·格拉古" class="headerlink" title="2.12.2 第二次改革：盖约·格拉古"></a>2.12.2 第二次改革：盖约·格拉古</h3><p>盖约·格拉古（154BC-121BC）</p>
+<p>123BC，122BC年， 当选护民官，陪审团全部由骑士阶级担任；建设海外殖民地安置平民；粮食法低价购买粮食；拉丁公民获得罗马公民权，其余意大利人获得拉丁公民权（未成功）。</p>
+<p>121BC年，被反对派杀死。</p>
+<img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/History/%E5%85%AC%E5%85%83%E5%89%8D130%E5%B9%B4%E7%9A%84%E5%9C%B0%E4%B8%AD%E6%B5%B7%E4%B8%96%E7%95%8C.png">
+
+<h2 id="2-13-西西里奴隶起义"><a href="#2-13-西西里奴隶起义" class="headerlink" title="2.13 西西里奴隶起义"></a>2.13 西西里奴隶起义</h2><p>第一次西西里奴隶起义：137BC-132BC</p>
+<p>第二次西西里奴隶起义：104BC-101BC</p>
+<h2 id="2-14-军人共和"><a href="#2-14-军人共和" class="headerlink" title="2.14 军人共和"></a>2.14 军人共和</h2><h3 id="2-14-1-盖乌斯·马略"><a href="#2-14-1-盖乌斯·马略" class="headerlink" title="2.14.1 盖乌斯·马略"></a>2.14.1 盖乌斯·马略</h3><p>盖乌斯·马略（157BC-86BC），平民。</p>
+<p>辛布里战争（113BC-101BC），日耳曼族入侵。马略成功击败。</p>
+<p>军事改革（志愿兵制）</p>
+<p>晚年和苏拉的斗争。</p>
+<h3 id="2-14-2-路奇乌斯·科尔内利乌斯·苏拉"><a href="#2-14-2-路奇乌斯·科尔内利乌斯·苏拉" class="headerlink" title="2.14.2 路奇乌斯·科尔内利乌斯·苏拉"></a>2.14.2 路奇乌斯·科尔内利乌斯·苏拉</h3><p>路奇乌斯·科尔内利乌斯·苏拉（138BC-78BC）</p>
+<p>朱古达战争（111BC-105BC），努米底亚</p>
+<p>同盟者战争（91BC-88BC），原罗马同盟者</p>
+<img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/History/%E5%90%8C%E7%9B%9F%E6%88%98%E4%BA%89%E6%97%B6%E7%9A%84%E6%84%8F%E5%A4%A7%E5%88%A9%E5%8D%97%E9%83%A8.png">
+
+<p>第一次米特拉达梯战争（89BC-84BC）本都王国</p>
+<p>第一次苏拉内战（88BC-87BC）</p>
+<p>第二次苏拉内战（83BC-81BC）</p>
+<p>81BC-79BC：苏拉独裁</p>
+<h3 id="2-14-3-卢库卢斯"><a href="#2-14-3-卢库卢斯" class="headerlink" title="2.14.3 卢库卢斯"></a>2.14.3 卢库卢斯</h3><p>卢库卢斯（117BC-56BC）</p>
+<p>第一次米特拉达梯战争（89BC-84BC）</p>
+<p>第二次米特拉达梯战争（74BC-66BC）</p>
+<h3 id="2-14-4-马库斯·李锡尼·克拉苏"><a href="#2-14-4-马库斯·李锡尼·克拉苏" class="headerlink" title="2.14.4 马库斯·李锡尼·克拉苏"></a>2.14.4 马库斯·李锡尼·克拉苏</h3><p>前三头之一</p>
+<p>马库斯·李锡尼·克拉苏（115BC-53BC）</p>
+<p>斯巴达克斯起义（73BC-71BC）</p>
+<p>东征帕提亚失败被杀</p>
+<h3 id="2-14-5-格涅乌斯·庞培"><a href="#2-14-5-格涅乌斯·庞培" class="headerlink" title="2.14.5 格涅乌斯·庞培"></a>2.14.5 格涅乌斯·庞培</h3><p>庞培·阿格努斯（伟大的庞培，106BC-48BC）</p>
+<p>肃清海盗</p>
+<p>与凯撒的内战中战败被杀</p>
+<img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/History/%E5%BA%9E%E5%9F%B9%E5%B9%B3%E5%AE%9A%E4%B8%9C%E6%96%B9%EF%BC%88%E5%89%8D63%E5%B9%B4%EF%BC%89%E7%9A%84%E5%9C%B0%E4%B8%AD%E6%B5%B7.png">
+
+<h3 id="2-14-5-凯撒"><a href="#2-14-5-凯撒" class="headerlink" title="2.14.5 凯撒"></a>2.14.5 凯撒</h3><p>盖乌斯·尤利乌斯·凯撒（100BC-44BC）</p>
+<p>前三头之一</p>
+<p>征服高卢（58BC-49）</p>
+<p>渡过卢孔比河，内战（49BC-45BC）</p>
+<p>终身独裁官</p>
+<p>被刺杀（44BC）</p>
+<img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/History/%E9%AB%98%E5%8D%A2%E6%88%98%E8%AE%B0%E4%B8%8E%E5%86%85%E6%88%98%E8%AE%B0.png">
             </div>
             <hr/>
 
@@ -672,7 +679,7 @@ A(i) = HMAC_hash(secret, A(i-1))</code></pre><p>由于使用了<code>seed</code>
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://deuterium.fun/ssl-and-tls-part-3-protocol/">http://deuterium.fun/ssl-and-tls-part-3-protocol/</a>
+                    <a href="http://deuterium.fun/roman-republic/">http://deuterium.fun/roman-republic/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -710,8 +717,12 @@ A(i) = HMAC_hash(secret, A(i-1))</code></pre><p>由于使用了<code>seed</code>
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/tls/">
-                                    <span class="chip bg-color">tls</span>
+                                <a href="/tags/history/">
+                                    <span class="chip bg-color">history</span>
+                                </a>
+                            
+                                <a href="/tags/rome/">
+                                    <span class="chip bg-color">rome</span>
                                 </a>
                             
                         </div>
@@ -1015,9 +1026,10 @@ A(i) = HMAC_hash(secret, A(i-1))</code></pre><p>由于使用了<code>seed</code>
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
+                <i class="far fa-dot-circle"></i>&nbsp;Current
+            </div>
             <div class="card">
                 <a href="/roman-republic/">
                     <div class="card-image">
@@ -1039,9 +1051,9 @@ A(i) = HMAC_hash(secret, A(i-1))</code></pre><p>由于使用了<code>seed</code>
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-03-02
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-03-02
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -1054,6 +1066,7 @@ A(i) = HMAC_hash(secret, A(i-1))</code></pre><p>由于使用了<code>seed</code>
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -1076,28 +1089,25 @@ A(i) = HMAC_hash(secret, A(i-1))</code></pre><p>由于使用了<code>seed</code>
                 Next&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/ssl-and-tls-part-2-cryptography/">
+                <a href="/ssl-and-tls-part-3-protocol/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="SSL and TLS (Part 2): Cryptography">
+                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="SSL and TLS (Part 3): Protocol">
                         
-                        <span class="card-title">SSL and TLS (Part 2): Cryptography</span>
+                        <span class="card-title">SSL and TLS (Part 3): Protocol</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            在SSL and TLS (Part 1): Brief Intro中简单介绍了一下SSL/TLS，并以需要解决的三个问题结尾。这三个问题是：
-
-保密性（Confidentiality）
-真实性（Authenticity）
-完整性（Inte
+                            在前面的文章中，我们从密码学的角度讨论了一些主要的密码原语（cryptographic primitive），最后通过组合这些密码原语构成一个可用的安全通信协议。
+这篇文章更进一步，看看TLS是怎么做的。不过TLS的细节太多了也有点难，这里
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-01-19
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-01-20
                             </span>
                         <span class="publish-author">
                             
