@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://deuterium.fun/"/>
-  <updated>2020-03-02T03:24:07.383Z</updated>
+  <updated>2020-03-02T03:28:17.019Z</updated>
   <id>http://deuterium.fun/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="http://deuterium.fun/roman-republic/"/>
     <id>http://deuterium.fun/roman-republic/</id>
     <published>2020-03-02T03:21:23.000Z</published>
-    <updated>2020-03-02T03:24:07.383Z</updated>
+    <updated>2020-03-02T03:28:17.019Z</updated>
     
     <summary type="html">
     
@@ -29,7 +29,9 @@
       
         
         
-          &lt;h1 id=&quot;1-王政时期（753BC-509BC）&quot;&gt;&lt;a href=&quot;#1-王政时期（753BC-509BC）&quot; class=&quot;headerlink&quot; title=&quot;1. 王政时期（753BC-509BC）&quot;&gt;&lt;/a&gt;1.
+          &lt;blockquote&gt;
+&lt;p&gt;由于疫情，有了一个漫长的假期。不玩游戏不看电影不追剧，看书成了唯一的消遣。十几天的时间看完了盐野七生的15卷本《罗马人的故事》，对古罗马的脉络有了一个大体的了解。在这篇文章中，对罗马王政时期和共和国时期的历史做一下简单的梳理。&lt;/p&gt;
+&lt;/bloc
         
       
     
@@ -387,9 +389,9 @@
       <category term="redis" scheme="http://deuterium.fun/categories/redis/"/>
     
     
-      <category term="tips" scheme="http://deuterium.fun/tags/tips/"/>
-    
       <category term="redis" scheme="http://deuterium.fun/tags/redis/"/>
+    
+      <category term="tips" scheme="http://deuterium.fun/tags/tips/"/>
     
   </entry>
   
