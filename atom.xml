@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://deuterium.fun/"/>
-  <updated>2020-03-02T03:28:17.019Z</updated>
+  <updated>2020-03-04T02:23:42.820Z</updated>
   <id>http://deuterium.fun/</id>
   
   <author>
@@ -15,6 +15,38 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Roman Empire</title>
+    <link href="http://deuterium.fun/roman-empire/"/>
+    <id>http://deuterium.fun/roman-empire/</id>
+    <published>2020-03-04T02:03:42.000Z</published>
+    <updated>2020-03-04T02:23:42.820Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;blockquote&gt;
+&lt;p&gt;这篇文章是根据假期看的《罗马人的故事》记录的罗马流水线的第二部分：罗马帝国。罗马帝国从27BC开始到467AD西罗马帝国灭亡共500年的历史，不包括东罗马帝国（拜占庭帝国）。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2
+        
+      
+    
+    </summary>
+    
+    
+      <category term="reading" scheme="http://deuterium.fun/categories/reading/"/>
+    
+    
+      <category term="history" scheme="http://deuterium.fun/tags/history/"/>
+    
+      <category term="rome" scheme="http://deuterium.fun/tags/rome/"/>
+    
+  </entry>
   
   <entry>
     <title>Roman Republic</title>
@@ -389,9 +421,9 @@
       <category term="redis" scheme="http://deuterium.fun/categories/redis/"/>
     
     
-      <category term="redis" scheme="http://deuterium.fun/tags/redis/"/>
-    
       <category term="tips" scheme="http://deuterium.fun/tags/tips/"/>
+    
+      <category term="redis" scheme="http://deuterium.fun/tags/redis/"/>
     
   </entry>
   
