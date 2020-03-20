@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://deuterium.fun/"/>
-  <updated>2020-03-18T06:55:49.388Z</updated>
+  <updated>2020-03-04T02:26:59.728Z</updated>
   <id>http://deuterium.fun/</id>
   
   <author>
@@ -15,84 +15,6 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title>Keep Simple</title>
-    <link href="http://deuterium.fun/keep-simple/"/>
-    <id>http://deuterium.fun/keep-simple/</id>
-    <published>2020-03-18T06:48:29.000Z</published>
-    <updated>2020-03-18T06:55:49.388Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;blockquote&gt;
-&lt;p&gt;保持简单，记录生活中的美好。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&quot;1-Year-Reading&quot;&gt;&lt;a href=&quot;#1-Year-Reading&quot; class=&quot;headerlink&quot; title=&quot;1. Year
-        
-      
-    
-    </summary>
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>Keep Curious</title>
-    <link href="http://deuterium.fun/keep-curious/"/>
-    <id>http://deuterium.fun/keep-curious/</id>
-    <published>2020-03-18T06:45:06.000Z</published>
-    <updated>2020-03-18T06:55:52.961Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;blockquote&gt;
-&lt;p&gt;世界多么奇妙，保持好奇，努力探索。这里列出其他学科的学习文章。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&quot;1-Physics&quot;&gt;&lt;a href=&quot;#1-Physics&quot; class=&quot;headerlink&quot; title=&quot;1.
-        
-      
-    
-    </summary>
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>Keep Serious</title>
-    <link href="http://deuterium.fun/keep-serious/"/>
-    <id>http://deuterium.fun/keep-serious/</id>
-    <published>2020-03-18T06:40:09.000Z</published>
-    <updated>2020-03-18T06:55:45.532Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;blockquote&gt;
-&lt;p&gt;我是个程序员，这里列出所有涉及到CS的文章。保持认真，不断前进。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&quot;1-数据库&quot;&gt;&lt;a href=&quot;#1-数据库&quot; class=&quot;headerlink&quot; title=&quot;1. 数据库&quot;&gt;&lt;/a&gt;1.
-        
-      
-    
-    </summary>
-    
-    
-    
-  </entry>
   
   <entry>
     <title>Roman Empire</title>
@@ -499,9 +421,9 @@
       <category term="redis" scheme="http://deuterium.fun/categories/redis/"/>
     
     
-      <category term="redis" scheme="http://deuterium.fun/tags/redis/"/>
-    
       <category term="tips" scheme="http://deuterium.fun/tags/tips/"/>
+    
+      <category term="redis" scheme="http://deuterium.fun/tags/redis/"/>
     
   </entry>
   
@@ -592,6 +514,81 @@
       <category term="go" scheme="http://deuterium.fun/tags/go/"/>
     
       <category term="json" scheme="http://deuterium.fun/tags/json/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Hello World</title>
+    <link href="http://deuterium.fun/hello-world/"/>
+    <id>http://deuterium.fun/hello-world/</id>
+    <published>2019-12-04T05:36:33.081Z</published>
+    <updated>2019-12-20T11:32:50.461Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a
+        
+      
+    
+    </summary>
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Keep Simple</title>
+    <link href="http://deuterium.fun/keep-simple/"/>
+    <id>http://deuterium.fun/keep-simple/</id>
+    <published>2019-12-01T06:48:29.000Z</published>
+    <updated>2020-03-20T02:46:47.436Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;blockquote&gt;
+&lt;p&gt;保持简单，记录生活中的美好。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;1-Year-Reading&quot;&gt;&lt;a href=&quot;#1-Year-Reading&quot; class=&quot;headerlink&quot; title=&quot;1. Year
+        
+      
+    
+    </summary>
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Keep Curious</title>
+    <link href="http://deuterium.fun/keep-curious/"/>
+    <id>http://deuterium.fun/keep-curious/</id>
+    <published>2019-12-01T06:45:06.000Z</published>
+    <updated>2020-03-20T02:46:38.216Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;blockquote&gt;
+&lt;p&gt;世界多么奇妙，保持好奇，努力探索。这里列出其他学科的学习文章。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;1-Physics&quot;&gt;&lt;a href=&quot;#1-Physics&quot; class=&quot;headerlink&quot; title=&quot;1.
+        
+      
+    
+    </summary>
+    
+    
     
   </entry>
   

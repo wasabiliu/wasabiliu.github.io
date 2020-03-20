@@ -4,45 +4,6 @@
   
     
     <entry>
-      <title>Keep Simple</title>
-      <link href="/keep-simple/"/>
-      <url>/keep-simple/</url>
-      
-        <content type="html"><![CDATA[<blockquote><p>保持简单，记录生活中的美好。</p></blockquote><h2 id="1-Year-Reading"><a href="#1-Year-Reading" class="headerlink" title="1. Year Reading"></a>1. Year Reading</h2><p>2019年阅读总结：<a href="https://deuterium.fun/year-reading-in-2019/">https://deuterium.fun/year-reading-in-2019/</a></p>]]></content>
-      
-      
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>Keep Curious</title>
-      <link href="/keep-curious/"/>
-      <url>/keep-curious/</url>
-      
-        <content type="html"><![CDATA[<blockquote><p>世界多么奇妙，保持好奇，努力探索。这里列出其他学科的学习文章。</p></blockquote><h2 id="1-Physics"><a href="#1-Physics" class="headerlink" title="1. Physics"></a>1. Physics</h2><p>物理是什么（《费恩曼物理学讲义》第一章-第三章）：<a href="https://deuterium.fun/what-is-physics/">https://deuterium.fun/what-is-physics/</a></p><h2 id="2-Economics"><a href="#2-Economics" class="headerlink" title="2. Economics"></a>2. Economics</h2><h2 id="3-Geography"><a href="#3-Geography" class="headerlink" title="3. Geography"></a>3. Geography</h2><h2 id="4-History"><a href="#4-History" class="headerlink" title="4. History"></a>4. History</h2><p>罗马王国和罗马共和国：<a href="https://deuterium.fun/roman-republic/">https://deuterium.fun/roman-republic/</a></p><p>罗马帝国：<a href="https://deuterium.fun/roman-empire/">https://deuterium.fun/roman-empire/</a></p>]]></content>
-      
-      
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>Keep Serious</title>
-      <link href="/keep-serious/"/>
-      <url>/keep-serious/</url>
-      
-        <content type="html"><![CDATA[<blockquote><p>我是个程序员，这里列出所有涉及到CS的文章。保持认真，不断前进。</p></blockquote><h2 id="1-数据库"><a href="#1-数据库" class="headerlink" title="1. 数据库"></a>1. 数据库</h2><h3 id="1-1-MySQL"><a href="#1-1-MySQL" class="headerlink" title="1.1 MySQL"></a>1.1 MySQL</h3><p>MySQL中的字符集和字符序：<a href="https://deuterium.fun/character-sets-and-collations-in-mysql/">https://deuterium.fun/character-sets-and-collations-in-mysql/</a></p><p>MySQL中的数据类型介绍：<a href="https://deuterium.fun/data-types-in-mysql/">https://deuterium.fun/data-types-in-mysql/</a></p><p>把一个本地文件导入到MySQL表中：<a href="https://deuterium.fun/files-to-mysql/">https://deuterium.fun/files-to-mysql/</a></p><p>MySQL导入文件使用的<code>LOAD DATA</code>的原理：<a href="https://deuterium.fun/what-happens-when-using-load-data/">https://deuterium.fun/what-happens-when-using-load-data/</a></p><h3 id="1-2-Redis"><a href="#1-2-Redis" class="headerlink" title="1.2 Redis"></a>1.2 Redis</h3><p>把文件导入Redis中：<a href="https://deuterium.fun/file-to-redis/">https://deuterium.fun/file-to-redis/</a></p><h2 id="2-Programming"><a href="#2-Programming" class="headerlink" title="2. Programming"></a>2. Programming</h2><h3 id="2-1-Go-Web"><a href="#2-1-Go-Web" class="headerlink" title="2.1 Go Web"></a>2.1 Go Web</h3><p>Go Web 1 处理器和多路选择器：<a href="https://deuterium.fun/go-web-part-1-handler-servemux/">https://deuterium.fun/go-web-part-1-handler-servemux/</a></p><p>Go Web 2 请求：<a href="https://deuterium.fun/go-web-part-2-request/">https://deuterium.fun/go-web-part-2-request/</a></p><p>Go Web 3 响应：<a href="https://deuterium.fun/go-web-part-3-response/">https://deuterium.fun/go-web-part-3-response/</a></p><p>Go Web 4 Cookie：<a href="https://deuterium.fun/go-web-part-4-cookie/">https://deuterium.fun/go-web-part-4-cookie/</a></p><h3 id="2-2-Go"><a href="#2-2-Go" class="headerlink" title="2.2 Go"></a>2.2 Go</h3><p>Go中结构体到json的花样输出：<a href="https://deuterium.fun/go-struct-to-json/">https://deuterium.fun/go-struct-to-json/</a></p><h2 id="3-Security"><a href="#3-Security" class="headerlink" title="3. Security"></a>3. Security</h2><h3 id="3-1-TLS"><a href="#3-1-TLS" class="headerlink" title="3.1 TLS"></a>3.1 TLS</h3><p>TLS简单介绍：<a href="https://deuterium.fun/ssl-and-tls-part-1-brief-intro/">https://deuterium.fun/ssl-and-tls-part-1-brief-intro/</a></p><p>TLS背后的密码学知识：<a href="https://deuterium.fun/ssl-and-tls-part-2-cryptography/">https://deuterium.fun/ssl-and-tls-part-2-cryptography/</a></p><p>TLS协议：<a href="https://deuterium.fun/ssl-and-tls-part-3-protocol/">https://deuterium.fun/ssl-and-tls-part-3-protocol/</a></p>]]></content>
-      
-      
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>Roman Empire</title>
       <link href="/roman-empire/"/>
       <url>/roman-empire/</url>
@@ -400,9 +361,9 @@
       
         <tags>
             
-            <tag> redis </tag>
-            
             <tag> tips </tag>
+            
+            <tag> redis </tag>
             
         </tags>
       
@@ -495,6 +456,45 @@
       <url>/hello-world/</url>
       
         <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><pre class="line-numbers language-bash"><code class="language-bash">$ hexo new <span class="token string">"My New Post"</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><pre class="line-numbers language-bash"><code class="language-bash">$ hexo server<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><pre class="line-numbers language-bash"><code class="language-bash">$ hexo generate<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><pre class="line-numbers language-bash"><code class="language-bash">$ hexo deploy<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p><p><img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/lufy.jpg" alt=""></p>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Keep Simple</title>
+      <link href="/keep-simple/"/>
+      <url>/keep-simple/</url>
+      
+        <content type="html"><![CDATA[<blockquote><p>保持简单，记录生活中的美好。</p></blockquote><h2 id="1-Year-Reading"><a href="#1-Year-Reading" class="headerlink" title="1. Year Reading"></a>1. Year Reading</h2><p>2019年阅读总结：<a href="https://deuterium.fun/year-reading-in-2019/">https://deuterium.fun/year-reading-in-2019/</a></p>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Keep Curious</title>
+      <link href="/keep-curious/"/>
+      <url>/keep-curious/</url>
+      
+        <content type="html"><![CDATA[<blockquote><p>世界多么奇妙，保持好奇，努力探索。这里列出其他学科的学习文章。</p></blockquote><h2 id="1-Physics"><a href="#1-Physics" class="headerlink" title="1. Physics"></a>1. Physics</h2><p>物理是什么（《费恩曼物理学讲义》第一章-第三章）：<a href="https://deuterium.fun/what-is-physics/">https://deuterium.fun/what-is-physics/</a></p><h2 id="2-Economics"><a href="#2-Economics" class="headerlink" title="2. Economics"></a>2. Economics</h2><h2 id="3-Geography"><a href="#3-Geography" class="headerlink" title="3. Geography"></a>3. Geography</h2><h2 id="4-History"><a href="#4-History" class="headerlink" title="4. History"></a>4. History</h2><p>罗马王国和罗马共和国：<a href="https://deuterium.fun/roman-republic/">https://deuterium.fun/roman-republic/</a></p><p>罗马帝国：<a href="https://deuterium.fun/roman-empire/">https://deuterium.fun/roman-empire/</a></p>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Keep Serious</title>
+      <link href="/keep-serious/"/>
+      <url>/keep-serious/</url>
+      
+        <content type="html"><![CDATA[<blockquote><p>我是个程序员，这里列出所有涉及到CS的文章。保持认真，不断前进。</p></blockquote><h2 id="1-数据库"><a href="#1-数据库" class="headerlink" title="1. 数据库"></a>1. 数据库</h2><h3 id="1-1-MySQL"><a href="#1-1-MySQL" class="headerlink" title="1.1 MySQL"></a>1.1 MySQL</h3><p>MySQL中的字符集和字符序：<a href="https://deuterium.fun/character-sets-and-collations-in-mysql/">https://deuterium.fun/character-sets-and-collations-in-mysql/</a></p><p>MySQL中的数据类型介绍：<a href="https://deuterium.fun/data-types-in-mysql/">https://deuterium.fun/data-types-in-mysql/</a></p><p>把一个本地文件导入到MySQL表中：<a href="https://deuterium.fun/files-to-mysql/">https://deuterium.fun/files-to-mysql/</a></p><p>MySQL导入文件使用的<code>LOAD DATA</code>的原理：<a href="https://deuterium.fun/what-happens-when-using-load-data/">https://deuterium.fun/what-happens-when-using-load-data/</a></p><h3 id="1-2-Redis"><a href="#1-2-Redis" class="headerlink" title="1.2 Redis"></a>1.2 Redis</h3><p>把文件导入Redis中：<a href="https://deuterium.fun/file-to-redis/">https://deuterium.fun/file-to-redis/</a></p><h2 id="2-Programming"><a href="#2-Programming" class="headerlink" title="2. Programming"></a>2. Programming</h2><h3 id="2-1-Go-Web"><a href="#2-1-Go-Web" class="headerlink" title="2.1 Go Web"></a>2.1 Go Web</h3><p>Go Web 1 处理器和多路选择器：<a href="https://deuterium.fun/go-web-part-1-handler-servemux/">https://deuterium.fun/go-web-part-1-handler-servemux/</a></p><p>Go Web 2 请求：<a href="https://deuterium.fun/go-web-part-2-request/">https://deuterium.fun/go-web-part-2-request/</a></p><p>Go Web 3 响应：<a href="https://deuterium.fun/go-web-part-3-response/">https://deuterium.fun/go-web-part-3-response/</a></p><p>Go Web 4 Cookie：<a href="https://deuterium.fun/go-web-part-4-cookie/">https://deuterium.fun/go-web-part-4-cookie/</a></p><h3 id="2-2-Go"><a href="#2-2-Go" class="headerlink" title="2.2 Go"></a>2.2 Go</h3><p>Go中结构体到json的花样输出：<a href="https://deuterium.fun/go-struct-to-json/">https://deuterium.fun/go-struct-to-json/</a></p><h2 id="3-Security"><a href="#3-Security" class="headerlink" title="3. Security"></a>3. Security</h2><h3 id="3-1-TLS"><a href="#3-1-TLS" class="headerlink" title="3.1 TLS"></a>3.1 TLS</h3><p>TLS简单介绍：<a href="https://deuterium.fun/ssl-and-tls-part-1-brief-intro/">https://deuterium.fun/ssl-and-tls-part-1-brief-intro/</a></p><p>TLS背后的密码学知识：<a href="https://deuterium.fun/ssl-and-tls-part-2-cryptography/">https://deuterium.fun/ssl-and-tls-part-2-cryptography/</a></p><p>TLS协议：<a href="https://deuterium.fun/ssl-and-tls-part-3-protocol/">https://deuterium.fun/ssl-and-tls-part-3-protocol/</a></p>]]></content>
       
       
       
