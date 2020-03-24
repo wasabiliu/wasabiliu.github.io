@@ -426,7 +426,7 @@
 </blockquote>
 <h2 id="1-Overview-of-Paritioning-in-MySQL"><a href="#1-Overview-of-Paritioning-in-MySQL" class="headerlink" title="1. Overview of Paritioning in MySQL"></a>1. Overview of Paritioning in MySQL</h2><p>数据库作为系统的重要部分，承担着数据的存储任务。随着业务的不断扩展，数据也可能疯狂增长。这个时候对于数据库的访问可能会有一些瓶颈。为了减小表的规模，可以将一张大表分成几个小的部分。一种方式就是分表，将一张表分成一系列表；另一种就是分区。</p>
 <p>分区也是将一张大表分成几个小的部分，但和分表不同的是，分区仍然是一张表，只不过在一张表下面有一些小的分区：</p>
-<p><img src="hhttps://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/MySQL/partition.png" alt="partition就是水平分区"></p>
+<p><img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/MySQL/partition.png" alt="partition就是水平分区"></p>
 <p>那么分区有什么好处呢？</p>
 <ul>
 <li>分区使得一张表可以存储的数据容量增大；</li>
