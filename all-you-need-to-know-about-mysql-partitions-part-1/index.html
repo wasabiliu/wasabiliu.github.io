@@ -1,0 +1,1668 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="All You Need to Know About MySQL Partitions (Part 1), Deuterium">
+    <meta name="description" content="
+什么是分区？为什么要分区？该怎么分区？分区有什么好处？使用分区应该注意什么？通过对MySQL文档的梳理，在这篇文章以及Part 2中详细介绍一下关于MySQL分区的方方面面。
+
+1. Overview of Paritioning in ">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>All You Need to Know About MySQL Partitions (Part 1) | Deuterium</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+    
+    <script src="/libs/jquery/jquery.min.js"></script>
+    
+<link rel="alternate" href="/atom.xml" title="Deuterium" type="application/atom+xml">
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper head-container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">Deuterium</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>Home</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>Tags</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>Categories</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>Archives</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>About</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>Contact</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>Friends</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="Search" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">Deuterium</div>
+        <div class="logo-desc">
+            
+            Software and anecdotes.
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			Home
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			Tags
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			Categories
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			Archives
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			About
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			Contact
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			Friends
+		</a>
+          
+        </li>
+        
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/25.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <div class="description center-align post-title">
+                        All You Need to Know About MySQL Partitions (Part 1)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        height: calc(100vh - 250px);
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #3B5998;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #3B5998;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #3B5998;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/partition/">
+                                <span class="chip bg-color">partition</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/mysql/" class="post-category">
+                                mysql
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
+                    2020-03-24
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
+                    5.7k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>Read Times:&nbsp;&nbsp;
+                    24 Min
+                </div>
+                
+				
+                
+            </div>
+            
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <blockquote>
+<p>什么是分区？为什么要分区？该怎么分区？分区有什么好处？使用分区应该注意什么？<a href="https://dev.mysql.com/doc/refman/8.0/en/partitioning.html" target="_blank" rel="noopener">通过对MySQL文档</a>的梳理，在这篇文章以及<a href="">Part 2</a>中详细介绍一下关于MySQL分区的方方面面。</p>
+</blockquote>
+<h2 id="1-Overview-of-Paritioning-in-MySQL"><a href="#1-Overview-of-Paritioning-in-MySQL" class="headerlink" title="1. Overview of Paritioning in MySQL"></a>1. Overview of Paritioning in MySQL</h2><p>数据库作为系统的重要部分，承担着数据的存储任务。随着业务的不断扩展，数据也可能疯狂增长。这个时候对于数据库的访问可能会有一些瓶颈。为了减小表的规模，可以将一张大表分成几个小的部分。一种方式就是分表，将一张表分成一系列表；另一种就是分区。</p>
+<p>分区也是将一张大表分成几个小的部分，但和分表不同的是，分区仍然是一张表，只不过在一张表下面有一些小的分区：</p>
+<p><img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/MySQL/characterset.PNG" alt="partition就是水平分区"></p>
+<p>那么分区有什么好处呢？</p>
+<ul>
+<li>分区使得一张表可以存储的数据容量增大；</li>
+<li>无用的数据通过删除分区的方式可以很方便地删除；</li>
+<li>同样，对于新增数据，也可以很方便地添加分区来存储新数据；</li>
+<li>使用分区之后，查询可以通过排除不可能的分区来减少待筛选数据的规模，减少查询时间。</li>
+</ul>
+<p>总之，对于一些应用场景来说，使用分区可以给系统带来很大的好处。</p>
+<h2 id="2-Partitioning-Types"><a href="#2-Partitioning-Types" class="headerlink" title="2. Partitioning Types"></a>2. Partitioning Types</h2><h3 id="2-1-Overview"><a href="#2-1-Overview" class="headerlink" title="2.1 Overview"></a>2.1 Overview</h3><p>MySQL中的分区就是水平分区。为了将一张大表分成几个分区，首先就应该确定一个分区的方式，即对于一条记录来说，如何确定这条记录放在哪个分区。在MySQL中，有下面几种分区方式。</p>
+<h3 id="2-2-RANGE-Partitioning"><a href="#2-2-RANGE-Partitioning" class="headerlink" title="2.2 RANGE Partitioning"></a>2.2 RANGE Partitioning</h3><p>Range分区，是根据指定字段的取值范围划定分区的，同一个分区包含同一个范围内的数据。分区范围应该是连续的并且不能有重合，这是显而易见的限制。如果不连续，那么就有可能有的记录找不到对应的分区；而有重叠的话，可能一条记录对应多个分区。</p>
+<h4 id="2-2-1-一个简单的例子"><a href="#2-2-1-一个简单的例子" class="headerlink" title="2.2.1 一个简单的例子"></a>2.2.1 一个简单的例子</h4><p>比如下面的例子，一家有20个分店的连锁店需要一张员工表：</p>
+<pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> employees <span class="token punctuation">(</span>
+    id <span class="token keyword">INT</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
+    fname <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">30</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    lname <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">30</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    hired <span class="token keyword">DATE</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">DEFAULT</span> <span class="token string">'1970-01-01'</span><span class="token punctuation">,</span>
+    separated <span class="token keyword">DATE</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">DEFAULT</span> <span class="token string">'9999-12-31'</span><span class="token punctuation">,</span>
+    job_code <span class="token keyword">INT</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
+    store_id <span class="token keyword">INT</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>使用<code>store_id</code>来区分分店，取值范围是[1, 20]。</p>
+<p>那么就可以使用这个字段来对表划成四个分区：</p>
+<pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> employees <span class="token punctuation">(</span>
+    id <span class="token keyword">INT</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
+    fname <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">30</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    lname <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">30</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    hired <span class="token keyword">DATE</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">DEFAULT</span> <span class="token string">'1970-01-01'</span><span class="token punctuation">,</span>
+    separated <span class="token keyword">DATE</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">DEFAULT</span> <span class="token string">'9999-12-31'</span><span class="token punctuation">,</span>
+    job_code <span class="token keyword">INT</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
+    store_id <span class="token keyword">INT</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span>
+<span class="token punctuation">)</span>
+<span class="token keyword">PARTITION</span> <span class="token keyword">BY</span> RANGE <span class="token punctuation">(</span>store_id<span class="token punctuation">)</span> <span class="token punctuation">(</span>
+    <span class="token keyword">PARTITION</span> p0 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token number">6</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p1 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token number">11</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p2 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token number">16</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p3 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token number">21</span><span class="token punctuation">)</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>也就是说，分店ID是1到5的在<code>p0</code>分区，分店ID是6到10的在<code>p1</code>分区，一次类推。</p>
+<p>对于一个给定的记录，是可以很容易确定对应的分区的。比如<code>(72, &#39;Mitchell&#39;, &#39;Wilson&#39;, &#39;1998-06-25&#39;, NULL, 13)</code>，分店ID是13，根据规则这条记录就在<code>p2</code>分区里。</p>
+<p>但是现在有个问题，如果又开了一家分店，分店ID是21，那么新分店的员工记录应该在哪个分区呢？</p>
+<p>按照上面的定义，这样会出错。因为MySQL找不到对应的分区。</p>
+<p>为了解决这个问题，可以使用<code>MAXVALUE</code>：</p>
+<pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> employees <span class="token punctuation">(</span>
+    id <span class="token keyword">INT</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
+    fname <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">30</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    lname <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">30</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    hired <span class="token keyword">DATE</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">DEFAULT</span> <span class="token string">'1970-01-01'</span><span class="token punctuation">,</span>
+    separated <span class="token keyword">DATE</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">DEFAULT</span> <span class="token string">'9999-12-31'</span><span class="token punctuation">,</span>
+    job_code <span class="token keyword">INT</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
+    store_id <span class="token keyword">INT</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span>
+<span class="token punctuation">)</span>
+<span class="token keyword">PARTITION</span> <span class="token keyword">BY</span> RANGE <span class="token punctuation">(</span>store_id<span class="token punctuation">)</span> <span class="token punctuation">(</span>
+    <span class="token keyword">PARTITION</span> p0 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token number">6</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p1 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token number">11</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p2 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token number">16</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p3 <span class="token keyword">VALUES</span> LESS THAN MAXVALUE
+<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这样，所有分店ID大于15的记录都会被放在<code>p3</code>分区里。</p>
+<p>不过，随着大于15的记录数越来越多，这样的分区方式可能会导致记录不均匀。可以通过<code>ALTER TABLE</code>来对表重新划分分区。</p>
+<h4 id="2-2-2-更多的例子"><a href="#2-2-2-更多的例子" class="headerlink" title="2.2.2 更多的例子"></a>2.2.2 更多的例子</h4><p>除此之外，还有其他的分区方式。比如，根据员工离职的年份来进行分区：</p>
+<pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> employees <span class="token punctuation">(</span>
+    id <span class="token keyword">INT</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
+    fname <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">30</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    lname <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">30</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    hired <span class="token keyword">DATE</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">DEFAULT</span> <span class="token string">'1970-01-01'</span><span class="token punctuation">,</span>
+    separated <span class="token keyword">DATE</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">DEFAULT</span> <span class="token string">'9999-12-31'</span><span class="token punctuation">,</span>
+    job_code <span class="token keyword">INT</span><span class="token punctuation">,</span>
+    store_id <span class="token keyword">INT</span>
+<span class="token punctuation">)</span>
+<span class="token keyword">PARTITION</span> <span class="token keyword">BY</span> RANGE <span class="token punctuation">(</span> YEAR<span class="token punctuation">(</span>separated<span class="token punctuation">)</span> <span class="token punctuation">)</span> <span class="token punctuation">(</span>
+    <span class="token keyword">PARTITION</span> p0 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token number">1991</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p1 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token number">1996</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p2 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token number">2001</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p3 <span class="token keyword">VALUES</span> LESS THAN MAXVALUE
+<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这里使用<code>YEAR()</code>函数将一个<code>DATE</code>类型的数据转换成数字，然后根据范围进行分区。</p>
+<p>还可以对一个<code>TIMESTAMP</code>类型的字段进行分区，使用<code>UNIX_TIMESTAMP()</code>函数：</p>
+<pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> quarterly_report_status <span class="token punctuation">(</span>
+    report_id <span class="token keyword">INT</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
+    report_status <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">20</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
+    report_updated <span class="token keyword">TIMESTAMP</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">DEFAULT</span> <span class="token keyword">CURRENT_TIMESTAMP</span> <span class="token keyword">ON</span> <span class="token keyword">UPDATE</span> <span class="token keyword">CURRENT_TIMESTAMP</span>
+<span class="token punctuation">)</span>
+<span class="token keyword">PARTITION</span> <span class="token keyword">BY</span> RANGE <span class="token punctuation">(</span> UNIX_TIMESTAMP<span class="token punctuation">(</span>report_updated<span class="token punctuation">)</span> <span class="token punctuation">)</span> <span class="token punctuation">(</span>
+    <span class="token keyword">PARTITION</span> p0 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span> UNIX_TIMESTAMP<span class="token punctuation">(</span><span class="token string">'2008-01-01 00:00:00'</span><span class="token punctuation">)</span> <span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p1 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span> UNIX_TIMESTAMP<span class="token punctuation">(</span><span class="token string">'2008-04-01 00:00:00'</span><span class="token punctuation">)</span> <span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p2 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span> UNIX_TIMESTAMP<span class="token punctuation">(</span><span class="token string">'2008-07-01 00:00:00'</span><span class="token punctuation">)</span> <span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p3 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span> UNIX_TIMESTAMP<span class="token punctuation">(</span><span class="token string">'2008-10-01 00:00:00'</span><span class="token punctuation">)</span> <span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p4 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span> UNIX_TIMESTAMP<span class="token punctuation">(</span><span class="token string">'2009-01-01 00:00:00'</span><span class="token punctuation">)</span> <span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p5 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span> UNIX_TIMESTAMP<span class="token punctuation">(</span><span class="token string">'2009-04-01 00:00:00'</span><span class="token punctuation">)</span> <span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p6 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span> UNIX_TIMESTAMP<span class="token punctuation">(</span><span class="token string">'2009-07-01 00:00:00'</span><span class="token punctuation">)</span> <span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p7 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span> UNIX_TIMESTAMP<span class="token punctuation">(</span><span class="token string">'2009-10-01 00:00:00'</span><span class="token punctuation">)</span> <span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p8 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span> UNIX_TIMESTAMP<span class="token punctuation">(</span><span class="token string">'2010-01-01 00:00:00'</span><span class="token punctuation">)</span> <span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p9 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span>MAXVALUE<span class="token punctuation">)</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="2-2-3-Range分区的适用场景"><a href="#2-2-3-Range分区的适用场景" class="headerlink" title="2.2.3 Range分区的适用场景"></a>2.2.3 Range分区的适用场景</h4><p>Range分区适用于下面的场景：</p>
+<ul>
+<li>需要时不时地删除旧数据。比如如果使用上面根据离职年份分区，想要删除所有1991年前离职的员工，可以直接<code>ALTER TABLE employees DROP PARTITION p0;</code>。这比使用<code>DELETE</code>有效多了。</li>
+<li>想使用日期或时间类型的字段，以及以其他方式递增的类型的字段。比如各种统计数据，每天一次。</li>
+<li>经常对分区字段进行查询。比如经常就<code>store_id</code>字段进行查询，如果使用分区的话，MySQL会快速地知道需要对哪些分区的数据进行查询。这在有很多数据的表中很有用。</li>
+</ul>
+<p>需要注意的是，Range分区对范围的划分是基于数字类型的，其它类型的范围不支持（比如字符串，也可以有一个范围）。</p>
+<h3 id="2-3-LIST-Partitioning"><a href="#2-3-LIST-Partitioning" class="headerlink" title="2.3 LIST Partitioning"></a>2.3 LIST Partitioning</h3><p>List分区和Range分区有很多相似的地方。和Range分区一样，每一个List分区必须显式定义出来。两者的主要不同在于，Range分区是根据一个连续且不重叠的范围进行划分的，而List分区是根据一个可选集合划分的，不需要连续，但需要不重叠。</p>
+<p>还以上面员工的例子为例：</p>
+<pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> employees <span class="token punctuation">(</span>
+    id <span class="token keyword">INT</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
+    fname <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">30</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    lname <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">30</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    hired <span class="token keyword">DATE</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">DEFAULT</span> <span class="token string">'1970-01-01'</span><span class="token punctuation">,</span>
+    separated <span class="token keyword">DATE</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">DEFAULT</span> <span class="token string">'9999-12-31'</span><span class="token punctuation">,</span>
+    job_code <span class="token keyword">INT</span><span class="token punctuation">,</span>
+    store_id <span class="token keyword">INT</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>假如一共有20家连锁店，按区位分布如下：</p>
+<table>
+<thead>
+<tr>
+<th>Region</th>
+<th>Store ID Numbers</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>North</td>
+<td>3, 5, 6, 9, 17</td>
+</tr>
+<tr>
+<td>East</td>
+<td>1, 2, 10, 11, 19, 20</td>
+</tr>
+<tr>
+<td>West</td>
+<td>4, 12, 13, 14, 18</td>
+</tr>
+<tr>
+<td>Central</td>
+<td>7, 8, 15, 16</td>
+</tr>
+</tbody></table>
+<p>这样如果想把在同一个区位的所有分店的员工记录放在一个分区里的话，使用Range分区是实现不了的，因为分区的定义是不连续的。不过可以使用List分区：</p>
+<pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> employees <span class="token punctuation">(</span>
+    id <span class="token keyword">INT</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
+    fname <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">30</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    lname <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">30</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    hired <span class="token keyword">DATE</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">DEFAULT</span> <span class="token string">'1970-01-01'</span><span class="token punctuation">,</span>
+    separated <span class="token keyword">DATE</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">DEFAULT</span> <span class="token string">'9999-12-31'</span><span class="token punctuation">,</span>
+    job_code <span class="token keyword">INT</span><span class="token punctuation">,</span>
+    store_id <span class="token keyword">INT</span>
+<span class="token punctuation">)</span>
+<span class="token keyword">PARTITION</span> <span class="token keyword">BY</span> LIST<span class="token punctuation">(</span>store_id<span class="token punctuation">)</span> <span class="token punctuation">(</span>
+    <span class="token keyword">PARTITION</span> pNorth <span class="token keyword">VALUES</span> <span class="token operator">IN</span> <span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">,</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token number">6</span><span class="token punctuation">,</span><span class="token number">9</span><span class="token punctuation">,</span><span class="token number">17</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> pEast <span class="token keyword">VALUES</span> <span class="token operator">IN</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">10</span><span class="token punctuation">,</span><span class="token number">11</span><span class="token punctuation">,</span><span class="token number">19</span><span class="token punctuation">,</span><span class="token number">20</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> pWest <span class="token keyword">VALUES</span> <span class="token operator">IN</span> <span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">,</span><span class="token number">12</span><span class="token punctuation">,</span><span class="token number">13</span><span class="token punctuation">,</span><span class="token number">14</span><span class="token punctuation">,</span><span class="token number">18</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> pCentral <span class="token keyword">VALUES</span> <span class="token operator">IN</span> <span class="token punctuation">(</span><span class="token number">7</span><span class="token punctuation">,</span><span class="token number">8</span><span class="token punctuation">,</span><span class="token number">15</span><span class="token punctuation">,</span><span class="token number">16</span><span class="token punctuation">)</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这样就可以将所有在一个区位的所有记录放在一个分区里了，如果想要删除一个区位下的所有记录的话，就可以直接使用<code>ALTER TABLE employees TRUNCATE PARTITION pWest</code>来删除。</p>
+<p>如果插入一条<code>store_id</code>不在定义中的记录的话，那么插入就会失败。同时，如果在一条<code>INSERT</code>语句中插入多条记录，其中有一条记录的<code>store_id</code>不在定义中的话，那么所有的插入都失败，即使其他的合法。</p>
+<p>为了让合法的能成功，可以使用<code>IGNORE</code>：</p>
+<pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">INSERT</span> <span class="token keyword">IGNORE</span> <span class="token keyword">INTO</span> h2 <span class="token keyword">VALUES</span> <span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token number">6</span><span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token number">7</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">9</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>List分区使用的分区字段需要是数字类型或者能通过函数转换成数字类型，分区定义中的可选值不能是别的类型（比如字符串）。</p>
+<h3 id="2-4-COLUMNS-Partitioning"><a href="#2-4-COLUMNS-Partitioning" class="headerlink" title="2.4 COLUMNS Partitioning"></a>2.4 COLUMNS Partitioning</h3><p>Columns分区是Range分区和List分区的变型。Range分区和List分区使用一个字段的取值来决定将数据存在哪个分区，同时字段的类型需要是数字类型的（或能转换成数字类型的比如日期和时间）。但是Columns分区使用多个字段，来决定记录放在哪个分区中。</p>
+<p>同时，字段的类型也不局限于数字类型，还可以使用字符串类型：</p>
+<ul>
+<li>所有的数字类型：<code>TINYINT</code>, <code>SMALLINT</code>, <code>MEDIUMINT</code>, <code>INT(INTEGER)</code>和<code>BIGINT</code>（和Range分区与List分区一样），不过对<code>DECIMAL</code>和<code>FLOAT</code>类型不支持；</li>
+<li>日期和时间类型：<code>DATE</code>和<code>DATETIME</code>；</li>
+<li>字符串类型：<code>CHAR</code>, <code>VARCHAR</code>, <code>BINARY</code>, <code>VARBINARY</code>，不过对<code>TEXT</code>和<code>BLOB</code>不支持。</li>
+</ul>
+<h4 id="2-4-1-RANGE-COLUMNS-Partitioning"><a href="#2-4-1-RANGE-COLUMNS-Partitioning" class="headerlink" title="2.4.1  RANGE COLUMNS Partitioning"></a>2.4.1  RANGE COLUMNS Partitioning</h4><p>Range columns分区和Range分区类似，支持使用多个字段确定分区，同时除了整数类型字段外还支持字符串类型。此外，两者的另一个区别在于，Range分区可以对字段使用一个表达式，比如<code>year(birthday)</code>，而Range columns分区不支持，只能使用字段名。</p>
+<p>使用Range columns的基本格式如下：</p>
+<pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> table_name
+PARTITIONED <span class="token keyword">BY</span> RANGE <span class="token keyword">COLUMNS</span><span class="token punctuation">(</span>column_list<span class="token punctuation">)</span> <span class="token punctuation">(</span>
+    <span class="token keyword">PARTITION</span> partition_name <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span>value_list<span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> partition_name <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span>value_list<span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token punctuation">,</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">]</span>
+<span class="token punctuation">)</span>
+
+column_list:
+    column_name<span class="token punctuation">[</span><span class="token punctuation">,</span> column_name<span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">]</span>
+
+value_list:
+    <span class="token keyword">value</span><span class="token punctuation">[</span><span class="token punctuation">,</span> <span class="token keyword">value</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>定义中使用<code>column_list</code>表示分区定义使用的所有字段列表，<code>value_list</code>列出了每个分区对应字段的取值，对于每一个分区，都要有一个<code>value_list</code>。</p>
+<p>同时<code>column_list</code>的元素个数需要和<code>value_list</code>一致，这样才能对每个字段都确定一个取值的范围；而且，<code>column_list</code>中的字段顺序要和<code>value_list</code>中的取值一一对应。</p>
+<p>和Range分区一样，这里我们也可以使用<code>MAXVALUE</code>来标识最大值。</p>
+<p>一个简单的例子：</p>
+<pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> rcx <span class="token punctuation">(</span>
+    <span class="token number">a</span> <span class="token keyword">INT</span><span class="token punctuation">,</span>
+    <span class="token number">b</span> <span class="token keyword">INT</span><span class="token punctuation">,</span>
+    <span class="token number">c</span> CHAR<span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token number">d</span> <span class="token keyword">INT</span>
+<span class="token punctuation">)</span>
+<span class="token keyword">PARTITION</span> <span class="token keyword">BY</span> RANGE <span class="token keyword">COLUMNS</span><span class="token punctuation">(</span><span class="token number">a</span><span class="token punctuation">,</span><span class="token number">d</span><span class="token punctuation">,</span><span class="token number">c</span><span class="token punctuation">)</span> <span class="token punctuation">(</span>
+    <span class="token keyword">PARTITION</span> p0 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token number">10</span><span class="token punctuation">,</span><span class="token string">'ggg'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p1 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span><span class="token number">20</span><span class="token punctuation">,</span><span class="token string">'mmm'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p2 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token number">15</span><span class="token punctuation">,</span><span class="token number">30</span><span class="token punctuation">,</span><span class="token string">'sss'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p3 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span>MAXVALUE<span class="token punctuation">,</span>MAXVALUE<span class="token punctuation">,</span>MAXVALUE<span class="token punctuation">)</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这里，表<code>rcx</code>有四个字段，使用了其中的三个来定义分区，在分区定义中每个对每个字段都确定了范围。</p>
+<p>由于使用多个字段来确定分区，所以Range columns决定一条记录的具体分区和Range分区不太一样。在Range分区中，表达式得到的结果如果在分区范围的边界上，那么这条记录是不会放在对应的分区里的（比如<code>PARTITION p0 LESS THAN (5)</code>，如果对应的值刚好是5的话，就不会放在<code>p0</code>里了，会放在下一个分区中）。不过，在Range columns分区中就不太一样了，因为Range columns分区是对多元组（tuple）进行比较的，而不是简单的标量值。</p>
+<p>对于一个下面定义的Range分区表来说：</p>
+<pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> r1 <span class="token punctuation">(</span>
+    <span class="token number">a</span> <span class="token keyword">INT</span><span class="token punctuation">,</span>
+    <span class="token number">b</span> <span class="token keyword">INT</span>
+<span class="token punctuation">)</span>
+<span class="token keyword">PARTITION</span> <span class="token keyword">BY</span> RANGE <span class="token punctuation">(</span><span class="token number">a</span><span class="token punctuation">)</span>  <span class="token punctuation">(</span>
+    <span class="token keyword">PARTITION</span> p0 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p1 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span>MAXVALUE<span class="token punctuation">)</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>如果我们插入三条记录：<code>(5, 10), (5, 11), (5, 12)</code>，对具体分区起作用的是字段<code>a</code>，所以只比较<code>a</code>的值就可以了。由于这三天记录的<code>a</code>值都大于5，所以这三条记录都放在<code>p1</code>中。</p>
+<p>我们可以使用下面的查询语句来查看一张表中每个分区的记录数：</p>
+<pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">SELECT</span> PARTITION_NAME<span class="token punctuation">,</span>TABLE_ROWS <span class="token keyword">FROM</span> INFORMATION_SCHEMA<span class="token punctuation">.</span>PARTITIONS <span class="token keyword">WHERE</span> TABLE_NAME <span class="token operator">=</span> <span class="token string">'r1'</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>好的，让我们来看看下面的Range columns的例子：</p>
+<pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> rc1 <span class="token punctuation">(</span>
+    <span class="token number">a</span> <span class="token keyword">INT</span><span class="token punctuation">,</span>
+    <span class="token number">b</span> <span class="token keyword">INT</span>
+<span class="token punctuation">)</span>
+<span class="token keyword">PARTITION</span> <span class="token keyword">BY</span> RANGE <span class="token keyword">COLUMNS</span><span class="token punctuation">(</span><span class="token number">a</span><span class="token punctuation">,</span> <span class="token number">b</span><span class="token punctuation">)</span> <span class="token punctuation">(</span>
+    <span class="token keyword">PARTITION</span> p0 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">12</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p3 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span>MAXVALUE<span class="token punctuation">,</span> MAXVALUE<span class="token punctuation">)</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>使用两个字段<code>a</code>和<code>b</code>来确定分区。这时，对于给定的记录来说，比较的就不是一个简单的标量值了，而是一个二元组。</p>
+<p>同样，如果我们插入这样的三条记录：<code>(5, 10), (5, 11), (5, 12)</code>，那么每条记录会放在哪个分区呢？</p>
+<p>首先可以使用MySQL的client来比较一下这些二元组：</p>
+<pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">SELECT</span> <span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token number">10</span><span class="token punctuation">)</span> <span class="token operator">&lt;</span> <span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token number">12</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token number">11</span><span class="token punctuation">)</span> <span class="token operator">&lt;</span> <span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token number">12</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token number">12</span><span class="token punctuation">)</span> <span class="token operator">&lt;</span> <span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token number">12</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>我们的分区定义范围的界线是<code>(5, 12)</code>，所以需要将所有待插入的记录去和这个二元组比较。结果如下：</p>
+<pre class="line-numbers language-shell"><code class="language-shell">+-----------------+-----------------+-----------------+
+| (5,10) < (5,12) | (5,11) < (5,12) | (5,12) < (5,12) |
++-----------------+-----------------+-----------------+
+|               1 |               1 |               0 |
++-----------------+-----------------+-----------------+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>可以看出，前两条记录会放在<code>p0</code>中，后一条放在<code>p1</code>中。这个例子展示了Range columns分区和Range分区对于确定分区的方式的不同。</p>
+<p>不过，如果Range columns分区只使用一个字段，那么分区的确定方式就和Range分区一致了。</p>
+<p>不过为啥只有一个字段来决定分区不使用Range分区而使用Range columns分区呢？这是因为，Range columns支持字符串。比如：</p>
+<pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> employees_by_lname <span class="token punctuation">(</span>
+    id <span class="token keyword">INT</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
+    fname <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">30</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    lname <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">30</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    hired <span class="token keyword">DATE</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">DEFAULT</span> <span class="token string">'1970-01-01'</span><span class="token punctuation">,</span>
+    separated <span class="token keyword">DATE</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">DEFAULT</span> <span class="token string">'9999-12-31'</span><span class="token punctuation">,</span>
+    job_code <span class="token keyword">INT</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
+    store_id <span class="token keyword">INT</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span>
+<span class="token punctuation">)</span>
+<span class="token keyword">PARTITION</span> <span class="token keyword">BY</span> RANGE <span class="token keyword">COLUMNS</span> <span class="token punctuation">(</span>lname<span class="token punctuation">)</span>  <span class="token punctuation">(</span>
+    <span class="token keyword">PARTITION</span> p0 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token string">'g'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p1 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token string">'m'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p2 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token string">'t'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p3 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span>MAXVALUE<span class="token punctuation">)</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>如果表已经有定义了，可以使用<code>alter table</code>来创建分区：</p>
+<pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">ALTER</span> <span class="token keyword">TABLE</span> employees <span class="token keyword">PARTITION</span> <span class="token keyword">BY</span> RANGE <span class="token keyword">COLUMNS</span> <span class="token punctuation">(</span>lname<span class="token punctuation">)</span>  <span class="token punctuation">(</span>
+    <span class="token keyword">PARTITION</span> p0 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token string">'g'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p1 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token string">'m'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p2 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token string">'t'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p3 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span>MAXVALUE<span class="token punctuation">)</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>由于是比较多元组来决定分区，因此Range columns分区的范围界线中，一个或多个字段的界限值可以是一样的，只要能保证分区定义的多元组是严格递增的：</p>
+<pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> rc2 <span class="token punctuation">(</span>
+    <span class="token number">a</span> <span class="token keyword">INT</span><span class="token punctuation">,</span>
+    <span class="token number">b</span> <span class="token keyword">INT</span>
+<span class="token punctuation">)</span>
+<span class="token keyword">PARTITION</span> <span class="token keyword">BY</span> RANGE <span class="token keyword">COLUMNS</span><span class="token punctuation">(</span><span class="token number">a</span><span class="token punctuation">,</span><span class="token number">b</span><span class="token punctuation">)</span> <span class="token punctuation">(</span>
+    <span class="token keyword">PARTITION</span> p0 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p1 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span><span class="token number">20</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p2 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span><span class="token number">30</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p3 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span>MAXVALUE<span class="token punctuation">,</span>MAXVALUE<span class="token punctuation">)</span>
+ <span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> rc3 <span class="token punctuation">(</span>
+    <span class="token number">a</span> <span class="token keyword">INT</span><span class="token punctuation">,</span>
+    <span class="token number">b</span> <span class="token keyword">INT</span>
+<span class="token punctuation">)</span>
+<span class="token keyword">PARTITION</span> <span class="token keyword">BY</span> RANGE <span class="token keyword">COLUMNS</span><span class="token punctuation">(</span><span class="token number">a</span><span class="token punctuation">,</span><span class="token number">b</span><span class="token punctuation">)</span> <span class="token punctuation">(</span>
+    <span class="token keyword">PARTITION</span> p0 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p1 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span><span class="token number">20</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p2 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span><span class="token number">30</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p3 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span><span class="token number">35</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p4 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token number">20</span><span class="token punctuation">,</span><span class="token number">40</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p5 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span>MAXVALUE<span class="token punctuation">,</span>MAXVALUE<span class="token punctuation">)</span>
+ <span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这两个表的分区定义，都是合法的。</p>
+<p>来看看这个定义：</p>
+<pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> rc4 <span class="token punctuation">(</span>
+    <span class="token number">a</span> <span class="token keyword">INT</span><span class="token punctuation">,</span>
+    <span class="token number">b</span> <span class="token keyword">INT</span><span class="token punctuation">,</span>
+    <span class="token number">c</span> <span class="token keyword">INT</span>
+<span class="token punctuation">)</span>
+<span class="token keyword">PARTITION</span> <span class="token keyword">BY</span> RANGE <span class="token keyword">COLUMNS</span><span class="token punctuation">(</span><span class="token number">a</span><span class="token punctuation">,</span><span class="token number">b</span><span class="token punctuation">,</span><span class="token number">c</span><span class="token punctuation">)</span> <span class="token punctuation">(</span>
+    <span class="token keyword">PARTITION</span> p0 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">25</span><span class="token punctuation">,</span><span class="token number">50</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p1 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span><span class="token number">20</span><span class="token punctuation">,</span><span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p2 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span><span class="token number">30</span><span class="token punctuation">,</span><span class="token number">50</span><span class="token punctuation">)</span>
+    <span class="token keyword">PARTITION</span> p3 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span>MAXVALUE<span class="token punctuation">,</span>MAXVALUE<span class="token punctuation">,</span>MAXVALUE<span class="token punctuation">)</span>
+ <span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>乍一看好像不合法，但确实是合法的。我们可以对这些界线多元组进行比较：</p>
+<pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">select</span> <span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">25</span><span class="token punctuation">,</span><span class="token number">50</span><span class="token punctuation">)</span><span class="token operator">&lt;</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span><span class="token number">20</span><span class="token punctuation">,</span><span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span><span class="token number">20</span><span class="token punctuation">,</span><span class="token number">100</span><span class="token punctuation">)</span><span class="token operator">&lt;</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span><span class="token number">30</span><span class="token punctuation">,</span><span class="token number">50</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>结果都为1。说明这三个三元组是严格递增的，所以可以在定义中使用。</p>
+<p>但是下面这个就不合法了：</p>
+<pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> rcf <span class="token punctuation">(</span>
+    <span class="token number">a</span> <span class="token keyword">INT</span><span class="token punctuation">,</span>
+    <span class="token number">b</span> <span class="token keyword">INT</span><span class="token punctuation">,</span>
+    <span class="token number">c</span> <span class="token keyword">INT</span>
+<span class="token punctuation">)</span>
+<span class="token keyword">PARTITION</span> <span class="token keyword">BY</span> RANGE <span class="token keyword">COLUMNS</span><span class="token punctuation">(</span><span class="token number">a</span><span class="token punctuation">,</span><span class="token number">b</span><span class="token punctuation">,</span><span class="token number">c</span><span class="token punctuation">)</span> <span class="token punctuation">(</span>
+    <span class="token keyword">PARTITION</span> p0 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">25</span><span class="token punctuation">,</span><span class="token number">50</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p1 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token number">20</span><span class="token punctuation">,</span><span class="token number">20</span><span class="token punctuation">,</span><span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p2 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span><span class="token number">30</span><span class="token punctuation">,</span><span class="token number">50</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p3 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span>MAXVALUE<span class="token punctuation">,</span>MAXVALUE<span class="token punctuation">,</span>MAXVALUE<span class="token punctuation">)</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>同样可是使用上面的判断方式，结果<code>(20,20,100)</code>并不小于<code>(10,30,50)</code>。</p>
+<p>那MySQL到底是怎么比较多元组的呢？我猜测是，按照多元组从左到右的顺序进行，比如<code>(a1,a2,a3)</code>和<code>(b1,b2,b3)</code>，先比较下标是1的，如果<code>a1&lt;b1</code>，那么<code>(a1,a2,a3) &lt; (b1,b2,b3)</code>；否则比较下标是2的，一次类推。</p>
+<p>不知道对不对，欢迎打脸。</p>
+<h4 id="2-4-2-LIST-COLUMNS-Partitioning"><a href="#2-4-2-LIST-COLUMNS-Partitioning" class="headerlink" title="2.4.2 LIST COLUMNS Partitioning"></a>2.4.2 LIST COLUMNS Partitioning</h4><p>List columns分区与List分区的区别，和Range columns分区与Range分区的区别是一样的。即，List columns分区可以使用多个字段，也可以使用字符串类型的字段。比如下面的一个分区定义：</p>
+<pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> customers_1 <span class="token punctuation">(</span>
+    first_name <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">25</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    last_name <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">25</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    street_1 <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">30</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    street_2 <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">30</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    city <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">15</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    renewal <span class="token keyword">DATE</span>
+<span class="token punctuation">)</span>
+<span class="token keyword">PARTITION</span> <span class="token keyword">BY</span> LIST <span class="token keyword">COLUMNS</span><span class="token punctuation">(</span>city<span class="token punctuation">)</span> <span class="token punctuation">(</span>
+    <span class="token keyword">PARTITION</span> pRegion_1 <span class="token keyword">VALUES</span> <span class="token operator">IN</span><span class="token punctuation">(</span><span class="token string">'Oskarshamn'</span><span class="token punctuation">,</span> <span class="token string">'Högsby'</span><span class="token punctuation">,</span> <span class="token string">'Mönsterås'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> pRegion_2 <span class="token keyword">VALUES</span> <span class="token operator">IN</span><span class="token punctuation">(</span><span class="token string">'Vimmerby'</span><span class="token punctuation">,</span> <span class="token string">'Hultsfred'</span><span class="token punctuation">,</span> <span class="token string">'Västervik'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> pRegion_3 <span class="token keyword">VALUES</span> <span class="token operator">IN</span><span class="token punctuation">(</span><span class="token string">'Nässjö'</span><span class="token punctuation">,</span> <span class="token string">'Eksjö'</span><span class="token punctuation">,</span> <span class="token string">'Vetlanda'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> pRegion_4 <span class="token keyword">VALUES</span> <span class="token operator">IN</span><span class="token punctuation">(</span><span class="token string">'Uppvidinge'</span><span class="token punctuation">,</span> <span class="token string">'Alvesta'</span><span class="token punctuation">,</span> <span class="token string">'Växjo'</span><span class="token punctuation">)</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>将同一个区位的几个城市的记录放在一个分区中，这样的定义List分区是实现不了的。</p>
+<h3 id="2-5-HASH-Partitioning"><a href="#2-5-HASH-Partitioning" class="headerlink" title="2.5 HASH Partitioning"></a>2.5 HASH Partitioning</h3><p>前面介绍的Range分区和List分区，以及两者的变型，需要我们手动指定分区的规则。而在Hash分区中，我们只需要指定Hash操作的字段以及划分的分区数就可以了，MySQL会自动计算每条记录所属的分区。</p>
+<h4 id="2-5-1-普通HASH-Partitioning"><a href="#2-5-1-普通HASH-Partitioning" class="headerlink" title="2.5.1 普通HASH Partitioning"></a>2.5.1 普通HASH Partitioning</h4><p>Hash分区的一个主要用途是将所有的数据均匀分配到给定数量的分区中，以此来将一个表可容纳的记录数增加。</p>
+<p>一个简单的例子：</p>
+<pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> employees <span class="token punctuation">(</span>
+    id <span class="token keyword">INT</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
+    fname <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">30</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    lname <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">30</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    hired <span class="token keyword">DATE</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">DEFAULT</span> <span class="token string">'1970-01-01'</span><span class="token punctuation">,</span>
+    separated <span class="token keyword">DATE</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">DEFAULT</span> <span class="token string">'9999-12-31'</span><span class="token punctuation">,</span>
+    job_code <span class="token keyword">INT</span><span class="token punctuation">,</span>
+    store_id <span class="token keyword">INT</span>
+<span class="token punctuation">)</span>
+<span class="token keyword">PARTITION</span> <span class="token keyword">BY</span> <span class="token keyword">HASH</span><span class="token punctuation">(</span>store_id<span class="token punctuation">)</span>
+PARTITIONS <span class="token number">4</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这里使用<code>store_id</code>字段计算Hash，一共划分成四个分区。如果不指定<code>PARTITIONS 4</code>的话，默认就是一个分区。</p>
+<p>也可以使用一个表达式：</p>
+<pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> employees <span class="token punctuation">(</span>
+    id <span class="token keyword">INT</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
+    fname <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">30</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    lname <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">30</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    hired <span class="token keyword">DATE</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">DEFAULT</span> <span class="token string">'1970-01-01'</span><span class="token punctuation">,</span>
+    separated <span class="token keyword">DATE</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">DEFAULT</span> <span class="token string">'9999-12-31'</span><span class="token punctuation">,</span>
+    job_code <span class="token keyword">INT</span><span class="token punctuation">,</span>
+    store_id <span class="token keyword">INT</span>
+<span class="token punctuation">)</span>
+<span class="token keyword">PARTITION</span> <span class="token keyword">BY</span> <span class="token keyword">HASH</span><span class="token punctuation">(</span> YEAR<span class="token punctuation">(</span>hired<span class="token punctuation">)</span> <span class="token punctuation">)</span>
+PARTITIONS <span class="token number">4</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>使用的字段需要是整数类型，或者表达式返回一个整数类型。</p>
+<p>Hash分区使用<code>mod</code>来计算。比如上面这个例子，如果一条记录的<code>YEAR(hired)</code>值是2020，那么对应的分区就是：</p>
+<pre class="line-numbers language-shell"><code class="language-shell">MOD(2020, 4) = 0<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h4 id="2-5-2-LINER-HASH-Partitioning"><a href="#2-5-2-LINER-HASH-Partitioning" class="headerlink" title="2.5.2 LINER HASH Partitioning"></a>2.5.2 LINER HASH Partitioning</h4><p>Liner Hash分区和Hash分区的不同在于Hash的计算方式，Liner Hash分区使用线性二次幂算法，而Hash分区使用的是取模。</p>
+<p>两者定义的区别也很简单：</p>
+<pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> employees <span class="token punctuation">(</span>
+    id <span class="token keyword">INT</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
+    fname <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">30</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    lname <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">30</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    hired <span class="token keyword">DATE</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">DEFAULT</span> <span class="token string">'1970-01-01'</span><span class="token punctuation">,</span>
+    separated <span class="token keyword">DATE</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">DEFAULT</span> <span class="token string">'9999-12-31'</span><span class="token punctuation">,</span>
+    job_code <span class="token keyword">INT</span><span class="token punctuation">,</span>
+    store_id <span class="token keyword">INT</span>
+<span class="token punctuation">)</span>
+<span class="token keyword">PARTITION</span> <span class="token keyword">BY</span> LINEAR <span class="token keyword">HASH</span><span class="token punctuation">(</span> YEAR<span class="token punctuation">(</span>hired<span class="token punctuation">)</span> <span class="token punctuation">)</span>
+PARTITIONS <span class="token number">4</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>给定一条记录，可以通过下面的算法得到这条记录存储在哪个分区（<code>num</code>表示总分区数，<code>N</code>表示具体的分区）。</p>
+<ol>
+<li>找到下一个大于大于<code>num</code>2次幂的数记作<code>V</code>；</li>
+<li>令<code>N = F(column_list) &amp; (V-1)</code>；</li>
+<li><code>while N&gt;=num</code>:<ul>
+<li>令<code>V = V/2</code>；</li>
+<li>令<code>N = N &amp; (V-1)</code>。</li>
+</ul>
+</li>
+</ol>
+<p>一个简单的例子：</p>
+<pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> t1 <span class="token punctuation">(</span>col1 <span class="token keyword">INT</span><span class="token punctuation">,</span> col2 CHAR<span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">,</span> col3 <span class="token keyword">DATE</span><span class="token punctuation">)</span>
+    <span class="token keyword">PARTITION</span> <span class="token keyword">BY</span> LINEAR <span class="token keyword">HASH</span><span class="token punctuation">(</span> YEAR<span class="token punctuation">(</span>col3<span class="token punctuation">)</span> <span class="token punctuation">)</span>
+    PARTITIONS <span class="token number">6</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>分区数<code>num=6</code>，加入两条待插入记录的<code>col3</code>分别是<code>2003-04-14</code>和<code>1998-10-19</code>，那么对于第一个：</p>
+<pre class="line-numbers language-shell"><code class="language-shell">V = POWER(2, CEILING( LOG(2,6) )) = 8
+N = YEAR('2003-04-14') & (8 - 1)
+   = 2003 & 7
+   = 3
+
+(3 >= 6 is FALSE: record stored in partition #3)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>对于第二个：</p>
+<pre class="line-numbers language-shell"><code class="language-shell">V = 8
+N = YEAR('1998-10-19') & (8 - 1)
+  = 1998 & 7
+  = 6
+
+(6 >= 6 is TRUE: additional step required)
+
+N = 6 & ((8 / 2) - 1)
+  = 6 & 3
+  = 2
+
+(2 >= 6 is FALSE: record stored in partition #2)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>相比Hash分区，Liner Hash分区的优点在于，添加、删除、合并和分裂分区很快，尤其是数据量很大的时候。缺点在于，它不像Hash分区那样数据分布均匀。</p>
+<h3 id="2-6-KEY-Partitioning"><a href="#2-6-KEY-Partitioning" class="headerlink" title="2.6 KEY Partitioning"></a>2.6 KEY Partitioning</h3><p>Key分区和Hash分区类似，只不过Hash分区是用户自定义了一个表达式，而Key分区是MySQL自己实现的表达式，在NDB存储引擎中，使用的是<code>md5()</code>。</p>
+<p>一个简单的例子：</p>
+<pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> k1 <span class="token punctuation">(</span>
+    id <span class="token keyword">INT</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">PRIMARY</span> <span class="token keyword">KEY</span><span class="token punctuation">,</span>
+    name <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">20</span><span class="token punctuation">)</span>
+<span class="token punctuation">)</span>
+<span class="token keyword">PARTITION</span> <span class="token keyword">BY</span> <span class="token keyword">KEY</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+PARTITIONS <span class="token number">2</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这里<code>KEY()</code>没有指定具体的值，那么就使用主键，即<code>id</code>。如果没有主键有唯一键的话，就使用唯一键：</p>
+<pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> k1 <span class="token punctuation">(</span>
+    id <span class="token keyword">INT</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
+    name <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">20</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">UNIQUE</span> <span class="token keyword">KEY</span> <span class="token punctuation">(</span>id<span class="token punctuation">)</span>
+<span class="token punctuation">)</span>
+<span class="token keyword">PARTITION</span> <span class="token keyword">BY</span> <span class="token keyword">KEY</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+PARTITIONS <span class="token number">2</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>上面两个例子使用的都是字段<code>id</code>。</p>
+<p>不过，如果唯一键没有指定为<code>NOT NULL</code>，就会定义失败。</p>
+<p>也可以使用字符串类型：</p>
+<pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> tm1 <span class="token punctuation">(</span>
+    s1 CHAR<span class="token punctuation">(</span><span class="token number">32</span><span class="token punctuation">)</span> <span class="token keyword">PRIMARY</span> <span class="token keyword">KEY</span>
+<span class="token punctuation">)</span>
+<span class="token keyword">PARTITION</span> <span class="token keyword">BY</span> <span class="token keyword">KEY</span><span class="token punctuation">(</span>s1<span class="token punctuation">)</span>
+PARTITIONS <span class="token number">10</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>使用Key分区，那么定义中使用的键就不能删除了，不然会出错。</p>
+<p>像Hash分区一样，Key分区也可以指定Liner：</p>
+<pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> tk <span class="token punctuation">(</span>
+    col1 <span class="token keyword">INT</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
+    col2 CHAR<span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    col3 <span class="token keyword">DATE</span>
+<span class="token punctuation">)</span>
+<span class="token keyword">PARTITION</span> <span class="token keyword">BY</span> LINEAR <span class="token keyword">KEY</span> <span class="token punctuation">(</span>col1<span class="token punctuation">)</span>
+PARTITIONS <span class="token number">3</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这样，Liner Key分区就和Liner Hash分区类似了，优缺点也一样。</p>
+<h3 id="2-7-子分区：Subpartitioning"><a href="#2-7-子分区：Subpartitioning" class="headerlink" title="2.7 子分区：Subpartitioning"></a>2.7 子分区：Subpartitioning</h3><p>子分区也叫做复合分区，就是将分区表的分区继续分区。比如：</p>
+<pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> ts <span class="token punctuation">(</span>id <span class="token keyword">INT</span><span class="token punctuation">,</span> purchased <span class="token keyword">DATE</span><span class="token punctuation">)</span>
+    <span class="token keyword">PARTITION</span> <span class="token keyword">BY</span> RANGE<span class="token punctuation">(</span> YEAR<span class="token punctuation">(</span>purchased<span class="token punctuation">)</span> <span class="token punctuation">)</span>
+    SUBPARTITION <span class="token keyword">BY</span> <span class="token keyword">HASH</span><span class="token punctuation">(</span> TO_DAYS<span class="token punctuation">(</span>purchased<span class="token punctuation">)</span> <span class="token punctuation">)</span>
+    SUBPARTITIONS <span class="token number">2</span> <span class="token punctuation">(</span>
+        <span class="token keyword">PARTITION</span> p0 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token number">1990</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+        <span class="token keyword">PARTITION</span> p1 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token number">2000</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+        <span class="token keyword">PARTITION</span> p2 <span class="token keyword">VALUES</span> LESS THAN MAXVALUE
+    <span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这个表使用的是Range分区，一共有三个Range分区，其中对于每个分区又使用Hash分区方式分成两个子分区，这样一共有6个子分区。</p>
+<p>只有Range分区和List分区能够继续划分子分区，并且子分区的分区方式是Hash分区或Key分区。</p>
+<p>子分区定义如果使用Hash分区或Key分区的话，那么具体的格式和Hash分区与Key分区类似，不同在于Key分区，子分区如果使用Key分区的话需要指定使用的键。</p>
+<p>在定义中也可以对每个子分区定义子分区的名字：</p>
+<pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> ts <span class="token punctuation">(</span>id <span class="token keyword">INT</span><span class="token punctuation">,</span> purchased <span class="token keyword">DATE</span><span class="token punctuation">)</span>
+    <span class="token keyword">PARTITION</span> <span class="token keyword">BY</span> RANGE<span class="token punctuation">(</span> YEAR<span class="token punctuation">(</span>purchased<span class="token punctuation">)</span> <span class="token punctuation">)</span>
+    SUBPARTITION <span class="token keyword">BY</span> <span class="token keyword">HASH</span><span class="token punctuation">(</span> TO_DAYS<span class="token punctuation">(</span>purchased<span class="token punctuation">)</span> <span class="token punctuation">)</span> <span class="token punctuation">(</span>
+        <span class="token keyword">PARTITION</span> p0 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token number">1990</span><span class="token punctuation">)</span> <span class="token punctuation">(</span>
+            SUBPARTITION s0<span class="token punctuation">,</span>
+            SUBPARTITION s1
+        <span class="token punctuation">)</span><span class="token punctuation">,</span>
+        <span class="token keyword">PARTITION</span> p1 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token number">2000</span><span class="token punctuation">)</span> <span class="token punctuation">(</span>
+            SUBPARTITION s2<span class="token punctuation">,</span>
+            SUBPARTITION s3
+        <span class="token punctuation">)</span><span class="token punctuation">,</span>
+        <span class="token keyword">PARTITION</span> p2 <span class="token keyword">VALUES</span> LESS THAN MAXVALUE <span class="token punctuation">(</span>
+            SUBPARTITION s4<span class="token punctuation">,</span>
+            SUBPARTITION s5
+        <span class="token punctuation">)</span>
+    <span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>不过要注意，如果要定义的话，需要把所有的子分区的名字都定义了，同时不能有重复的子分区名字，即使两个子分区不在同一个分区下。</p>
+<h3 id="2-8-MySQL分区如何处理NULL值"><a href="#2-8-MySQL分区如何处理NULL值" class="headerlink" title="2.8 MySQL分区如何处理NULL值"></a>2.8 MySQL分区如何处理NULL值</h3><p>分区中可以使用NULL值，在MySQL中，NULL值小于任何一个非NULL值。在不同的分区方式中，对于NULL值的处理是不同的。</p>
+<h4 id="2-8-1-RANGE分区"><a href="#2-8-1-RANGE分区" class="headerlink" title="2.8.1 RANGE分区"></a>2.8.1 RANGE分区</h4><p>如果决定分区的字段可以为NULL值，那么对于这样的记录存在最小的那个分区里。比如：</p>
+<pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> t2 <span class="token punctuation">(</span>
+    <span class="token number">c1</span> <span class="token keyword">INT</span><span class="token punctuation">,</span>
+    <span class="token number">c2</span> <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">20</span><span class="token punctuation">)</span>
+<span class="token punctuation">)</span>
+<span class="token keyword">PARTITION</span> <span class="token keyword">BY</span> RANGE<span class="token punctuation">(</span><span class="token number">c1</span><span class="token punctuation">)</span> <span class="token punctuation">(</span>
+    <span class="token keyword">PARTITION</span> p0 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token operator">-</span><span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p1 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p2 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p3 <span class="token keyword">VALUES</span> LESS THAN MAXVALUE
+<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>如果插入一条<code>c1=null</code>的记录，那么这条记录存在<code>p0</code>中。</p>
+<p>对于使用MySQL函数的分区，也是这么处理NULL值的。比如<code>YEAR(NULL)=NULL</code>，然后存在最小的那个分区里。</p>
+<h4 id="2-8-2-LIST分区"><a href="#2-8-2-LIST分区" class="headerlink" title="2.8.2 LIST分区"></a>2.8.2 LIST分区</h4><p>List分区可以接受NULL值，只要分区定义中给定了NULL值存储的分区即可。如果这样：</p>
+<pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> ts1 <span class="token punctuation">(</span>
+    <span class="token number">c1</span> <span class="token keyword">INT</span><span class="token punctuation">,</span>
+    <span class="token number">c2</span> <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">20</span><span class="token punctuation">)</span>
+<span class="token punctuation">)</span>
+<span class="token keyword">PARTITION</span> <span class="token keyword">BY</span> LIST<span class="token punctuation">(</span><span class="token number">c1</span><span class="token punctuation">)</span> <span class="token punctuation">(</span>
+    <span class="token keyword">PARTITION</span> p0 <span class="token keyword">VALUES</span> <span class="token operator">IN</span> <span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">6</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p1 <span class="token keyword">VALUES</span> <span class="token operator">IN</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">7</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p2 <span class="token keyword">VALUES</span> <span class="token operator">IN</span> <span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">8</span><span class="token punctuation">)</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>那么插入一条<code>c1=null</code>的记录不会成功。如果这样：</p>
+<pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> ts2 <span class="token punctuation">(</span>
+    <span class="token number">c1</span> <span class="token keyword">INT</span><span class="token punctuation">,</span>
+    <span class="token number">c2</span> <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">20</span><span class="token punctuation">)</span>
+<span class="token punctuation">)</span>
+<span class="token keyword">PARTITION</span> <span class="token keyword">BY</span> LIST<span class="token punctuation">(</span><span class="token number">c1</span><span class="token punctuation">)</span> <span class="token punctuation">(</span>
+    <span class="token keyword">PARTITION</span> p0 <span class="token keyword">VALUES</span> <span class="token operator">IN</span> <span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">6</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p1 <span class="token keyword">VALUES</span> <span class="token operator">IN</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">7</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p2 <span class="token keyword">VALUES</span> <span class="token operator">IN</span> <span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">PARTITION</span> p3 <span class="token keyword">VALUES</span> <span class="token operator">IN</span> <span class="token punctuation">(</span><span class="token boolean">NULL</span><span class="token punctuation">)</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>那么对于所有<code>c1=null</code>的记录都将存在<code>p3</code>中。</p>
+<h4 id="2-8-3-HASH分区和KEY分区"><a href="#2-8-3-HASH分区和KEY分区" class="headerlink" title="2.8.3 HASH分区和KEY分区"></a>2.8.3 HASH分区和KEY分区</h4><p>Hash分区和Key分区对于NULL的处理是将NULL当做0。比如：</p>
+<pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> th <span class="token punctuation">(</span>
+    <span class="token number">c1</span> <span class="token keyword">INT</span><span class="token punctuation">,</span>
+    <span class="token number">c2</span> <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">20</span><span class="token punctuation">)</span>
+<span class="token punctuation">)</span>
+<span class="token keyword">PARTITION</span> <span class="token keyword">BY</span> <span class="token keyword">HASH</span><span class="token punctuation">(</span><span class="token number">c1</span><span class="token punctuation">)</span>
+PARTITIONS <span class="token number">2</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>那么对于<code>c1=null</code>的记录将放在分区ID是0的分区里，和<code>c1=0</code>，<code>c1=2</code>效果一样。对于Key分区也是一样。</p>
+<p>关于MySQL分区其余的部分，参考<a href="">Part 2</a>。</p>
+
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        Author:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="http://deuterium.fun" rel="external nofollow noreferrer">Valineliu</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        Link:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="http://deuterium.fun/all-you-need-to-know-about-mysql-partitions-part-1/">http://deuterium.fun/all-you-need-to-know-about-mysql-partitions-part-1/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        Reprint policy:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    All articles in this blog are used except for special statements
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    reprint polocy. If reproduced, please indicate source
+                    <a href="http://deuterium.fun" target="_blank">Valineliu</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>Copied successfully, please follow the reprint policy of this article</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">more</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/partition/">
+                                    <span class="chip bg-color">partition</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    
+    <div class="social-share" data-sites="wechat,weibo,douban" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+        <style>
+    .valine-card {
+        margin: 1.5rem auto;
+    }
+
+    .valine-card .card-content {
+        padding: 20px 20px 5px 20px;
+    }
+
+    #vcomments textarea {
+        box-sizing: border-box;
+        background: url("/medias/comment_bg.png") 100% 100% no-repeat;
+    }
+
+    #vcomments p {
+        margin: 2px 2px 10px;
+        font-size: 1.05rem;
+        line-height: 1.78rem;
+    }
+
+    #vcomments blockquote p {
+        text-indent: 0.2rem;
+    }
+
+    #vcomments a {
+        padding: 0 2px;
+        color: #4cbf30;
+        font-weight: 500;
+        text-decoration: none;
+    }
+
+    #vcomments img {
+        max-width: 100%;
+        height: auto;
+        cursor: pointer;
+    }
+
+    #vcomments ol li {
+        list-style-type: decimal;
+    }
+
+    #vcomments ol,
+    ul {
+        display: block;
+        padding-left: 2em;
+        word-spacing: 0.05rem;
+    }
+
+    #vcomments ul li,
+    ol li {
+        display: list-item;
+        line-height: 1.8rem;
+        font-size: 1rem;
+    }
+
+    #vcomments ul li {
+        list-style-type: disc;
+    }
+
+    #vcomments ul ul li {
+        list-style-type: circle;
+    }
+
+    #vcomments table, th, td {
+        padding: 12px 13px;
+        border: 1px solid #dfe2e5;
+    }
+
+    #vcomments table, th, td {
+        border: 0;
+    }
+
+    table tr:nth-child(2n), thead {
+        background-color: #fafafa;
+    }
+
+    #vcomments table th {
+        background-color: #f2f2f2;
+        min-width: 80px;
+    }
+
+    #vcomments table td {
+        min-width: 80px;
+    }
+
+    #vcomments h1 {
+        font-size: 1.85rem;
+        font-weight: bold;
+        line-height: 2.2rem;
+    }
+
+    #vcomments h2 {
+        font-size: 1.65rem;
+        font-weight: bold;
+        line-height: 1.9rem;
+    }
+
+    #vcomments h3 {
+        font-size: 1.45rem;
+        font-weight: bold;
+        line-height: 1.7rem;
+    }
+
+    #vcomments h4 {
+        font-size: 1.25rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    #vcomments h5 {
+        font-size: 1.1rem;
+        font-weight: bold;
+        line-height: 1.4rem;
+    }
+
+    #vcomments h6 {
+        font-size: 1rem;
+        line-height: 1.3rem;
+    }
+
+    #vcomments p {
+        font-size: 1rem;
+        line-height: 1.5rem;
+    }
+
+    #vcomments hr {
+        margin: 12px 0;
+        border: 0;
+        border-top: 1px solid #ccc;
+    }
+
+    #vcomments blockquote {
+        margin: 15px 0;
+        border-left: 5px solid #42b983;
+        padding: 1rem 0.8rem 0.3rem 0.8rem;
+        color: #666;
+        background-color: rgba(66, 185, 131, .1);
+    }
+
+    #vcomments pre {
+        font-family: monospace, monospace;
+        padding: 1.2em;
+        margin: .5em 0;
+        background: #272822;
+        overflow: auto;
+        border-radius: 0.3em;
+        tab-size: 4;
+    }
+
+    #vcomments code {
+        font-family: monospace, monospace;
+        padding: 1px 3px;
+        font-size: 0.92rem;
+        color: #e96900;
+        background-color: #f8f8f8;
+        border-radius: 2px;
+    }
+
+    #vcomments pre code {
+        font-family: monospace, monospace;
+        padding: 0;
+        color: #e8eaf6;
+        background-color: #272822;
+    }
+
+    #vcomments pre[class*="language-"] {
+        padding: 1.2em;
+        margin: .5em 0;
+    }
+
+    #vcomments code[class*="language-"],
+    pre[class*="language-"] {
+        color: #e8eaf6;
+    }
+
+    #vcomments [type="checkbox"]:not(:checked), [type="checkbox"]:checked {
+        position: inherit;
+        margin-left: -1.3rem;
+        margin-right: 0.4rem;
+        margin-top: -1px;
+        vertical-align: middle;
+        left: unset;
+        visibility: visible;
+    }
+
+    #vcomments b,
+    strong {
+        font-weight: bold;
+    }
+
+    #vcomments dfn {
+        font-style: italic;
+    }
+
+    #vcomments small {
+        font-size: 85%;
+    }
+
+    #vcomments cite {
+        font-style: normal;
+    }
+
+    #vcomments mark {
+        background-color: #fcf8e3;
+        padding: .2em;
+    }
+
+    #vcomments table, th, td {
+        padding: 12px 13px;
+        border: 1px solid #dfe2e5;
+    }
+
+    table tr:nth-child(2n), thead {
+        background-color: #fafafa;
+    }
+
+    #vcomments table th {
+        background-color: #f2f2f2;
+        min-width: 80px;
+    }
+
+    #vcomments table td {
+        min-width: 80px;
+    }
+
+    #vcomments [type="checkbox"]:not(:checked), [type="checkbox"]:checked {
+        position: inherit;
+        margin-left: -1.3rem;
+        margin-right: 0.4rem;
+        margin-top: -1px;
+        vertical-align: middle;
+        left: unset;
+        visibility: visible;
+    }
+</style>
+
+<div class="card valine-card" data-aos="fade-up">
+    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; left: 20px; top: 15px; padding-bottom: 5px;">
+        <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
+        <span>评论</span>
+    </div>
+    <div id="vcomments" class="card-content" style="display: grid">
+    </div>
+</div>
+
+<script src="/libs/valine/av-min.js"></script>
+<script src="/libs/valine/Valine.min.js"></script>
+<script>
+    new Valine({
+        el: '#vcomments',
+        appId: 'BFXDDa5GNPBSIaLTpmkrVlrz-gzGzoHsz',
+        appKey: '2Up07jbiLJPDxricj9CLg3Qw',
+        notify: 'false' === 'true',
+        verify: 'false' === 'true',
+        visitor: 'true' === 'true',
+        avatar: 'mm',
+        pageSize: '10',
+        lang: 'en',
+        placeholder: 'say someting...'
+    });
+</script>
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
+            <div class="card">
+                <a href="/all-you-need-to-know-about-mysql-partitions-part-2/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/20.jpg" class="responsive-img" alt="All You Need to Know About MySQL Partitions (Part 2)">
+                        
+                        <span class="card-title">All You Need to Know About MySQL Partitions (Part 2)</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+在Part 1中，已经详细介绍了MySQL中的几种分区方式。在这里，详细介绍一下分区的各种操作。同样，这篇文章是对官方文档的梳理。
+
+3. 分区管理对于一个一分区的表来说，分区管理包括添加分区、删除分区、合并分区、拆分分区以及，改变分区方
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2020-03-24
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/mysql/" class="post-category">
+                                    mysql
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/partition/">
+                        <span class="chip bg-color">partition</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                Next&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/roman-empire/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="Roman Empire">
+                        
+                        <span class="card-title">Roman Empire</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+这篇文章是根据假期看的《罗马人的故事》记录的罗马流水线的第二部分：罗马帝国。罗马帝国从27BC开始到467AD西罗马帝国灭亡共500年的历史，不包括东罗马帝国（拜占庭帝国）。
+
+1. 尤利乌斯·克劳狄乌斯王朝（27BC-68AD）凯撒绘制
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-03-04
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/reading/" class="post-category">
+                                    reading
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/history/">
+                        <span class="chip bg-color">history</span>
+                    </a>
+                    
+                    <a href="/tags/rome/">
+                        <span class="chip bg-color">rome</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+    
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+<!-- 代码块折行 -->
+
+<style type="text/css">
+code[class*="language-"], pre[class*="language-"] { white-space: pre !important; }
+</style>
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;You Will See...</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+    <footer class="page-footer bg-color">
+    <div class="container row center-align">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            <span id="year">2020</span>
+            <a href="http://deuterium.fun" target="_blank">Valineliu</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+            
+            
+            
+            
+            
+            <br>
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link ">
+
+
+    <a href="mailto:1749118121@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;Search</span>
+            <input type="search" id="searchInput" name="s" placeholder="Please enter a search keyword"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>

@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://deuterium.fun/"/>
-  <updated>2020-03-04T02:26:59.728Z</updated>
+  <updated>2020-03-24T03:15:01.022Z</updated>
   <id>http://deuterium.fun/</id>
   
   <author>
@@ -15,6 +15,62 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>All You Need to Know About MySQL Partitions (Part 2)</title>
+    <link href="http://deuterium.fun/all-you-need-to-know-about-mysql-partitions-part-2/"/>
+    <id>http://deuterium.fun/all-you-need-to-know-about-mysql-partitions-part-2/</id>
+    <published>2020-03-24T03:12:31.000Z</published>
+    <updated>2020-03-24T03:15:01.022Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;blockquote&gt;
+&lt;p&gt;在&lt;a href=&quot;&quot;&gt;Part 1&lt;/a&gt;中，已经详细介绍了MySQL中的几种分区方式。在这里，详细介绍一下分区的各种操作。同样，这篇文章是对&lt;a
+        
+      
+    
+    </summary>
+    
+    
+      <category term="mysql" scheme="http://deuterium.fun/categories/mysql/"/>
+    
+    
+      <category term="partition" scheme="http://deuterium.fun/tags/partition/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>All You Need to Know About MySQL Partitions (Part 1)</title>
+    <link href="http://deuterium.fun/all-you-need-to-know-about-mysql-partitions-part-1/"/>
+    <id>http://deuterium.fun/all-you-need-to-know-about-mysql-partitions-part-1/</id>
+    <published>2020-03-24T03:12:25.000Z</published>
+    <updated>2020-03-24T03:14:29.228Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;blockquote&gt;
+&lt;p&gt;什么是分区？为什么要分区？该怎么分区？分区有什么好处？使用分区应该注意什么？&lt;a href=&quot;https://dev.mysql.com/doc/refman/8.0/en/partitioning.html&quot; target=&quot;_blank&quot;
+        
+      
+    
+    </summary>
+    
+    
+      <category term="mysql" scheme="http://deuterium.fun/categories/mysql/"/>
+    
+    
+      <category term="partition" scheme="http://deuterium.fun/tags/partition/"/>
+    
+  </entry>
   
   <entry>
     <title>Roman Empire</title>
@@ -362,9 +418,9 @@
       <category term="mysql" scheme="http://deuterium.fun/categories/mysql/"/>
     
     
-      <category term="tips" scheme="http://deuterium.fun/tags/tips/"/>
-    
       <category term="mysql" scheme="http://deuterium.fun/tags/mysql/"/>
+    
+      <category term="tips" scheme="http://deuterium.fun/tags/tips/"/>
     
   </entry>
   
@@ -531,58 +587,6 @@
         
         
           &lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a
-        
-      
-    
-    </summary>
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>Keep Simple</title>
-    <link href="http://deuterium.fun/keep-simple/"/>
-    <id>http://deuterium.fun/keep-simple/</id>
-    <published>2019-12-01T06:48:29.000Z</published>
-    <updated>2020-03-20T02:46:47.436Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;blockquote&gt;
-&lt;p&gt;保持简单，记录生活中的美好。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&quot;1-Year-Reading&quot;&gt;&lt;a href=&quot;#1-Year-Reading&quot; class=&quot;headerlink&quot; title=&quot;1. Year
-        
-      
-    
-    </summary>
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>Keep Curious</title>
-    <link href="http://deuterium.fun/keep-curious/"/>
-    <id>http://deuterium.fun/keep-curious/</id>
-    <published>2019-12-01T06:45:06.000Z</published>
-    <updated>2020-03-20T02:46:38.216Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;blockquote&gt;
-&lt;p&gt;世界多么奇妙，保持好奇，努力探索。这里列出其他学科的学习文章。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&quot;1-Physics&quot;&gt;&lt;a href=&quot;#1-Physics&quot; class=&quot;headerlink&quot; title=&quot;1.
         
       
     
