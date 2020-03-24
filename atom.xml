@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://deuterium.fun/"/>
-  <updated>2020-03-24T03:15:01.022Z</updated>
+  <updated>2020-03-24T03:17:12.135Z</updated>
   <id>http://deuterium.fun/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="http://deuterium.fun/all-you-need-to-know-about-mysql-partitions-part-2/"/>
     <id>http://deuterium.fun/all-you-need-to-know-about-mysql-partitions-part-2/</id>
     <published>2020-03-24T03:12:31.000Z</published>
-    <updated>2020-03-24T03:15:01.022Z</updated>
+    <updated>2020-03-24T03:17:12.135Z</updated>
     
     <summary type="html">
     
@@ -30,7 +30,7 @@
         
         
           &lt;blockquote&gt;
-&lt;p&gt;在&lt;a href=&quot;&quot;&gt;Part 1&lt;/a&gt;中，已经详细介绍了MySQL中的几种分区方式。在这里，详细介绍一下分区的各种操作。同样，这篇文章是对&lt;a
+&lt;p&gt;在&lt;a href=&quot;https://deuterium.fun/all-you-need-to-know-about-mysql-partitions-part-1/&quot;&gt;Part
         
       
     
@@ -49,7 +49,7 @@
     <link href="http://deuterium.fun/all-you-need-to-know-about-mysql-partitions-part-1/"/>
     <id>http://deuterium.fun/all-you-need-to-know-about-mysql-partitions-part-1/</id>
     <published>2020-03-24T03:12:25.000Z</published>
-    <updated>2020-03-24T03:14:29.228Z</updated>
+    <updated>2020-03-24T03:18:11.715Z</updated>
     
     <summary type="html">
     

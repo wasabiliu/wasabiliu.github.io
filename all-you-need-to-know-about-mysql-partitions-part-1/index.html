@@ -422,11 +422,11 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <blockquote>
-<p>什么是分区？为什么要分区？该怎么分区？分区有什么好处？使用分区应该注意什么？<a href="https://dev.mysql.com/doc/refman/8.0/en/partitioning.html" target="_blank" rel="noopener">通过对MySQL文档</a>的梳理，在这篇文章以及<a href="">Part 2</a>中详细介绍一下关于MySQL分区的方方面面。</p>
+<p>什么是分区？为什么要分区？该怎么分区？分区有什么好处？使用分区应该注意什么？<a href="https://dev.mysql.com/doc/refman/8.0/en/partitioning.html" target="_blank" rel="noopener">通过对MySQL文档</a>的梳理，在这篇文章以及<a href="https://deuterium.fun/all-you-need-to-know-about-mysql-partitions-part-2/">Part 2</a>中详细介绍一下关于MySQL分区的方方面面。</p>
 </blockquote>
 <h2 id="1-Overview-of-Paritioning-in-MySQL"><a href="#1-Overview-of-Paritioning-in-MySQL" class="headerlink" title="1. Overview of Paritioning in MySQL"></a>1. Overview of Paritioning in MySQL</h2><p>数据库作为系统的重要部分，承担着数据的存储任务。随着业务的不断扩展，数据也可能疯狂增长。这个时候对于数据库的访问可能会有一些瓶颈。为了减小表的规模，可以将一张大表分成几个小的部分。一种方式就是分表，将一张表分成一系列表；另一种就是分区。</p>
 <p>分区也是将一张大表分成几个小的部分，但和分表不同的是，分区仍然是一张表，只不过在一张表下面有一些小的分区：</p>
-<p><img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/MySQL/characterset.PNG" alt="partition就是水平分区"></p>
+<p><img src="hhttps://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/MySQL/partition.png" alt="partition就是水平分区"></p>
 <p>那么分区有什么好处呢？</p>
 <ul>
 <li>分区使得一张表可以存储的数据容量增大；</li>
@@ -937,7 +937,7 @@ PARTITIONS <span class="token number">3</span><span class="token punctuation">;<
 <span class="token keyword">PARTITION</span> <span class="token keyword">BY</span> <span class="token keyword">HASH</span><span class="token punctuation">(</span><span class="token number">c1</span><span class="token punctuation">)</span>
 PARTITIONS <span class="token number">2</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>那么对于<code>c1=null</code>的记录将放在分区ID是0的分区里，和<code>c1=0</code>，<code>c1=2</code>效果一样。对于Key分区也是一样。</p>
-<p>关于MySQL分区其余的部分，参考<a href="">Part 2</a>。</p>
+<p>关于MySQL分区其余的部分，参考<a href="https://deuterium.fun/all-you-need-to-know-about-mysql-partitions-part-2/">Part 2</a>。</p>
 
             </div>
             <hr/>

@@ -422,7 +422,7 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <blockquote>
-<p>在<a href="">Part 1</a>中，已经详细介绍了MySQL中的几种分区方式。在这里，详细介绍一下分区的各种操作。同样，这篇文章是对<a href="https://dev.mysql.com/doc/refman/8.0/en/partitioning.html" target="_blank" rel="noopener">官方文档</a>的梳理。</p>
+<p>在<a href="https://deuterium.fun/all-you-need-to-know-about-mysql-partitions-part-1/">Part 1</a>中，已经详细介绍了MySQL中的几种分区方式。在这里，详细介绍一下分区的各种操作。同样，这篇文章是对<a href="https://dev.mysql.com/doc/refman/8.0/en/partitioning.html" target="_blank" rel="noopener">官方文档</a>的梳理。</p>
 </blockquote>
 <h2 id="3-分区管理"><a href="#3-分区管理" class="headerlink" title="3. 分区管理"></a>3. 分区管理</h2><p>对于一个一分区的表来说，分区管理包括添加分区、删除分区、合并分区、拆分分区以及，改变分区方式等。对于这些操作，都需要使用<code>ALTER TABLE</code>语句来进行操作。需要注意的是，每一个<code>ALTER TABLE</code>语句只能有一个分区相关的操作，而不能在一个<code>ALTER TABLE</code>语句中有多个分区操作。</p>
 <h3 id="3-1-RANGE分区和LIST分区管理"><a href="#3-1-RANGE分区和LIST分区管理" class="headerlink" title="3.1 RANGE分区和LIST分区管理"></a>3.1 RANGE分区和LIST分区管理</h3><p>对Range分区和List分区操作是一样的。</p>
