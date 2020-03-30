@@ -442,7 +442,7 @@
     <span class="token keyword">PARTITION</span> p2 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token number">16</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
     <span class="token keyword">PARTITION</span> p3 <span class="token keyword">VALUES</span> LESS THAN <span class="token punctuation">(</span><span class="token number">21</span><span class="token punctuation">)</span>
 <span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>也就是说，分店ID是1到5的在<code>p0</code>分区，分店ID是6到10的在<code>p1</code>分区，一次类推。</p>
+<p>也就是说，分店ID是1到5的在<code>p0</code>分区，分店ID是6到10的在<code>p1</code>分区，依次类推。</p>
 <p>对于一个给定的记录，是可以很容易确定对应的分区的。比如<code>(72, &#39;Mitchell&#39;, &#39;Wilson&#39;, &#39;1998-06-25&#39;, NULL, 13)</code>，分店ID是13，根据规则这条记录就在<code>p2</code>分区里。</p>
 <p>但是现在有个问题，如果又开了一家分店，分店ID是21，那么新分店的员工记录应该在哪个分区呢？</p>
 <p>按照上面的定义，这样会出错。因为MySQL找不到对应的分区。</p>

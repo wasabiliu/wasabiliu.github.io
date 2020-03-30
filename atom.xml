@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://deuterium.fun/"/>
-  <updated>2020-03-24T06:17:02.853Z</updated>
+  <updated>2020-03-30T02:04:18.376Z</updated>
   <id>http://deuterium.fun/</id>
   
   <author>
@@ -15,6 +15,36 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>《中国历代政治得失》笔记</title>
+    <link href="http://deuterium.fun/zhong-guo-li-dai-zheng-zhi-de-shi-bi-ji/"/>
+    <id>http://deuterium.fun/zhong-guo-li-dai-zheng-zhi-de-shi-bi-ji/</id>
+    <published>2020-03-30T01:53:16.000Z</published>
+    <updated>2020-03-30T02:04:18.376Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;blockquote&gt;
+&lt;p&gt;利用周末一个下午的时间，重新刷了一遍钱穆的《中国历代政治得失》。能说“西方在政治经验上一般都比较短浅”这话的，只有中国人。这不是自夸，这是事实。从整本书中都能看出钱穆对中国古代政治经验的一种称赞。他推崇汉代的地方政府组织，推崇唐代的中央政府组织，贬
+        
+      
+    
+    </summary>
+    
+    
+      <category term="reading" scheme="http://deuterium.fun/categories/reading/"/>
+    
+    
+      <category term="history" scheme="http://deuterium.fun/tags/history/"/>
+    
+      <category term="china" scheme="http://deuterium.fun/tags/china/"/>
+    
+  </entry>
   
   <entry>
     <title>All You Need to Know About MySQL Partitions (Part 2)</title>
@@ -49,7 +79,7 @@
     <link href="http://deuterium.fun/all-you-need-to-know-about-mysql-partitions-part-1/"/>
     <id>http://deuterium.fun/all-you-need-to-know-about-mysql-partitions-part-1/</id>
     <published>2020-03-24T03:12:25.000Z</published>
-    <updated>2020-03-24T06:18:32.523Z</updated>
+    <updated>2020-03-24T07:56:47.450Z</updated>
     
     <summary type="html">
     
@@ -570,29 +600,6 @@
       <category term="go" scheme="http://deuterium.fun/tags/go/"/>
     
       <category term="json" scheme="http://deuterium.fun/tags/json/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Hello World</title>
-    <link href="http://deuterium.fun/hello-world/"/>
-    <id>http://deuterium.fun/hello-world/</id>
-    <published>2019-12-04T05:36:33.081Z</published>
-    <updated>2019-12-20T11:32:50.461Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a
-        
-      
-    
-    </summary>
-    
-    
     
   </entry>
   
