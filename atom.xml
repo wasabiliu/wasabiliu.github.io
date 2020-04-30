@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://deuterium.fun/"/>
-  <updated>2020-03-30T02:04:18.376Z</updated>
+  <updated>2020-04-30T02:07:35.116Z</updated>
   <id>http://deuterium.fun/</id>
   
   <author>
@@ -15,6 +15,36 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>csapp ch1: A Tour of Computer Systems</title>
+    <link href="http://deuterium.fun/csapp-ch1-a-tour-of-computer-systems/"/>
+    <id>http://deuterium.fun/csapp-ch1-a-tour-of-computer-systems/</id>
+    <published>2020-04-30T01:56:19.000Z</published>
+    <updated>2020-04-30T02:07:35.116Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;blockquote&gt;
+&lt;p&gt;这篇文章是csapp第一章阅读笔记。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;img
+        
+      
+    
+    </summary>
+    
+    
+      <category term="cs" scheme="http://deuterium.fun/categories/cs/"/>
+    
+    
+      <category term="csapp" scheme="http://deuterium.fun/tags/csapp/"/>
+    
+  </entry>
   
   <entry>
     <title>《中国历代政治得失》笔记</title>
@@ -570,36 +600,6 @@
     
     
       <category term="physics" scheme="http://deuterium.fun/tags/physics/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Go struct to json</title>
-    <link href="http://deuterium.fun/go-struct-to-json/"/>
-    <id>http://deuterium.fun/go-struct-to-json/</id>
-    <published>2019-12-05T03:27:38.000Z</published>
-    <updated>2019-12-06T13:21:46.096Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;最近做了一些将go中结构体输出到json的事情，各种花样输出，在这里整理一下。&lt;/p&gt;
-&lt;h3 id=&quot;问题1：如何将struct转成json？&quot;&gt;&lt;a href=&quot;#问题1：如何将struct转成json？&quot; class=&quot;headerlink&quot;
-        
-      
-    
-    </summary>
-    
-    
-      <category term="programming" scheme="http://deuterium.fun/categories/programming/"/>
-    
-    
-      <category term="go" scheme="http://deuterium.fun/tags/go/"/>
-    
-      <category term="json" scheme="http://deuterium.fun/tags/json/"/>
     
   </entry>
   
