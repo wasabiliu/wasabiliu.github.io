@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://deuterium.fun/"/>
-  <updated>2020-04-30T02:07:35.116Z</updated>
+  <updated>2020-05-06T02:08:46.164Z</updated>
   <id>http://deuterium.fun/</id>
   
   <author>
@@ -15,6 +15,37 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>csapp ch02 (part 1): Information Storage</title>
+    <link href="http://deuterium.fun/csapp-ch02-part-1-information-storage/"/>
+    <id>http://deuterium.fun/csapp-ch02-part-1-information-storage/</id>
+    <published>2020-05-06T02:07:41.000Z</published>
+    <updated>2020-05-06T02:08:46.164Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;blockquote&gt;
+&lt;p&gt;这篇文章是csapp第二章第一节的阅读笔记。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;机器级的程序把内存当做一个大数组，数组里的元素就是字节。&lt;/p&gt;
+&lt;p&gt;接下来就应该看看，编译器和运行时系统是如何把由一块块字节组成的信息翻译成它本来的养子。&lt;
+        
+      
+    
+    </summary>
+    
+    
+      <category term="cs" scheme="http://deuterium.fun/categories/cs/"/>
+    
+    
+      <category term="csapp" scheme="http://deuterium.fun/tags/csapp/"/>
+    
+  </entry>
   
   <entry>
     <title>csapp ch1: A Tour of Computer Systems</title>
@@ -570,36 +601,6 @@
       <category term="mysql" scheme="http://deuterium.fun/tags/mysql/"/>
     
       <category term="charset" scheme="http://deuterium.fun/tags/charset/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>What is physics</title>
-    <link href="http://deuterium.fun/what-is-physics/"/>
-    <id>http://deuterium.fun/what-is-physics/</id>
-    <published>2019-12-07T12:41:20.000Z</published>
-    <updated>2019-12-07T13:21:47.681Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;blockquote&gt;
-&lt;p&gt;这篇文章是阅读《费恩曼物理学讲义 第一卷 新千年版》第1-3章的阅读笔记。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h3 id=&quot;1-从一片沙滩开始&quot;&gt;&lt;a href=&quot;#1-从一片沙滩开始&quot; class=&quot;headerlink&quot;
-        
-      
-    
-    </summary>
-    
-    
-      <category term="physics" scheme="http://deuterium.fun/categories/physics/"/>
-    
-    
-      <category term="physics" scheme="http://deuterium.fun/tags/physics/"/>
     
   </entry>
   
