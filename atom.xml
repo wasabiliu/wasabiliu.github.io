@@ -568,9 +568,9 @@
       <category term="redis" scheme="http://deuterium.fun/categories/redis/"/>
     
     
-      <category term="tips" scheme="http://deuterium.fun/tags/tips/"/>
-    
       <category term="redis" scheme="http://deuterium.fun/tags/redis/"/>
+    
+      <category term="tips" scheme="http://deuterium.fun/tags/tips/"/>
     
   </entry>
   
