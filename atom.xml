@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://deuterium.fun/"/>
-  <updated>2020-05-06T02:08:46.164Z</updated>
+  <updated>2020-05-07T02:11:13.909Z</updated>
   <id>http://deuterium.fun/</id>
   
   <author>
@@ -15,6 +15,37 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>csapp ch02 (part 2): Integer Representations</title>
+    <link href="http://deuterium.fun/csapp-ch02-part-2-integer-representations/"/>
+    <id>http://deuterium.fun/csapp-ch02-part-2-integer-representations/</id>
+    <published>2020-05-07T01:44:53.000Z</published>
+    <updated>2020-05-07T02:11:13.909Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;blockquote&gt;
+&lt;p&gt;这篇文章是csapp第二章第二节的阅读笔记。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;既然知道了信息是如何存储的，那么接下来看看，整数是如何存储的。整数包括两种：有符号整数和无符号整数，分别对应可为负和不可为负。&lt;/p&gt;
+&lt;p&gt;这里会涉及到如下的
+        
+      
+    
+    </summary>
+    
+    
+      <category term="cs" scheme="http://deuterium.fun/categories/cs/"/>
+    
+    
+      <category term="csapp" scheme="http://deuterium.fun/tags/csapp/"/>
+    
+  </entry>
   
   <entry>
     <title>csapp ch02 (part 1): Information Storage</title>
@@ -571,36 +602,6 @@
       <category term="redis" scheme="http://deuterium.fun/tags/redis/"/>
     
       <category term="tips" scheme="http://deuterium.fun/tags/tips/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Character Sets and Collations in MySQL</title>
-    <link href="http://deuterium.fun/character-sets-and-collations-in-mysql/"/>
-    <id>http://deuterium.fun/character-sets-and-collations-in-mysql/</id>
-    <published>2019-12-08T06:51:46.000Z</published>
-    <updated>2019-12-08T11:00:33.341Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;最近遇到一个关于MySQL字符乱码的问题，比较好解决，但是为了更好地理解MySQL中的字符系统，参考MySQL的文档整理一下关于MySQL中字符集合字符序的问题。&lt;/p&gt;
-&lt;h3 id=&quot;1-什么是字符集和字符序&quot;&gt;&lt;a href=&quot;#1-什么是字符集和字符序&quot;
-        
-      
-    
-    </summary>
-    
-    
-      <category term="mysql" scheme="http://deuterium.fun/categories/mysql/"/>
-    
-    
-      <category term="mysql" scheme="http://deuterium.fun/tags/mysql/"/>
-    
-      <category term="charset" scheme="http://deuterium.fun/tags/charset/"/>
     
   </entry>
   
