@@ -572,7 +572,7 @@
 </ul>
 <h2 id="4-有符号与无符号数之间的转换"><a href="#4-有符号与无符号数之间的转换" class="headerlink" title="4. 有符号与无符号数之间的转换"></a>4. 有符号与无符号数之间的转换</h2><p>既然信息的底层存储是一样的，那么不同的解释方法会得到不同的结果。接下来就看看，对于同一个二进制编码来说，使用不同的解释方法（无符号编码和补码编码）得到的结果之间的关系。</p>
 <p>无符号编码的取值范围是$[0,UMax_w]$，补码编码的取值范围是$[TMin_w,TMax_w]$。</p>
-<p>先看看将补码编码转换成无符号编码。令$T2U_w(x)=B2U_w(T2B_w(x))$，其中$TMin_w\leq x \leq TMax_w$，有：<br>$$<br>T2U_w(x)=<br>\begin{cases}<br>x+2^w,&amp;\text{x&lt;0}\<br>x,&amp;\text{x \geq 0}<br>\end{cases}<br>$$<br>比如，$T2U_{16}(-12345)=-12345+2^{16}=53191$，同时可得：$T2U_w(-1)=-1+2^w=UMax_w$。</p>
+<p>先看看将补码编码转换成无符号编码。令$T2U_w(x)=B2U_w(T2B_w(x))$，其中$TMin_w\leq x \leq TMax_w$，有：<br>$$<br>T2U_w(x)=<br>\begin{cases}<br>x+2^w, &amp; \text{x&lt;0}\<br>x, &amp; \text{x $\geq$ 0}<br>\end{cases}<br>$$<br>比如，$T2U_{16}(-12345)=-12345+2^{16}=53191$，同时可得：$T2U_w(-1)=-1+2^w=UMax_w$。</p>
 <p>对于一个$\vec{x}$，我们知道$B2U_w(\vec{x})$和$B2T_w(\vec{x})$，那么：<br>$$<br>\begin{aligned}<br>B2U_w(\vec{x})-B2T_w(\vec{x})&amp;=(\sum_{i=0}^{w-1}x_i2^i)-(-x_{w-1}2^{w-1}+\sum_{i=0}^{w-2}x_i2^i)\<br>&amp;=x_{w-1}2^w<br>\end{aligned}<br>$$<br>也就是说$B2U_w(\vec{x})=B2T_w(\vec{x})+x_{w-1}2^w$，所以：<br>$$<br>B2U_w(T2B_w(x))=T2U_w(x)=x+x_{w-1}2^w<br>$$<br>这样就可以通过这个公式将一个有符号数转换成无符号数了。</p>
 <p>接下来看看从无符号数到有符号数的转换，这个函数记作$U2T_w(u)$。</p>
 <p>那么对于$0 \leq u \leq UMax_w$，有：<br>$$<br>U2T_w(u)=\left{<br>\begin{aligned}<br>u&amp;,&amp;u \leq TMax_w\<br>u-2^w&amp;,&amp;u &gt; TMax_w<br>\end{aligned}<br>\right.<br>$$<br>令$\vec{u}=U2B_w(u)$，那么这个编码也就是$U2T_w(u)$的编码，同时有：<br>$$<br>B2T_w(u)=B2U_w(u)-u_{w-1}2^w<br>$$<br>所以：<br>$$<br>\begin{aligned}<br>U2T_w(u)&amp;=B2T(U2B_w(u))\<br>&amp;=B2U_w(U2B_w(u))-U_{w-1}2^w\<br>&amp;=u-u_{w-1}2^w<br>\end{aligned}<br>$$<br>比如，$T2U_{16}(-12345)=65536-12345=53191$。</p>
