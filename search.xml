@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>Use pt-osc to ALTER MySQL table</title>
+      <link href="/use-pt-osc-to-alter-mysql-table/"/>
+      <url>/use-pt-osc-to-alter-mysql-table/</url>
+      
+        <content type="html"><![CDATA[<h2 id="1-怎么了（问题）"><a href="#1-怎么了（问题）" class="headerlink" title="1. 怎么了（问题）"></a>1. 怎么了（问题）</h2><p>之前有一个张MySQL表用一个使用了<code>utf8</code>编码的<code>text</code>类型的<code>content</code>字段来保存文章。最近发现当文章中有emoji表情时，保存会失败：</p><pre class="line-numbers language-shell"><code class="language-shell">Incorrect string value: '\\xF0\\x9F\\x91\\x87\\xF0\\x9F...' for column 'content' at row 1<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>原来是<code>utf8</code>编码不支持emoji，需要使用<code>utf8mb4</code>编码。</p><h2 id="2-怎么办（方法）"><a href="#2-怎么办（方法）" class="headerlink" title="2. 怎么办（方法）"></a>2. 怎么办（方法）</h2><p>找到问题之后，那么解决办法就有了：</p><ol><li>修改<code>content</code>字段的编码为<code>utf8mb4</code>；</li><li>程序连接数据库的字符集也改成<code>utf8mb4</code>。</li></ol><p>当然可以直接使用下面的语句进行修改：</p><pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">alter</span> <span class="token keyword">table</span> tbl_xxx <span class="token keyword">modify</span> content <span class="token keyword">text</span> <span class="token keyword">character set</span> utf8mb4<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>但是对于大表，这个语句会锁表很长时间。对于线上服务来说，不能接受长时间的锁表。</p><h2 id="3-Then-What？"><a href="#3-Then-What？" class="headerlink" title="3. Then What？"></a>3. Then What？</h2><p>然后发现有一个工具pt-osc可以直接进行修改而减少锁表时间。pt-osc是percona的一个工具。</p><p>下载：</p><pre class="line-numbers language-shell"><code class="language-shell">wget percona.com/get/percona-toolkit.tar.gz<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>直接使用<code>wget</code>下载就可以了。然后解压进入<code>bin</code>目录，就会发现一系列工具：</p><img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/MySQL/percona.jpg"><p>我们需要使用的，就是pt-online-schema-change。</p><p>行吧直接上：</p><pre class="line-numbers language-sql"><code class="language-sql">pt<span class="token operator">-</span>online<span class="token operator">-</span><span class="token keyword">schema</span><span class="token operator">-</span>change \\<span class="token operator">-</span>hxxx \\<span class="token operator">-</span>Pxxx \\<span class="token operator">-</span>uxxx \\<span class="token operator">-</span>pxxx \\<span class="token comment" spellcheck="true">--alter "modify title char(128) character set utf8mb4,modify content text character set utf8mb4" \\</span>D<span class="token operator">=</span>xxx<span class="token punctuation">,</span>t<span class="token operator">=</span>xxx \\<span class="token comment" spellcheck="true">--execute \\</span><span class="token comment" spellcheck="true">--print \\</span><span class="token comment" spellcheck="true">--statistics \\</span><span class="token comment" spellcheck="true">--no-check-alter</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>其中<code>-h -P -u -p</code>就是连接数据库的IP、端口、账号和密码。</p><p>接下来在<code>--alter</code>中就是修改表结构的语句了，主体还是和MySQL的<code>ALTER</code>语句类似的，只不过这里不需要添加<code>ALTER TABLE xxx</code>了。</p><p>对于多个<code>ALTER</code>语句，中间可以使用<code>,</code>分割。</p><p><code>D=xxx,t=xxx</code>表示对应的数据库和表名。</p><p><code>--execute</code>指定程序进行修改，为了安全，默认是不进行修改的，需要添加<code>--execute</code>才能真正执行修改操作。</p><p>尝试了一下，果然很方便。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> mysql </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> mysql </tag>
+            
+            <tag> tips </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>csapp ch02 (part 2): Integer Representations</title>
       <link href="/csapp-ch02-part-2-integer-representations/"/>
       <url>/csapp-ch02-part-2-integer-representations/</url>
@@ -513,9 +540,9 @@
       
         <tags>
             
-            <tag> redis </tag>
-            
             <tag> tips </tag>
+            
+            <tag> redis </tag>
             
         </tags>
       

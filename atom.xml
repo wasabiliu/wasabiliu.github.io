@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://deuterium.fun/"/>
-  <updated>2020-05-07T09:43:33.699Z</updated>
+  <updated>2020-05-08T07:45:53.928Z</updated>
   <id>http://deuterium.fun/</id>
   
   <author>
@@ -15,6 +15,35 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Use pt-osc to ALTER MySQL table</title>
+    <link href="http://deuterium.fun/use-pt-osc-to-alter-mysql-table/"/>
+    <id>http://deuterium.fun/use-pt-osc-to-alter-mysql-table/</id>
+    <published>2020-05-08T07:41:44.000Z</published>
+    <updated>2020-05-08T07:45:53.928Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h2 id=&quot;1-怎么了（问题）&quot;&gt;&lt;a href=&quot;#1-怎么了（问题）&quot; class=&quot;headerlink&quot; title=&quot;1. 怎么了（问题）&quot;&gt;&lt;/a&gt;1.
+        
+      
+    
+    </summary>
+    
+    
+      <category term="mysql" scheme="http://deuterium.fun/categories/mysql/"/>
+    
+    
+      <category term="mysql" scheme="http://deuterium.fun/tags/mysql/"/>
+    
+      <category term="tips" scheme="http://deuterium.fun/tags/tips/"/>
+    
+  </entry>
   
   <entry>
     <title>csapp ch02 (part 2): Integer Representations</title>
@@ -572,36 +601,6 @@
       <category term="mysql" scheme="http://deuterium.fun/tags/mysql/"/>
     
       <category term="data_type" scheme="http://deuterium.fun/tags/data-type/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>File to Redis</title>
-    <link href="http://deuterium.fun/file-to-redis/"/>
-    <id>http://deuterium.fun/file-to-redis/</id>
-    <published>2019-12-10T07:33:19.000Z</published>
-    <updated>2019-12-16T09:40:39.335Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;问题是这样的，现在需要把一个文件里的所有数据上传到redis的set中，文件里存储的就是ID，每行一个：&lt;/p&gt;
-&lt;pre class=&quot;line-numbers language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;head
-        
-      
-    
-    </summary>
-    
-    
-      <category term="redis" scheme="http://deuterium.fun/categories/redis/"/>
-    
-    
-      <category term="redis" scheme="http://deuterium.fun/tags/redis/"/>
-    
-      <category term="tips" scheme="http://deuterium.fun/tags/tips/"/>
     
   </entry>
   
