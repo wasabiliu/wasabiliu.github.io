@@ -4,9 +4,25 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Character Sets and Collations in MySQL, Deuterium">
-    <meta name="description" content="最近遇到一个关于MySQL字符乱码的问题，比较好解决，但是为了更好地理解MySQL中的字符系统，参考MySQL的文档整理一下关于MySQL中字符集合字符序的问题。
-1. 什么是字符集和字符序MySQL是存储数据的数据库，既然是存储数据的，那">
+    <meta name="keywords" content="csapp ch02 (part 3): Integer Arithmetic, Deuterium">
+    <meta name="description" content="
+这篇文章是csapp第二章第三节的阅读笔记。
+
+整数的运算包括加减乘除，对于每一种运算都涉及到有符号整数和无符号整数。
+这里涉及到的符号：
+
+
+
+Symbol
+Type
+Meaning
+
+
+
+$+_w^t$
+Operation
+补码加法
+">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -14,7 +30,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Character Sets and Collations in MySQL | Deuterium</title>
+    <title>csapp ch02 (part 3): Integer Arithmetic | Deuterium</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -221,13 +237,13 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/2.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/23.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
                     <div class="description center-align post-title">
-                        Character Sets and Collations in MySQL
+                        csapp ch02 (part 3): Integer Arithmetic
                     </div>
                 </div>
             </div>
@@ -345,12 +361,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/mysql/">
-                                <span class="chip bg-color">mysql</span>
-                            </a>
-                        
-                            <a href="/tags/charset/">
-                                <span class="chip bg-color">charset</span>
+                            <a href="/tags/csapp/">
+                                <span class="chip bg-color">csapp</span>
                             </a>
                         
                     </div>
@@ -361,8 +373,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/mysql/" class="post-category">
-                                mysql
+                            <a href="/categories/cs/" class="post-category">
+                                cs
                             </a>
                         
                     </div>
@@ -374,7 +386,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
-                    2019-12-08
+                    2020-05-09
                 </div>
                 
 
@@ -383,14 +395,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    1.7k
+                    2.3k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>Read Times:&nbsp;&nbsp;
-                    6 Min
+                    9 Min
                 </div>
                 
 				
@@ -401,117 +413,150 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>最近遇到一个关于MySQL字符乱码的问题，比较好解决，但是为了更好地理解MySQL中的字符系统，参考MySQL的文档整理一下关于MySQL中字符集合字符序的问题。</p>
-<h3 id="1-什么是字符集和字符序"><a href="#1-什么是字符集和字符序" class="headerlink" title="1. 什么是字符集和字符序"></a>1. 什么是字符集和字符序</h3><p>MySQL是存储数据的数据库，既然是存储数据的，那么数据就需要一个编码的规则，因为计算机对于所有的数据都是通过二进制编码的方式存储的。字符集（Character Sets），就是字符到二进制编码映射的集合。由于不同的语言所包含的字符不同，所以为了支持不同的语言，MySQL定义了许许多多不同的字符集。</p>
-<p>举一个简单的例子，假如我们有一种语言只有四个字符：<code>A, B, a, b</code>。</p>
-<p>我们规定了这四个字符到二进制编码的规则：</p>
+                <blockquote>
+<p>这篇文章是csapp第二章第三节的阅读笔记。</p>
+</blockquote>
+<p>整数的运算包括加减乘除，对于每一种运算都涉及到有符号整数和无符号整数。</p>
+<p>这里涉及到的符号：</p>
 <table>
 <thead>
 <tr>
 <th>Symbol</th>
-<th>Encoding</th>
+<th>Type</th>
+<th>Meaning</th>
 </tr>
 </thead>
 <tbody><tr>
-<td><code>A</code></td>
-<td>0</td>
+<td>$+_w^t$</td>
+<td>Operation</td>
+<td>补码加法</td>
 </tr>
 <tr>
-<td><code>B</code></td>
-<td>1</td>
+<td>$+_w^u$</td>
+<td>Operation</td>
+<td>无符号数加法</td>
 </tr>
 <tr>
-<td><code>a</code></td>
-<td>2</td>
+<td>$\ast _w^t$</td>
+<td>Operation</td>
+<td>补码乘法</td>
 </tr>
 <tr>
-<td><code>b</code></td>
-<td>3</td>
+<td>$\ast _w^u$</td>
+<td>Operation</td>
+<td>无符号数乘法</td>
+</tr>
+<tr>
+<td>$-_w^t$</td>
+<td>Operation</td>
+<td>补码减法</td>
+</tr>
+<tr>
+<td>$-_w^u$</td>
+<td>Operation</td>
+<td>无符号数减法</td>
 </tr>
 </tbody></table>
-<p>在这里，<code>A</code>就是一个字符，而数字0就是字符<code>A</code>的编码，这四个字符和编码组合在一起就是字符集。</p>
-<p>接下来看看什么是字符序（Collations）。</p>
-<p>对于上面的字符集，我们需要有一个比较的规则。比如，我们想比较<code>A</code>和<code>B</code>，当然结果有三种：等于、小于或大于。但我们熟悉的还是<code>A&lt;B</code>。一种简单的方式就是比较他们的编码数字。因为<code>0&lt;1</code>，所以对应的字符<code>A&lt;B</code>。</p>
-<p>这样就构成了一条字符比较的规则。这样的一条规则就可以构成一个字符序。</p>
-<p>进一步，如果我们规定大写字母和对应的小写字母相等呢？这样就又多了一条规则：</p>
-<blockquote>
-<p><code>a</code>=<code>A</code>, <code>b</code>=<code>B</code></p>
-</blockquote>
-<p>这样，两条比较的规则就又构成了一个字符序。</p>
-<p>通过这个简单的例子，我们可以知道：</p>
-<ol>
-<li>字符集就是字符到二进制编码的映射集合；</li>
-<li>字符序是比较字符集的规则集合；</li>
-<li>一个字符集可能有多个字符序。</li>
-</ol>
-<p>在MySQL中，定义了许多字符集合字符序。这些字符集合字符序可以帮助我们处理很多字符相关的问题。</p>
-<h3 id="2-MySQL中的字符集合字符序"><a href="#2-MySQL中的字符集合字符序" class="headerlink" title="2. MySQL中的字符集合字符序"></a>2. MySQL中的字符集合字符序</h3><p>在MySQL中，我们可以使用如下的语句来查看字符集：</p>
-<pre class="line-numbers language-mysql"><code class="language-mysql">SHOW CHARACTER SET;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>这会列出所有的字符集。如果想筛选的话，可以加上<code>LIKE</code>条件：</p>
-<pre class="line-numbers language-mysql"><code class="language-mysql">SHOW CHARATER SET LIKE 'utf%';<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>结果如下：</p>
-<pre class="line-numbers language-shell"><code class="language-shell">+---------+------------------+--------------------+--------+
-| Charset | Description      | Default collation  | Maxlen |
-+---------+------------------+--------------------+--------+
-| utf16   | UTF-16 Unicode   | utf16_general_ci   |      4 |
-| utf16le | UTF-16LE Unicode | utf16le_general_ci |      4 |
-| utf32   | UTF-32 Unicode   | utf32_general_ci   |      4 |
-| utf8    | UTF-8 Unicode    | utf8_general_ci    |      3 |
-| utf8mb4 | UTF-8 Unicode    | utf8mb4_0900_ai_ci |      4 |
-+---------+------------------+--------------------+--------+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>结果返回了字符集的名称、描述、默认字符序以及单个字符最大长度等信息。</p>
-<p>每一个字符集都有一个默认的字符序，有的字符集有多个字符序，可以通过下面的语句查看一个字符集的字符序：</p>
-<pre class="line-numbers language-mysql"><code class="language-mysql">SHOW COLLATION WHERE Charset = 'utf8mb4';<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>返回的结果会列出所有的字符序以及相关的信息，这里就不展示了。</p>
-<p>字符序有下面的特点：</p>
-<ol>
-<li>两个不同的字符集不会有相同的字符序。也就是每个字符集都有自己单独的字符序小弟，大家不会有交集；</li>
-<li>每一个字符集都有一个默认的字符序；</li>
-<li>字符序的名字是以对应的字符集名称为前缀的。</li>
-</ol>
-<img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/MySQL/characterset.PNG">
-
-<h3 id="3-在MySQL中使用字符集"><a href="#3-在MySQL中使用字符集" class="headerlink" title="3. 在MySQL中使用字符集"></a>3. 在MySQL中使用字符集</h3><p>MySQL中有很多可以控制字符集的选项，这些选项过于复杂很容易混淆。不过记住一点：</p>
-<blockquote>
-<p>只有基于字符的值才真正的“有”字符集的概念。</p>
-</blockquote>
-<p>对于其他类型的值，字符集只是一个设置，用来指定用哪一种字符进行比较或操作。基于字符的值能存放在某列中、查询的字符中、表达式的计算结果中或者某个用户变量中，等等。</p>
-<p>MySQL中字符集的设置可以分为两类：创建对象时的默认值、在服务器和客户端通信时的设置。</p>
-<h4 id="3-1-创建对象时的默认设置"><a href="#3-1-创建对象时的默认设置" class="headerlink" title="3.1 创建对象时的默认设置"></a>3.1 创建对象时的默认设置</h4><p>在MySQL中，从上到下一共有四层字符集的设置，分别是服务器（Server）、数据库（Database）、表（Table）和列（Column），在每一层都可以指定一个默认的字符集：</p>
-<img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/MySQL/charset_layers.PNG">
-
-<p>其中，服务器和数据库的字符集设置有对应的参数：<code>character_set_server</code>和<code>character_set_database</code>，表和列的字符集设置在对应的DDL语句中。</p>
-<p>由于真正存放数据的是列，所以更高层次的字符集设置仅仅是指定一个默认值，如果在创建列时没有知道字符集，就会从下到上寻找设置的字符集。如果指定了一个字符集，那么上面所有层次的设置都没有效果了。</p>
-<p>在MySQL 5.5、5.6和5.7中，默认的字符集是latin1，在最新的MySQL 8中，默认的字符集是utf8。</p>
-<h4 id="3-2-服务器和客户端通信时的设置"><a href="#3-2-服务器和客户端通信时的设置" class="headerlink" title="3.2 服务器和客户端通信时的设置"></a>3.2 服务器和客户端通信时的设置</h4><p>当服务器和客户端进行通信时，可能各自使用不同的字符集。这时，服务器需要进行字符的转换工作。这涉及到MySQL中的三个参数：<code>character_set_client</code>、<code>character_set_connection</code>和<code>character_set_results</code>。</p>
-<p>这三个参数的影响效果如下图所示：</p>
-<img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/MySQL/charset_communacate.PNG">
-
-<p>这里服务器进行了两次翻译过程：</p>
-<ol>
-<li>SQL语句从客户端离开时的字符集是<code>character_set_client</code>；</li>
-<li>SQL语句进入服务器后服务器转换成<code>character_set_connection</code>；</li>
-<li>服务器处理完SQL语句后，将结果的字符集设置成了<code>character_set_results</code>。</li>
-</ol>
-<p>根据需要，可以使用<code>SET NAMES</code>或者<code>SET CHARACTER SET</code>语句来改变上面的设置：</p>
-<pre class="line-numbers language-mysql"><code class="language-mysql">SET NAMES 'utf8';<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>这样，会将<code>character_set_client</code>、<code>character_set_connection</code>和<code>character_set_results</code>都设置成utf8。</p>
-<p>不过在服务器上使用这个命令只能改变服务器端的设置，客户端程序也需要设置正确的字符集才能避免出现问题。</p>
-<h4 id="3-3-小结"><a href="#3-3-小结" class="headerlink" title="3.3 小结"></a>3.3 小结</h4><p>可以通过<code>SHOW VARIABLES LIKE &#39;character%&#39;</code>命令来查看这些参数的值：</p>
-<pre class="line-numbers language-shell"><code class="language-shell">+--------------------------+-----------------------------------------------------------+
-| Variable_name            | Value                                                     |
-+--------------------------+-----------------------------------------------------------+
-| character_set_client     | latin1                                                    |
-| character_set_connection | latin1                                                    |
-| character_set_database   | utf8mb4                                                   |
-| character_set_filesystem | binary                                                    |
-| character_set_results    | latin1                                                    |
-| character_set_server     | utf8mb4                                                   |
-| character_set_system     | utf8                                                      |
-| character_sets_dir       | /usr/local/mysql-8.0.13-macos10.14-x86_64/share/charsets/ |
-+--------------------------+-----------------------------------------------------------+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h3 id="4-字符集的选择"><a href="#4-字符集的选择" class="headerlink" title="4. 字符集的选择"></a>4. 字符集的选择</h3><p>使用不同的字符集会带来更多的CPU操作，可能也会消耗更多的内存和磁盘空间。因此，为了方便，最好先为服务器（或者数据库）设置一个合理的字符集，然后根据不同的情况让某些列选择合适的字符集，</p>
-<p>如果统一使用utf8字符集，整个世界都清净了。这也是很常见的一种做法。不过有的时候并不需要使用utf8，使用utf8之后会增加磁盘空间的消耗。</p>
+<h2 id="1-无符号整数加法"><a href="#1-无符号整数加法" class="headerlink" title="1. 无符号整数加法"></a>1. 无符号整数加法</h2><p>有两个w位的无符号整数x和y：$0 \leq x,y \leq 2^w$，那么两个数和的范围就是$0 \leq x+y \leq 2^{w+1}-2$。这个数是不能用w位二进制数表示的，需要w+1位才能表示。</p>
+<p>因此，如果仍然使用w位来存储$x+y$的结果的话，就有可能对真正的值进行截断。我们使用符号$+_w^u$来表示截断后的结果，那么有：<br>$$<br>x+_w^uy=\begin{cases}<br>x+y,&amp; \text{$x+y&lt;2^w$ 正常}\<br>x+y-2^w,&amp; \text{$2^w \leq x+y \leq 2^{w+1}$ 溢出}<br>\end{cases}<br>$$<br>其实，也就是对$2^w$取模：<br>$$<br>x+_w^uy=(x+y)\ mod\ 2^w<br>$$<br>既然有可能溢出，那么我们有办法检测溢出吗？</p>
+<p>令$s=x+_w^uy$，如果$s&lt;x$，那么就溢出了。</p>
+<p>用代码表示：</p>
+<pre class="line-numbers language-c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">uadd_ok</span><span class="token punctuation">(</span><span class="token keyword">unsigned</span> x<span class="token punctuation">,</span> <span class="token keyword">unsigned</span> y<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">unsigned</span> sum <span class="token operator">=</span> x <span class="token operator">+</span> y<span class="token punctuation">;</span>
+    <span class="token keyword">return</span> sum <span class="token operator">>=</span> x<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>没有溢出就返回1，有溢出就返回0。</p>
+<p>上面的无符号加法就是一个模数加法，在模数加法中，有一个阿贝尔群（abelian group）的概念。这里有一个0元素，然后对于群中的元素$x$来说，都有一个对应的加法逆元$-_w^ux$，使得：$-_w^ux+_w^ux=0$。这样就有了一个无符号数取反的操作。</p>
+<p>对于一个$x$：$0 \leq x &lt;2^w$，取反操作如下：<br>$$<br>-_w^ux=\begin{cases}<br>x,&amp;\text{$x=0$}\<br>2^w-x,&amp;\text{$x&gt;0$}<br>\end{cases}<br>$$<br>可以知道，无符号数中，只有0的加法逆元是它本身。</p>
+<h2 id="2-补码加法"><a href="#2-补码加法" class="headerlink" title="2. 补码加法"></a>2. 补码加法</h2><p>接下来看看补码加法。对于两个补码表示的有符号整数$x$和$y$：$-2^{w-1}\leq x,y\leq 2^{w-1}-1$，两个数的和$x+y$的取值范围就是$-2^w\leq x+y \leq 2^w-2$，同样不能使用w位来表示，需要w+1位。这样，当我们使用w位来表示的时候，就需要对其进行截断。令符号$x+_w^ty$表示截断后的结果，那么：<br>$$<br>x+_w^ty=\begin{cases}<br>x+y-2^w,&amp;\text{$2^{w-1}\leq x+y$ 正溢出}\<br>x+y,&amp;\text{$-2^{w-1}\leq x+y &lt;2^{w-1}$ 正常}\<br>x+y+2^w,&amp;\text{$x+y&lt;-2^{w-1}$ 负溢出}<br>\end{cases}<br>$$<br>其实有符号整数加法和无符号整数加法的二进制形式是一样的，而计算机在做计算的时候也是不进行区分的。</p>
+<p>所以有：<br>$$<br>x+<em>w^ty=U2T_w[T2U_w(x)+_w^uT2U_w(y)]=U2T_w[(x</em>{w-1}2^w+x+y_{w-1}2^w+y)\ mod\ 2^w]=U2T_w[(x+y)\ mod\ 2^w]<br>$$<br>像无符号加法一样，补码加法也有溢出，而且还有两种溢出：正溢出和负溢出。那么如何检测溢出呢？</p>
+<p>令$s=x+_w^ty$：</p>
+<p>如果$x&gt;0$且$y&gt;0$，但是$s\leq 0$，那么就是正溢出；</p>
+<p>如果$x&lt;0$且$y&lt;0$，但是$s\geq 0$，那么就是负溢出。</p>
+<p>使用代码来表示：</p>
+<pre class="line-numbers language-c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">tadd_ok</span><span class="token punctuation">(</span><span class="token keyword">int</span> x<span class="token punctuation">,</span> <span class="token keyword">int</span> y<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">int</span> sum <span class="token operator">=</span> x <span class="token operator">+</span> y<span class="token punctuation">;</span>
+    <span class="token keyword">int</span> neg_over <span class="token operator">=</span> x <span class="token operator">&lt;</span> <span class="token number">0</span> <span class="token operator">&amp;&amp;</span> y <span class="token operator">&lt;</span> <span class="token number">0</span> <span class="token operator">&amp;&amp;</span> sum <span class="token operator">>=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">int</span> pos_over <span class="token operator">=</span> x <span class="token operator">>=</span> <span class="token number">0</span> <span class="token operator">&amp;&amp;</span> y <span class="token operator">>=</span> <span class="token number">0</span> <span class="token operator">&amp;&amp;</span> sum <span class="token operator">&lt;</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token operator">!</span>neg_over <span class="token operator">&amp;&amp;</span> <span class="token operator">!</span>pos_over<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>如果没有溢出就返回1，发生溢出就返回0。</p>
+<h2 id="3-补码取反"><a href="#3-补码取反" class="headerlink" title="3. 补码取反"></a>3. 补码取反</h2><p>和无符号加法一样，补码加法也有一个加法逆元的概念。对于一个$x$：$-2^{w-1}\leq x&lt;2^{w-1}$，它的加法逆元就是：<br>$$<br>-_w^tx=\begin{cases}<br>-2^{w-1},&amp;x=-2^{w-1}\<br>-x,&amp;x&gt;-2^{w-1}<br>\end{cases}<br>$$<br>所以$TMin_w$的加法逆元就是它本身。因此在补码加法中，加法逆元是其本身的有两个元素：0和$TMin_w$。</p>
+<p>对于一个有符号数取反，在二进制表示的层面上有一个简便的方法（以4位为例）：</p>
+<table>
+<thead>
+<tr>
+<th>$\vec{x}$</th>
+<th>$\sim\vec{x}$</th>
+<th>$incr(\sim\vec{x})$</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>[0101]    5</td>
+<td>[1010]    -6</td>
+<td>[1011]    -5</td>
+</tr>
+<tr>
+<td>[0111]    7</td>
+<td>[1000]    -8</td>
+<td>[1001]    -7</td>
+</tr>
+<tr>
+<td>[1100]    -4</td>
+<td>[0011]    3</td>
+<td>[0100]    4</td>
+</tr>
+<tr>
+<td>[0000]    0</td>
+<td>[1111]    -1</td>
+<td>[0000]    0</td>
+</tr>
+<tr>
+<td>[1000]    -8</td>
+<td>[0111]    7</td>
+<td>[1000]    8</td>
+</tr>
+</tbody></table>
+<p>简单来说就是，“取反加一”。</p>
+<h2 id="4-无符号整数乘法"><a href="#4-无符号整数乘法" class="headerlink" title="4. 无符号整数乘法"></a>4. 无符号整数乘法</h2><p>两个无符号整数$x$和$y$：$0\leq x,y\leq 2^w-1$，它们的乘积$x\ast y$的取值范围是$0\leq x\ast y\leq (2^w-1)^2=2^{2w}-2^{w+1}+1$，需要使用2w位才能保存，如果使用w位保存的话就会截断。令$x\ast _w^uy$是截断后的结果，那么：<br>$$<br>x\ast _w^uy=(x\ast y)\ mod\ 2^w<br>$$</p>
+<h2 id="5-补码乘法"><a href="#5-补码乘法" class="headerlink" title="5. 补码乘法"></a>5. 补码乘法</h2><p>两个有符号整数$x$和$y$：$-2^{w-1}\leq x,y\leq 2^{w-1}-1$，它们的乘积$x\ast y$的取值范围是$-2^{w-1}\cdot(2^{w-1}-1)=-2^{2w-2}+2^{w-1}\leq x\ast y\leq (-2^{w-1})^2=2^{2w-2}$。</p>
+<p>同样如果使用w位表示的也需要截断。令$x\ast _w^ty$表示截断后的结果，那么：<br>$$<br>x\ast _w^ty=U2T_w((x\cdot y)\ mod\ 2^w)<br>$$<br>和加法一样，补码乘法与无符号乘法的二进制表示是一样的。</p>
+<p>可以使用下面的代码来检测是否有溢出：</p>
+<pre class="line-numbers language-c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">tmult_ok</span><span class="token punctuation">(</span><span class="token keyword">int</span> x<span class="token punctuation">,</span> <span class="token keyword">int</span> y<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">int</span> p <span class="token operator">=</span> x\ast y<span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token operator">!</span>x <span class="token operator">||</span> p<span class="token operator">/</span>x <span class="token operator">==</span> y<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>没有溢出的话返回1，否则返回0。</p>
+<p>如果不用除法的话可以这样：</p>
+<pre class="line-numbers language-c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">tmulk_ok</span><span class="token punctuation">(</span><span class="token keyword">int</span> x<span class="token punctuation">,</span> <span class="token keyword">int</span> y<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    int64_t pll <span class="token operator">=</span> <span class="token punctuation">(</span>int64_t<span class="token punctuation">)</span> x\ast y<span class="token punctuation">;</span>
+    <span class="token keyword">return</span> pll <span class="token operator">==</span> <span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">)</span> pll<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>首先使用64位的数保存两个32位数的乘积，这是能够完整保留结果的，然后将其截断到32位，看是否一致。如果一致说明没有溢出，否则就有溢出。</p>
+<h2 id="6-乘以常数"><a href="#6-乘以常数" class="headerlink" title="6. 乘以常数"></a>6. 乘以常数</h2><p>计算机的乘法操作比较耗时，因此编译器会将乘法优化成移位操作和加减法。</p>
+<p>不管是有符号还是无符号，左移一位，就相当于乘以2，那么左移k位，相当于乘以$2^k$。</p>
+<p>所以无符号：$x&lt;&lt;k=x\ast _w^u2^k$；</p>
+<p>有符号：$x&lt;&lt;k=x\ast _w^t2^k$。</p>
+<p>同时，任何一个整数都可以写成多个2的幂次数的和的形式。比如$14=2^3+2^2+2^1$，所以乘以一个常数都可以转换成多个左移和加法操作：<br>$$<br>x\ast 14=(x&lt;&lt;3)+(x&lt;&lt;2)+(x&lt;&lt;1)<br>$$<br>一般来说，对于常量$K$，乘法$x\ast K$都可以表示成左移操作和加减法操作。对于$K$，可以表示成下面的二进制形式：<br>$$<br>[(0…0)(1…1)(0…0)\cdots(1…1)]<br>$$<br>比如14可以表示成$[(0…0)(111)(0)]$，令连续1的下标是$n$和$m$，且$n\leq m$，对于14来说$n=3,m=1$。</p>
+<p>都可以表示成下面两种形式：</p>
+<p>A：$(x&lt;&lt;n)+(x&lt;&lt;(n-1))+\cdots+(x&lt;&lt;m)$</p>
+<p>B：$(x&lt;&lt;(n+1)-(x&lt;&lt;m))$</p>
+<p>比如：<br>$$<br>x\ast 6=(x&lt;&lt;2)+(x&lt;&lt;1)\<br>x\ast 31=(x&lt;&lt;5)-x\<br>x\ast (-6)=(x&lt;&lt;1)-(x&lt;&lt;3)\<br>x\ast 55=(x&lt;&lt;6)-(x&lt;&lt;3)-x<br>$$</p>
+<h2 id="7-除以2的幂"><a href="#7-除以2的幂" class="headerlink" title="7. 除以2的幂"></a>7. 除以2的幂</h2><p>首先需要确定，整数除法是向0取整的。比如$5/2=2.5$，然后向0取整$\lfloor 2.5\rfloor=2$；比如$-12340/256=-48.203125$，然后向0取整$\lceil -48.203125\rceil=-48$。</p>
+<p>左移1位是乘以2，右移应该就是除吧？但是右移操作有两种：逻辑右移和算术右移。</p>
+<p>那么对于无符号数除以一个2的幂次数，就可以直接逻辑右移了。令$x’=x&gt;&gt;k$，那么就有：<br>$$<br>x’=\lfloor x/2^k\rfloor<br>$$<br>对于大于0的有符号数来说，也可以使用上面的方法进行计算；但是对于有符号数如果也使用向下取整的话，就会有问题了。从上面$-12340/256$的结果就可以看出来，如果向下取整的话结果是-49而不是-48。所以我们需要使用另外的方法来计算有符号数除以2的幂次数。</p>
+<p>为了能够对于小于0的数的计算结果向上取整，需要加一个偏差值。根据$\lceil x/y\rceil=\lfloor (x+y-1)/y\rfloor$，可以这样：<br>$$<br>（x&lt;0 ? x+(1&lt;&lt;k)-1:x)&gt;&gt;k<br>$$<br>来计算有符号整数除以2的幂次数的结果。</p>
+<p>一个有意思的题目：写出<code>div16()</code>函数来计算<code>x/16</code>的值，其中<code>x</code>的类型是<code>int</code>，但是不使用比较运算符、除法运算符、取模运算符、条件判断、比较或循环：</p>
+<pre class="line-numbers language-c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">div16</span><span class="token punctuation">(</span><span class="token keyword">int</span> x<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">int</span> bias <span class="token operator">=</span> <span class="token punctuation">(</span>x <span class="token operator">>></span> <span class="token number">31</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span> <span class="token number">0xF</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token punctuation">(</span>x <span class="token operator">+</span> bias<span class="token punctuation">)</span> <span class="token operator">>></span> <span class="token number">4</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="8-关于整数运算的思考"><a href="#8-关于整数运算的思考" class="headerlink" title="8. 关于整数运算的思考"></a>8. 关于整数运算的思考</h2><ul>
+<li>计算机执行整数运算其实是一种模运算形式；</li>
+<li>有限字长限制了取值范围，导致计算结果可能溢出；</li>
+<li>无论是补码还是无符号运算，底层的二进制行为是一致或非常类似的；</li>
+<li><code>unsigned</code>类型会导致很多察觉不到的问题。</li>
+</ul>
 
             </div>
             <hr/>
@@ -537,7 +582,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://deuterium.fun/character-sets-and-collations-in-mysql/">http://deuterium.fun/character-sets-and-collations-in-mysql/</a>
+                    <a href="http://deuterium.fun/csapp-ch02-part-3-integer-arithmetic/">http://deuterium.fun/csapp-ch02-part-3-integer-arithmetic/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -575,12 +620,8 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/mysql/">
-                                    <span class="chip bg-color">mysql</span>
-                                </a>
-                            
-                                <a href="/tags/charset/">
-                                    <span class="chip bg-color">charset</span>
+                                <a href="/tags/csapp/">
+                                    <span class="chip bg-color">csapp</span>
                                 </a>
                             
                         </div>
@@ -621,61 +662,65 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
+                <i class="far fa-dot-circle"></i>&nbsp;Current
+            </div>
             <div class="card">
-                <a href="/file-to-redis/">
+                <a href="/csapp-ch02-part-3-integer-arithmetic/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="File to Redis">
+                        <img src="/medias/featureimages/23.jpg" class="responsive-img" alt="csapp ch02 (part 3): Integer Arithmetic">
                         
-                        <span class="card-title">File to Redis</span>
+                        <span class="card-title">csapp ch02 (part 3): Integer Arithmetic</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            问题是这样的，现在需要把一个文件里的所有数据上传到redis的set中，文件里存储的就是ID，每行一个：
-head id.list
-10000
-10001
-10002
-10003
-10004
-10005
-10006
-10007
-10008
+                            
+这篇文章是csapp第二章第三节的阅读笔记。
+
+整数的运算包括加减乘除，对于每一种运算都涉及到有符号整数和无符号整数。
+这里涉及到的符号：
+
+
+
+Symbol
+Type
+Meaning
+
+
+
+$+_w^t$
+Operation
+补码加法
 
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2019-12-10
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-05-09
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/redis/" class="post-category">
-                                    redis
+                            <a href="/categories/cs/" class="post-category">
+                                    cs
                                 </a>
                             
                             
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/redis/">
-                        <span class="chip bg-color">redis</span>
-                    </a>
-                    
-                    <a href="/tags/tips/">
-                        <span class="chip bg-color">tips</span>
+                    <a href="/tags/csapp/">
+                        <span class="chip bg-color">csapp</span>
                     </a>
                     
                 </div>
@@ -689,35 +734,32 @@ head id.list
                 Next&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/what-is-physics/">
+                <a href="/use-pt-osc-to-alter-mysql-table/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="What is physics">
+                        <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="Use pt-osc to ALTER MySQL table">
                         
-                        <span class="card-title">What is physics</span>
+                        <span class="card-title">Use pt-osc to ALTER MySQL table</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            
-这篇文章是阅读《费恩曼物理学讲义 第一卷 新千年版》第1-3章的阅读笔记。
-
-1. 从一片沙滩开始我们生活在一个多姿多彩的世界中。
-想象一下，去年的某一天，我们正在一个美丽的海边沙滩享受着没有工作烦恼的美妙时光。你躺在柔软细密的沙滩上，不
+                            1. 怎么了（问题）之前有一个张MySQL表用一个使用了utf8编码的text类型的content字段来保存文章。最近发现当文章中有emoji表情时，保存会失败：
+Incorrect string value: '\\xF0\\x9F\\x
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2019-12-07
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-05-08
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/physics/" class="post-category">
-                                    physics
+                            <a href="/categories/mysql/" class="post-category">
+                                    mysql
                                 </a>
                             
                             
@@ -727,8 +769,12 @@ head id.list
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/physics/">
-                        <span class="chip bg-color">physics</span>
+                    <a href="/tags/mysql/">
+                        <span class="chip bg-color">mysql</span>
+                    </a>
+                    
+                    <a href="/tags/tips/">
+                        <span class="chip bg-color">tips</span>
                     </a>
                     
                 </div>
@@ -865,6 +911,13 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
 
 </main>
 
+
+<script src="https://cdn.bootcss.com/mathjax/2.7.7/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script>
+    MathJax.Hub.Config({
+        tex2jax: {inlineMath: [['$', '$'], ['\(', '\)']]}
+    });
+</script>
 
 
     <footer class="page-footer bg-color">

@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://deuterium.fun/"/>
-  <updated>2020-05-08T07:45:53.928Z</updated>
+  <updated>2020-05-09T02:22:27.591Z</updated>
   <id>http://deuterium.fun/</id>
   
   <author>
@@ -15,6 +15,41 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>csapp ch02 (part 3): Integer Arithmetic</title>
+    <link href="http://deuterium.fun/csapp-ch02-part-3-integer-arithmetic/"/>
+    <id>http://deuterium.fun/csapp-ch02-part-3-integer-arithmetic/</id>
+    <published>2020-05-09T02:11:27.000Z</published>
+    <updated>2020-05-09T02:22:27.591Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;blockquote&gt;
+&lt;p&gt;这篇文章是csapp第二章第三节的阅读笔记。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;整数的运算包括加减乘除，对于每一种运算都涉及到有符号整数和无符号整数。&lt;/p&gt;
+&lt;p&gt;这里涉及到的符号：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;t
+        
+      
+    
+    </summary>
+    
+    
+      <category term="cs" scheme="http://deuterium.fun/categories/cs/"/>
+    
+    
+      <category term="csapp" scheme="http://deuterium.fun/tags/csapp/"/>
+    
+  </entry>
   
   <entry>
     <title>Use pt-osc to ALTER MySQL table</title>
@@ -572,35 +607,6 @@
       <category term="mysql" scheme="http://deuterium.fun/tags/mysql/"/>
     
       <category term="tips" scheme="http://deuterium.fun/tags/tips/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Data Types in MySQL</title>
-    <link href="http://deuterium.fun/data-types-in-mysql/"/>
-    <id>http://deuterium.fun/data-types-in-mysql/</id>
-    <published>2019-12-16T09:32:58.000Z</published>
-    <updated>2019-12-16T09:37:11.916Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;h3 id=&quot;1-开始&quot;&gt;&lt;a href=&quot;#1-开始&quot; class=&quot;headerlink&quot; title=&quot;1. 开始&quot;&gt;&lt;/a&gt;1.
-        
-      
-    
-    </summary>
-    
-    
-      <category term="mysql" scheme="http://deuterium.fun/categories/mysql/"/>
-    
-    
-      <category term="mysql" scheme="http://deuterium.fun/tags/mysql/"/>
-    
-      <category term="data_type" scheme="http://deuterium.fun/tags/data-type/"/>
     
   </entry>
   
