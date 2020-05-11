@@ -4,9 +4,12 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Character Sets and Collations in MySQL, Deuterium">
-    <meta name="description" content="最近遇到一个关于MySQL字符乱码的问题，比较好解决，但是为了更好地理解MySQL中的字符系统，参考MySQL的文档整理一下关于MySQL中字符集合字符序的问题。
-1. 什么是字符集和字符序MySQL是存储数据的数据库，既然是存储数据的，那">
+    <meta name="keywords" content="csapp ch02 (part 4): Floating Point, Deuterium">
+    <meta name="description" content="
+这篇文章是csapp第二章第四节的阅读笔记。
+
+接下来看看浮点数的表示。
+1. 二进制小数首先看看有小数部分的二进制数：$$b_mb_{m-1}\cdots b_1b_0.b{-1}b{-2}\cdots b_{-n}$$和无符号整数类似">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -14,7 +17,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Character Sets and Collations in MySQL | Deuterium</title>
+    <title>csapp ch02 (part 4): Floating Point | Deuterium</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -221,13 +224,13 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/2.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/14.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
                     <div class="description center-align post-title">
-                        Character Sets and Collations in MySQL
+                        csapp ch02 (part 4): Floating Point
                     </div>
                 </div>
             </div>
@@ -345,12 +348,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/mysql/">
-                                <span class="chip bg-color">mysql</span>
-                            </a>
-                        
-                            <a href="/tags/charset/">
-                                <span class="chip bg-color">charset</span>
+                            <a href="/tags/csapp/">
+                                <span class="chip bg-color">csapp</span>
                             </a>
                         
                     </div>
@@ -361,8 +360,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/mysql/" class="post-category">
-                                mysql
+                            <a href="/categories/cs/" class="post-category">
+                                cs
                             </a>
                         
                     </div>
@@ -374,7 +373,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
-                    2019-12-08
+                    2020-05-11
                 </div>
                 
 
@@ -383,14 +382,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    1.7k
+                    2.2k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>Read Times:&nbsp;&nbsp;
-                    6 Min
+                    9 Min
                 </div>
                 
 				
@@ -401,117 +400,392 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>最近遇到一个关于MySQL字符乱码的问题，比较好解决，但是为了更好地理解MySQL中的字符系统，参考MySQL的文档整理一下关于MySQL中字符集合字符序的问题。</p>
-<h3 id="1-什么是字符集和字符序"><a href="#1-什么是字符集和字符序" class="headerlink" title="1. 什么是字符集和字符序"></a>1. 什么是字符集和字符序</h3><p>MySQL是存储数据的数据库，既然是存储数据的，那么数据就需要一个编码的规则，因为计算机对于所有的数据都是通过二进制编码的方式存储的。字符集（Character Sets），就是字符到二进制编码映射的集合。由于不同的语言所包含的字符不同，所以为了支持不同的语言，MySQL定义了许许多多不同的字符集。</p>
-<p>举一个简单的例子，假如我们有一种语言只有四个字符：<code>A, B, a, b</code>。</p>
-<p>我们规定了这四个字符到二进制编码的规则：</p>
+                <blockquote>
+<p>这篇文章是csapp第二章第四节的阅读笔记。</p>
+</blockquote>
+<p>接下来看看浮点数的表示。</p>
+<h2 id="1-二进制小数"><a href="#1-二进制小数" class="headerlink" title="1. 二进制小数"></a>1. 二进制小数</h2><p>首先看看有小数部分的二进制数：<br>$$<br>b_mb_{m-1}\cdots b_1b_0.b{-1}b{-2}\cdots b_{-n}<br>$$<br>和无符号整数类似，这个二进制小数的值可以这样计算：<br>$$<br>b=\sum_{i=-n}^m2^i\times b_i<br>$$<br>比如：$101.11_2=1\times 2^2+0\times 2^1+1\times 2^0+1\times 2^{-1}+1\times 2^{-2}=5\frac{3}{4}$。</p>
+<h2 id="2-IEEE浮点数表示"><a href="#2-IEEE浮点数表示" class="headerlink" title="2. IEEE浮点数表示"></a>2. IEEE浮点数表示</h2><p>使用上面的方法无法表达很大的数，因此使用类似$x\times 2^y$的形式来表示。</p>
+<p>IEEE浮点数就是使用这种形式：$V=(-1)^s\times M\times 2^E$。</p>
+<ul>
+<li>$s$：表示符号（<em>sign</em>），如果$s=0$代表这个数是正数；$s=1$表示负数；</li>
+<li>$M$：尾数（<em>significant</em>），是一个二进制小数，范围是1到$2-\epsilon$或0到$1-\epsilon$；</li>
+<li>$E$：阶码（<em>exponent</em>），将整个数的值乘以$2^E$。</li>
+</ul>
+<p>这样一个浮点数的二进制表示就有三个部分。下图表示的是C语言中单精度浮点数<code>float</code>和双精度浮点数<code>double</code>的二进制形式：</p>
+<p><img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/CS/Standard%20floating-point%20formats.png" alt="Standard floating-point formats"></p>
+<p>即使用一个bit表示$s$，k个bit表示$E$和n个bit表示$M$。其中单精度下$k=8,n=23$，双精度下$k=11,n=52$。</p>
+<p>使用上面的格式编码的浮点数，对应的值有三种情况。</p>
+<h3 id="2-1-规格化的值"><a href="#2-1-规格化的值" class="headerlink" title="2.1 规格化的值"></a>2.1 规格化的值</h3><p>这是最普通的情况，这时<code>exp</code>既不都是0也不都是1，这时，阶码$E=e-Bias$，其中$e$就是<code>exp</code>对应的十进制数，而$Bias$是$2^{k-1}-1$，单精度下是127，双精度下是1023。</p>
+<p>同时，尾数$M=1+f$，其中$f$就是<code>frac</code>部分编码的 。这样$M$的二进制形式就是$1.f{n-1}f{n-2}\cdots f_0$。</p>
+<h3 id="2-2-非规格化的值"><a href="#2-2-非规格化的值" class="headerlink" title="2.2 非规格化的值"></a>2.2 非规格化的值</h3><p>当<code>exp</code>全是0时，这个浮点数就是非规格化的值。这时。阶码$E=1-Bias$，而尾数$M=f$。</p>
+<p>非规格化的值可以表示0。规格化的值不能表示0因为尾数$M=1+f&gt;0$。当<code>exp</code>和<code>frac</code>都是0时就表示0。同时$s$的存在，还可以表示-0.0和+0.0。</p>
+<p>非规格化的值还可以表示非常接近0的值。</p>
+<h3 id="2-3-特殊值"><a href="#2-3-特殊值" class="headerlink" title="2.3 特殊值"></a>2.3 特殊值</h3><p>当<code>exp</code>都是1,的时候，可以表示一些特殊值。比如<code>frac</code>都是0的时候，可以表示无穷。同时根据$s$的值可以表示正无穷和负无穷。</p>
+<p>当<code>frac</code>不全是0的时候，表示<code>NaN</code>，not a number。这个值可以表示$\sqrt{-1}$和$\infty-\infty$的值。</p>
+<h2 id="3-示例数字"><a href="#3-示例数字" class="headerlink" title="3. 示例数字"></a>3. 示例数字</h2><p>下面的表格就演示了IEEE浮点数的表示方法（其中k=4，n=3，Bias=7）：</p>
 <table>
 <thead>
 <tr>
-<th>Symbol</th>
-<th>Encoding</th>
+<th>Description</th>
+<th>Bits</th>
+<th>$e$</th>
+<th>$E$</th>
+<th>$2^E$</th>
+<th>$f$</th>
+<th>$M$</th>
+<th>$2^E\times M$</th>
+<th>Decimal</th>
 </tr>
 </thead>
 <tbody><tr>
-<td><code>A</code></td>
+<td>Zero</td>
+<td>0 0000 000</td>
 <td>0</td>
+<td>-6</td>
+<td>$\frac{1}{64}$</td>
+<td>$\frac{0}{8}$</td>
+<td>$\frac{0}{8}$</td>
+<td>$\frac{0}{512}$</td>
+<td>0.0</td>
 </tr>
 <tr>
-<td><code>B</code></td>
+<td>Smallest positive</td>
+<td>0 0000 001</td>
+<td>0</td>
+<td>-6</td>
+<td>$\frac{1}{64}$</td>
+<td>$\frac{1}{8}$</td>
+<td>$\frac{1}{8}$</td>
+<td>$\frac{1}{512}$</td>
+<td>0.001953</td>
+</tr>
+<tr>
+<td></td>
+<td>0 0000 010</td>
+<td>0</td>
+<td>-6</td>
+<td>$\frac{1}{64}$</td>
+<td>$\frac{2}{8}$</td>
+<td>$\frac{2}{8}$</td>
+<td>$\frac{2}{512}$</td>
+<td>0.003906</td>
+</tr>
+<tr>
+<td></td>
+<td>0 0000 011</td>
+<td></td>
+<td></td>
+<td>$\frac{1}{64}$</td>
+<td>$\frac{3}{8}$</td>
+<td>$\frac{3}{8}$</td>
+<td>$\frac{3}{512}$</td>
+<td>0.005859</td>
+</tr>
+<tr>
+<td></td>
+<td>$\vdots$</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Largest denormalized</td>
+<td>0 0000 111</td>
+<td>0</td>
+<td>-6</td>
+<td>$\frac{1}{64}$</td>
+<td>$\frac{7}{8}$</td>
+<td>$\frac{7}{8}$</td>
+<td>$\frac{7}{512}$</td>
+<td>0.013672</td>
+</tr>
+<tr>
+<td>Smallest normalized</td>
+<td>0 0001 000</td>
 <td>1</td>
+<td>-6</td>
+<td>$\frac{1}{64}$</td>
+<td>$\frac{0}{8}$</td>
+<td>$\frac{8}{8}$</td>
+<td>$\frac{8}{512}$</td>
+<td>0.015625</td>
 </tr>
 <tr>
-<td><code>a</code></td>
-<td>2</td>
+<td></td>
+<td>0 0001 001</td>
+<td>1</td>
+<td>-6</td>
+<td>$\frac{1}{64}$</td>
+<td>$\frac{1}{8}$</td>
+<td>$\frac{9}{8}$</td>
+<td>$\frac{9}{512}$</td>
+<td>0.017578</td>
 </tr>
 <tr>
-<td><code>b</code></td>
-<td>3</td>
+<td></td>
+<td>$\vdots$</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>0 0110 110</td>
+<td>6</td>
+<td>-1</td>
+<td>$\frac{1}{2}$</td>
+<td>$\frac{6}{8}$</td>
+<td>$\frac{14}{8}$</td>
+<td>$\frac{14}{16}$</td>
+<td>0.875</td>
+</tr>
+<tr>
+<td></td>
+<td>0 0110 111</td>
+<td>6</td>
+<td>-1</td>
+<td>$\frac{1}{2}$</td>
+<td>$\frac{7}{8}$</td>
+<td>$\frac{15}{8}$</td>
+<td>$\frac{15}{16}$</td>
+<td>0.9375</td>
+</tr>
+<tr>
+<td>One</td>
+<td>0 0111 000</td>
+<td>7</td>
+<td>0</td>
+<td>1</td>
+<td>$\frac{0}{8}$</td>
+<td>$\frac{8}{8}$</td>
+<td>$\frac{8}{8}$</td>
+<td>1.0</td>
+</tr>
+<tr>
+<td></td>
+<td>0 0111 001</td>
+<td>7</td>
+<td>0</td>
+<td>1</td>
+<td>$\frac{1}{8}$</td>
+<td>$\frac{9}{8}$</td>
+<td>$\frac{9}{8}$</td>
+<td>1.125</td>
+</tr>
+<tr>
+<td></td>
+<td>0 0111 010</td>
+<td>7</td>
+<td>0</td>
+<td>1</td>
+<td>$\frac{2}{8}$</td>
+<td>$\frac{10}{8}$</td>
+<td>$\frac{10}{8}$</td>
+<td>1.25</td>
+</tr>
+<tr>
+<td></td>
+<td>$\vdots$</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>0 1110 110</td>
+<td>14</td>
+<td>7</td>
+<td>128</td>
+<td>$\frac{6}{8}$</td>
+<td>$\frac{14}{8}$</td>
+<td>$\frac{1792}{8}$</td>
+<td>224.0</td>
+</tr>
+<tr>
+<td>Largest normalized</td>
+<td>0 1110 111</td>
+<td>14</td>
+<td>7</td>
+<td>128</td>
+<td>$\frac{7}{8}$</td>
+<td>$\frac{15}{8}$</td>
+<td>$\frac{1920}{8}$</td>
+<td>240.0</td>
+</tr>
+<tr>
+<td>Infinity</td>
+<td>0 1111 000</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
 </tr>
 </tbody></table>
-<p>在这里，<code>A</code>就是一个字符，而数字0就是字符<code>A</code>的编码，这四个字符和编码组合在一起就是字符集。</p>
-<p>接下来看看什么是字符序（Collations）。</p>
-<p>对于上面的字符集，我们需要有一个比较的规则。比如，我们想比较<code>A</code>和<code>B</code>，当然结果有三种：等于、小于或大于。但我们熟悉的还是<code>A&lt;B</code>。一种简单的方式就是比较他们的编码数字。因为<code>0&lt;1</code>，所以对应的字符<code>A&lt;B</code>。</p>
-<p>这样就构成了一条字符比较的规则。这样的一条规则就可以构成一个字符序。</p>
-<p>进一步，如果我们规定大写字母和对应的小写字母相等呢？这样就又多了一条规则：</p>
-<blockquote>
-<p><code>a</code>=<code>A</code>, <code>b</code>=<code>B</code></p>
-</blockquote>
-<p>这样，两条比较的规则就又构成了一个字符序。</p>
-<p>通过这个简单的例子，我们可以知道：</p>
+<p>使用这种方式，可以保证随着二进制编码的递增，对应的浮点数的值也是递增的（负数反过来）。</p>
+<p>这样对于浮点数的排序就可以直接对二进制编码进行排序了。</p>
+<p>同时，对于非规格化我们使用$1-Bias$作为$E$，过渡到规格化时使用$e-Bias$，可以看到一个渐进递增的关系。</p>
+<p>作为一个例子，下面演示把一个整数编码转换成对应的浮点数编码。</p>
 <ol>
-<li>字符集就是字符到二进制编码的映射集合；</li>
-<li>字符序是比较字符集的规则集合；</li>
-<li>一个字符集可能有多个字符序。</li>
+<li><p>整数3510593的十六进制编码是<code>0x00359141</code>，把它转换成对应的单精度编码。</p>
+</li>
+<li><p>首先二进制编码是：<code>0000,0000,0011,0101,1001,0001,0100,0001</code>；</p>
+</li>
+<li><p>可以表示成$1.1010,1100,1000,1010,0000,1_2\times 2^{21}$；</p>
+</li>
+<li><p>那么位数M就是<code>1.1010,1100,1000,1010,0000,1</code>，需要右移21位，所以$E=21$；</p>
+</li>
+<li><p>这是一个规格化的数，所以f就是<code>0.1010,1100,1000,1010,0000,1</code>；</p>
+</li>
+<li><p>单精度下<code>frac</code>一共23位，所以f需要补0：<code>0.1010,1100,1000,1010,0000,100</code>，这样就得到了<code>frac</code>的编码；</p>
+</li>
+<li><p>规格化下$E=e-Bias$，其中$Bias=127$，所以$e=21+127=148=1001,0100_2$，所以<code>exp</code>的编码就是<code>1001,0100</code>；</p>
+</li>
+<li><p>最后这是一个正数，所以$s=0$，得到对应浮点数的编码：<code>0100,1010,0101,0110,0100,0101,0000,0100</code>，十六进制就是<code>0x4A564504</code>。</p>
+</li>
 </ol>
-<p>在MySQL中，定义了许多字符集合字符序。这些字符集合字符序可以帮助我们处理很多字符相关的问题。</p>
-<h3 id="2-MySQL中的字符集合字符序"><a href="#2-MySQL中的字符集合字符序" class="headerlink" title="2. MySQL中的字符集合字符序"></a>2. MySQL中的字符集合字符序</h3><p>在MySQL中，我们可以使用如下的语句来查看字符集：</p>
-<pre class="line-numbers language-mysql"><code class="language-mysql">SHOW CHARACTER SET;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>这会列出所有的字符集。如果想筛选的话，可以加上<code>LIKE</code>条件：</p>
-<pre class="line-numbers language-mysql"><code class="language-mysql">SHOW CHARATER SET LIKE 'utf%';<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>结果如下：</p>
-<pre class="line-numbers language-shell"><code class="language-shell">+---------+------------------+--------------------+--------+
-| Charset | Description      | Default collation  | Maxlen |
-+---------+------------------+--------------------+--------+
-| utf16   | UTF-16 Unicode   | utf16_general_ci   |      4 |
-| utf16le | UTF-16LE Unicode | utf16le_general_ci |      4 |
-| utf32   | UTF-32 Unicode   | utf32_general_ci   |      4 |
-| utf8    | UTF-8 Unicode    | utf8_general_ci    |      3 |
-| utf8mb4 | UTF-8 Unicode    | utf8mb4_0900_ai_ci |      4 |
-+---------+------------------+--------------------+--------+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>结果返回了字符集的名称、描述、默认字符序以及单个字符最大长度等信息。</p>
-<p>每一个字符集都有一个默认的字符序，有的字符集有多个字符序，可以通过下面的语句查看一个字符集的字符序：</p>
-<pre class="line-numbers language-mysql"><code class="language-mysql">SHOW COLLATION WHERE Charset = 'utf8mb4';<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>返回的结果会列出所有的字符序以及相关的信息，这里就不展示了。</p>
-<p>字符序有下面的特点：</p>
-<ol>
-<li>两个不同的字符集不会有相同的字符序。也就是每个字符集都有自己单独的字符序小弟，大家不会有交集；</li>
-<li>每一个字符集都有一个默认的字符序；</li>
-<li>字符序的名字是以对应的字符集名称为前缀的。</li>
-</ol>
-<img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/MySQL/characterset.PNG">
-
-<h3 id="3-在MySQL中使用字符集"><a href="#3-在MySQL中使用字符集" class="headerlink" title="3. 在MySQL中使用字符集"></a>3. 在MySQL中使用字符集</h3><p>MySQL中有很多可以控制字符集的选项，这些选项过于复杂很容易混淆。不过记住一点：</p>
-<blockquote>
-<p>只有基于字符的值才真正的“有”字符集的概念。</p>
-</blockquote>
-<p>对于其他类型的值，字符集只是一个设置，用来指定用哪一种字符进行比较或操作。基于字符的值能存放在某列中、查询的字符中、表达式的计算结果中或者某个用户变量中，等等。</p>
-<p>MySQL中字符集的设置可以分为两类：创建对象时的默认值、在服务器和客户端通信时的设置。</p>
-<h4 id="3-1-创建对象时的默认设置"><a href="#3-1-创建对象时的默认设置" class="headerlink" title="3.1 创建对象时的默认设置"></a>3.1 创建对象时的默认设置</h4><p>在MySQL中，从上到下一共有四层字符集的设置，分别是服务器（Server）、数据库（Database）、表（Table）和列（Column），在每一层都可以指定一个默认的字符集：</p>
-<img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/MySQL/charset_layers.PNG">
-
-<p>其中，服务器和数据库的字符集设置有对应的参数：<code>character_set_server</code>和<code>character_set_database</code>，表和列的字符集设置在对应的DDL语句中。</p>
-<p>由于真正存放数据的是列，所以更高层次的字符集设置仅仅是指定一个默认值，如果在创建列时没有知道字符集，就会从下到上寻找设置的字符集。如果指定了一个字符集，那么上面所有层次的设置都没有效果了。</p>
-<p>在MySQL 5.5、5.6和5.7中，默认的字符集是latin1，在最新的MySQL 8中，默认的字符集是utf8。</p>
-<h4 id="3-2-服务器和客户端通信时的设置"><a href="#3-2-服务器和客户端通信时的设置" class="headerlink" title="3.2 服务器和客户端通信时的设置"></a>3.2 服务器和客户端通信时的设置</h4><p>当服务器和客户端进行通信时，可能各自使用不同的字符集。这时，服务器需要进行字符的转换工作。这涉及到MySQL中的三个参数：<code>character_set_client</code>、<code>character_set_connection</code>和<code>character_set_results</code>。</p>
-<p>这三个参数的影响效果如下图所示：</p>
-<img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/MySQL/charset_communacate.PNG">
-
-<p>这里服务器进行了两次翻译过程：</p>
-<ol>
-<li>SQL语句从客户端离开时的字符集是<code>character_set_client</code>；</li>
-<li>SQL语句进入服务器后服务器转换成<code>character_set_connection</code>；</li>
-<li>服务器处理完SQL语句后，将结果的字符集设置成了<code>character_set_results</code>。</li>
-</ol>
-<p>根据需要，可以使用<code>SET NAMES</code>或者<code>SET CHARACTER SET</code>语句来改变上面的设置：</p>
-<pre class="line-numbers language-mysql"><code class="language-mysql">SET NAMES 'utf8';<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>这样，会将<code>character_set_client</code>、<code>character_set_connection</code>和<code>character_set_results</code>都设置成utf8。</p>
-<p>不过在服务器上使用这个命令只能改变服务器端的设置，客户端程序也需要设置正确的字符集才能避免出现问题。</p>
-<h4 id="3-3-小结"><a href="#3-3-小结" class="headerlink" title="3.3 小结"></a>3.3 小结</h4><p>可以通过<code>SHOW VARIABLES LIKE &#39;character%&#39;</code>命令来查看这些参数的值：</p>
-<pre class="line-numbers language-shell"><code class="language-shell">+--------------------------+-----------------------------------------------------------+
-| Variable_name            | Value                                                     |
-+--------------------------+-----------------------------------------------------------+
-| character_set_client     | latin1                                                    |
-| character_set_connection | latin1                                                    |
-| character_set_database   | utf8mb4                                                   |
-| character_set_filesystem | binary                                                    |
-| character_set_results    | latin1                                                    |
-| character_set_server     | utf8mb4                                                   |
-| character_set_system     | utf8                                                      |
-| character_sets_dir       | /usr/local/mysql-8.0.13-macos10.14-x86_64/share/charsets/ |
-+--------------------------+-----------------------------------------------------------+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h3 id="4-字符集的选择"><a href="#4-字符集的选择" class="headerlink" title="4. 字符集的选择"></a>4. 字符集的选择</h3><p>使用不同的字符集会带来更多的CPU操作，可能也会消耗更多的内存和磁盘空间。因此，为了方便，最好先为服务器（或者数据库）设置一个合理的字符集，然后根据不同的情况让某些列选择合适的字符集，</p>
-<p>如果统一使用utf8字符集，整个世界都清净了。这也是很常见的一种做法。不过有的时候并不需要使用utf8，使用utf8之后会增加磁盘空间的消耗。</p>
+<h2 id="4-舍入（Rounding）"><a href="#4-舍入（Rounding）" class="headerlink" title="4. 舍入（Rounding）"></a>4. 舍入（Rounding）</h2><p>因为精度和位数的限制，浮点数只能近似地表示实数运算，所以浮点数运算涉及到一个舍入的问题。下表展示了四种舍入的方式：</p>
+<table>
+<thead>
+<tr>
+<th>Mode</th>
+<th>1.40</th>
+<th>1.60</th>
+<th>1.50</th>
+<th>2.50</th>
+<th>-1.50</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Round-to-even</td>
+<td>1</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>-2</td>
+</tr>
+<tr>
+<td>Round-toward-zero</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>2</td>
+<td>-1</td>
+</tr>
+<tr>
+<td>Round-down</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>2</td>
+<td>-2</td>
+</tr>
+<tr>
+<td>Round-up</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>3</td>
+<td>-1</td>
+</tr>
+</tbody></table>
+<p>其中后三种都好理解，不好理解的是第一种：Round-to-even。</p>
+<p>为什么要向偶数舍入呢？考虑这个场景。我们需要计算一组数的平均数，如果采用下面的三种舍入方法，那么对于同样符号（正负）的数来说，舍入的方向是一样的，这样在计算平均值的时候带来的偏差会比较大。相反，如果使用第一种，即向偶数舍入，那么一组数大概率50%的数向上舍入50%的数向下舍入，平衡了舍入带来的偏差。不过这种舍入方式计算的平均值也比真实值略高一些。</p>
+<h2 id="5-浮点数运算"><a href="#5-浮点数运算" class="headerlink" title="5. 浮点数运算"></a>5. 浮点数运算</h2><p>IEEE浮点数的运算是这样的，将两个浮点数当做看作两个实数$x,y$，对于加法就计算$Round(x+y)$。也就是先计算然后舍入。</p>
+<p>不过由于有限的精度，可以不需要完全计算出结果，只要精度够了即可。</p>
+<p>像有符号和无符号整数的加法一样，浮点数的加法也构成一个阿贝尔群，只不过由于舍入的存在，令$x+^fy$定义为$Round(x+y)$，需要考虑如下的特点：</p>
+<ul>
+<li><p>由于溢出，$x+^fy$可能得到无穷；</p>
+</li>
+<li><p>可交换：$x+^fy=y+^fx$；</p>
+</li>
+<li><p>不可结合：$(x+^fy)+^fz$和$x+^f(y+^fz)$不一定相等。比如<code>(3.14+1e10)-1e10</code>的结果是<code>0.0</code>，而<code>3.14+(1e10-1e10)</code>的结果是<code>3.14</code>；</p>
+</li>
+<li><p>由于不可结合，因此编译器对于浮点数就不能做一些优化。比如：</p>
+<pre class="line-numbers language-c"><code class="language-c">x <span class="token operator">=</span> a <span class="token operator">+</span> b <span class="token operator">+</span> c<span class="token punctuation">;</span>
+y <span class="token operator">=</span> b <span class="token operator">+</span> c <span class="token operator">+</span> d<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>就不能优化成：</p>
+<pre class="line-numbers language-c"><code class="language-c">t <span class="token operator">=</span> b <span class="token operator">+</span> c<span class="token punctuation">;</span>
+x <span class="token operator">=</span> a <span class="token operator">+</span> t<span class="token punctuation">;</span>
+y <span class="token operator">=</span> t <span class="token operator">+</span> d<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+</li>
+<li><p>浮点数加法满足单调性：如果$a\geq b$，那么对于不是<code>NaN</code>的<code>x</code>来说，有$x+^fa\geq x+^fb$；</p>
+</li>
+</ul>
+<p>浮点数的乘法也具有和浮点数的加法一致的上述特征。同时，对于浮点数乘法来说，$a\ast ^fa\geq0$，这对于无符号和有符号整数的乘法来说不满足。</p>
+<h2 id="6-C语言中的浮点数"><a href="#6-C语言中的浮点数" class="headerlink" title="6. C语言中的浮点数"></a>6. C语言中的浮点数</h2><p>C语言中有两种浮点数：<code>float</code>和<code>double</code>，两者在和<code>int</code>做类型转换时，原则如下：</p>
+<ul>
+<li><code>int</code>转<code>float</code>：不会溢出，但是会舍入；</li>
+<li><code>int</code>或<code>float</code>转<code>double</code>：没有精度损失；</li>
+<li><code>double</code>转<code>float</code>：值可能会变成正无穷或负无穷，因为可表示范围小了，同时也会有舍入，因为精度也小了；</li>
+<li><code>float</code>或<code>double</code>转<code>int</code>：值会向0舍入。比如<code>1.999</code>变成<code>1</code>，<code>-1.999</code>变成<code>-1</code>。也有可能溢出，不过C语言没有规定溢出后的<code>int</code>值，与Intel兼容的处理器会将结果指定为$TMin_w$。转换浮点数到整数的时候，如果找不到一个合理的值，就使用这个值。因此<code>(int) +1e10</code>的结果是<code>-2147483648</code>。</li>
+</ul>
+<p>通过下面的几个例子做一下练习（其中<code>x</code>，<code>f</code>和<code>d</code>分别是<code>int</code>，<code>float</code>和<code>double</code>类型的值）：</p>
+<table>
+<thead>
+<tr>
+<th>Expression</th>
+<th>True or False</th>
+<th>Explanation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>x==(int)(double)x</code></td>
+<td>✔</td>
+<td><code>double</code>的精度大于<code>int</code></td>
+</tr>
+<tr>
+<td><code>x==(int)(float)x</code></td>
+<td>✘</td>
+<td>当<code>x=TMax</code>时错误</td>
+</tr>
+<tr>
+<td><code>d==(double)(float)d</code></td>
+<td>✘</td>
+<td>当<code>d=1e40</code>时，结果是正无穷</td>
+</tr>
+<tr>
+<td><code>f==(float)(double)f</code></td>
+<td>✔</td>
+<td><code>double</code>的精度大于<code>float</code></td>
+</tr>
+<tr>
+<td><code>f==-(-f)</code></td>
+<td>✔</td>
+<td>浮点数使用<code>s</code>表示正负</td>
+</tr>
+<tr>
+<td><code>1.0/2==1/2.0</code></td>
+<td>✔</td>
+<td>计算的时候两个数都会转换成浮点数</td>
+</tr>
+<tr>
+<td><code>d*d&gt;=0.0</code></td>
+<td>✔</td>
+<td>正确，即使会溢出</td>
+</tr>
+<tr>
+<td><code>(f+d)-f==d</code></td>
+<td>✘</td>
+<td>这个就是不符合结合律的例子了</td>
+</tr>
+</tbody></table>
+<p>注意：<strong>将大的浮点数转换成整数是一个常见的错误</strong>。</p>
 
             </div>
             <hr/>
@@ -525,12 +799,8 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/mysql/">
-                                    <span class="chip bg-color">mysql</span>
-                                </a>
-                            
-                                <a href="/tags/charset/">
-                                    <span class="chip bg-color">charset</span>
+                                <a href="/tags/csapp/">
+                                    <span class="chip bg-color">csapp</span>
                                 </a>
                             
                         </div>
@@ -568,61 +838,52 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
+                <i class="far fa-dot-circle"></i>&nbsp;Current
+            </div>
             <div class="card">
-                <a href="/file-to-redis/">
+                <a href="/csapp-ch02-part-4-floating-point/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="File to Redis">
+                        <img src="/medias/featureimages/14.jpg" class="responsive-img" alt="csapp ch02 (part 4): Floating Point">
                         
-                        <span class="card-title">File to Redis</span>
+                        <span class="card-title">csapp ch02 (part 4): Floating Point</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            问题是这样的，现在需要把一个文件里的所有数据上传到redis的set中，文件里存储的就是ID，每行一个：
-head id.list
-10000
-10001
-10002
-10003
-10004
-10005
-10006
-10007
-10008
+                            
+这篇文章是csapp第二章第四节的阅读笔记。
 
+接下来看看浮点数的表示。
+1. 二进制小数首先看看有小数部分的二进制数：$$b_mb_{m-1}\cdots b_1b_0.b{-1}b{-2}\cdots b_{-n}$$和无符号整数类似
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2019-12-10
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-05-11
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/redis/" class="post-category">
-                                    redis
+                            <a href="/categories/cs/" class="post-category">
+                                    cs
                                 </a>
                             
                             
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/redis/">
-                        <span class="chip bg-color">redis</span>
-                    </a>
-                    
-                    <a href="/tags/tips/">
-                        <span class="chip bg-color">tips</span>
+                    <a href="/tags/csapp/">
+                        <span class="chip bg-color">csapp</span>
                     </a>
                     
                 </div>
@@ -636,35 +897,48 @@ head id.list
                 Next&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/what-is-physics/">
+                <a href="/csapp-ch02-part-3-integer-arithmetic/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="What is physics">
+                        <img src="/medias/featureimages/23.jpg" class="responsive-img" alt="csapp ch02 (part 3): Integer Arithmetic">
                         
-                        <span class="card-title">What is physics</span>
+                        <span class="card-title">csapp ch02 (part 3): Integer Arithmetic</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
                             
-这篇文章是阅读《费恩曼物理学讲义 第一卷 新千年版》第1-3章的阅读笔记。
+这篇文章是csapp第二章第三节的阅读笔记。
 
-1. 从一片沙滩开始我们生活在一个多姿多彩的世界中。
-想象一下，去年的某一天，我们正在一个美丽的海边沙滩享受着没有工作烦恼的美妙时光。你躺在柔软细密的沙滩上，不
+整数的运算包括加减乘除，对于每一种运算都涉及到有符号整数和无符号整数。
+这里涉及到的符号：
+
+
+
+Symbol
+Type
+Meaning
+
+
+
+$+_w^t$
+Operation
+补码加法
+
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2019-12-07
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-05-09
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/physics/" class="post-category">
-                                    physics
+                            <a href="/categories/cs/" class="post-category">
+                                    cs
                                 </a>
                             
                             
@@ -674,8 +948,8 @@ head id.list
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/physics/">
-                        <span class="chip bg-color">physics</span>
+                    <a href="/tags/csapp/">
+                        <span class="chip bg-color">csapp</span>
                     </a>
                     
                 </div>
@@ -812,6 +1086,13 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
 
 </main>
 
+
+<script src="https://cdn.bootcss.com/mathjax/2.7.7/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script>
+    MathJax.Hub.Config({
+        tex2jax: {inlineMath: [['$', '$'], ['\(', '\)']]}
+    });
+</script>
 
 
     <footer class="page-footer bg-color">

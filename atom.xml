@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://deuterium.fun/"/>
-  <updated>2020-05-09T02:22:27.591Z</updated>
+  <updated>2020-05-11T01:56:59.237Z</updated>
   <id>http://deuterium.fun/</id>
   
   <author>
@@ -15,6 +15,37 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>csapp ch02 (part 4): Floating Point</title>
+    <link href="http://deuterium.fun/csapp-ch02-part-4-floating-point/"/>
+    <id>http://deuterium.fun/csapp-ch02-part-4-floating-point/</id>
+    <published>2020-05-11T01:51:42.000Z</published>
+    <updated>2020-05-11T01:56:59.237Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;blockquote&gt;
+&lt;p&gt;这篇文章是csapp第二章第四节的阅读笔记。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;接下来看看浮点数的表示。&lt;/p&gt;
+&lt;h2 id=&quot;1-二进制小数&quot;&gt;&lt;a href=&quot;#1-二进制小数&quot; class=&quot;headerlink&quot;
+        
+      
+    
+    </summary>
+    
+    
+      <category term="cs" scheme="http://deuterium.fun/categories/cs/"/>
+    
+    
+      <category term="csapp" scheme="http://deuterium.fun/tags/csapp/"/>
+    
+  </entry>
   
   <entry>
     <title>csapp ch02 (part 3): Integer Arithmetic</title>
@@ -578,35 +609,6 @@
     
     
       <category term="mysql" scheme="http://deuterium.fun/tags/mysql/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Files to MySQL</title>
-    <link href="http://deuterium.fun/files-to-mysql/"/>
-    <id>http://deuterium.fun/files-to-mysql/</id>
-    <published>2019-12-17T02:40:21.000Z</published>
-    <updated>2020-03-20T10:36:56.307Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;&lt;strong&gt;问题&lt;/strong&gt;：把一个本地的文件（比如.txt或.csv文件）导入到指定的一张MySQL表中。可以使用mysqlimport或者&lt;code&gt;LOAD
-        
-      
-    
-    </summary>
-    
-    
-      <category term="mysql" scheme="http://deuterium.fun/categories/mysql/"/>
-    
-    
-      <category term="mysql" scheme="http://deuterium.fun/tags/mysql/"/>
-    
-      <category term="tips" scheme="http://deuterium.fun/tags/tips/"/>
     
   </entry>
   
