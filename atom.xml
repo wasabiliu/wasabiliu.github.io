@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://deuterium.fun/"/>
-  <updated>2020-05-11T01:56:59.237Z</updated>
+  <updated>2020-05-21T13:13:32.472Z</updated>
   <id>http://deuterium.fun/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>csapp ch02 (part 5): Summary</title>
+    <link href="http://deuterium.fun/csapp-ch02-part-5-summary/"/>
+    <id>http://deuterium.fun/csapp-ch02-part-5-summary/</id>
+    <published>2020-05-21T13:13:06.000Z</published>
+    <updated>2020-05-21T13:13:32.472Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;blockquote&gt;
+&lt;p&gt;这篇文章是基于csapp第二章的习题做的一个总结，习题以及答案在&lt;a
+        
+      
+    
+    </summary>
+    
+    
+      <category term="cs" scheme="http://deuterium.fun/categories/cs/"/>
+    
+    
+      <category term="csapp" scheme="http://deuterium.fun/tags/csapp/"/>
+    
+  </entry>
   
   <entry>
     <title>csapp ch02 (part 4): Floating Point</title>
@@ -582,33 +610,6 @@
       <category term="go" scheme="http://deuterium.fun/tags/go/"/>
     
       <category term="web" scheme="http://deuterium.fun/tags/web/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>What Happens When Using LOAD DATA</title>
-    <link href="http://deuterium.fun/what-happens-when-using-load-data/"/>
-    <id>http://deuterium.fun/what-happens-when-using-load-data/</id>
-    <published>2019-12-18T02:07:13.000Z</published>
-    <updated>2020-03-20T10:37:48.240Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;在之前的文章&lt;a href=&quot;https://deuterium.fun/files-to-mysql/&quot;&gt;Files to MySQL&lt;/a&gt;中简单介绍了mysqlimport和&lt;code&gt;LOAD
-        
-      
-    
-    </summary>
-    
-    
-      <category term="mysql" scheme="http://deuterium.fun/categories/mysql/"/>
-    
-    
-      <category term="mysql" scheme="http://deuterium.fun/tags/mysql/"/>
     
   </entry>
   
