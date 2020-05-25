@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>ddia, Foundations of Data Systems (Part 1): Terminology, Approach, Data Models and Query Languages</title>
+      <link href="/ddia-foundations-of-data-systems-part-1-terminology-approach-data-models-and-query-languages/"/>
+      <url>/ddia-foundations-of-data-systems-part-1-terminology-approach-data-models-and-query-languages/</url>
+      
+        <content type="html"><![CDATA[<blockquote><p>这篇文章是ddia第一部分数据系统基础中第一章和第二章的阅读笔记。</p></blockquote><h2 id="1-Reliable-Scalable-and-Maintainable-Applications"><a href="#1-Reliable-Scalable-and-Maintainable-Applications" class="headerlink" title="1. Reliable, Scalable, and Maintainable Applications"></a>1. Reliable, Scalable, and Maintainable Applications</h2><p><img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/CS/1.reliable%2C%20scalable%2C%20and%20maintainable%20applications.png" alt="1.可靠、可扩展与可维护的应用系统"></p><p>应用系统包含的模块：</p><ul><li><strong>数据库</strong>：用以存储数据，这样应用就可以再次访问；</li><li><strong>高速缓存</strong>：缓存那些复杂或操作代价昂贵的结果，以加快下一次访问；</li><li><strong>索引</strong>：用户可以按关键字搜索数据并支持各种过滤；</li><li><strong>流式处理</strong>：持续发送消息至另一个进行，处理采用异步处理；</li><li><strong>批处理</strong>：定期处理大量的累积数据。</li></ul><p>单个组件无法满足所有数据处理与存储需求，所以需要将<strong>任务分解</strong>，每个组件负责高效完成其中一部分，然后通过<strong>应用层代码</strong>驱动有机衔接起来。</p><p>容错总是指特定类型的故障，这样的系统才更有实际意义。</p><p>故障与失效：</p><ul><li><strong>故障</strong>：组件偏离其正常规格；</li><li><strong>失效</strong>：系统作为一个整体停止，无法向用户提供所需的服务。</li></ul><p><strong>扇出（fan-out）</strong>：在事务处理系统中，用来描述为了服务一个输入请求而需要做的请求总数，像扇子一样逐渐变多。</p><p>实践中的百分位数：</p><ul><li>近似算法来计算百分位数：<ul><li>正向衰减</li><li>t-digest</li><li>HdrHistogram</li></ul></li><li>采用直方图的方式来聚合响应时间。</li></ul><p>把无状态服务分布然后扩展至多台机器相对比较容易，而有状态服务从单个节点扩展到分布式多机环境的复杂性会大大增加。</p><p>消除意外复杂性最好手段之一是<strong>抽象</strong>。</p><h2 id="2-Data-Models-and-Query-Languages"><a href="#2-Data-Models-and-Query-Languages" class="headerlink" title="2. Data Models and Query Languages"></a>2. Data Models and Query Languages</h2><p><img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/CS/2.Data%20Models%20and%20Query%20Languages.png" alt="2.Data Models and Query Languages"></p><p>这里介绍三种数据模型：关系模型、文档模型和图模型。</p><p>关系模型就是SQL，对应关系型数据库。关系模型的一个问题就是阻抗失衡（impedance mismatch），数据表结构发生变化，代码中的关系映射也需要变化，且不一定完全匹配。</p><p>文档模型就是NoSQL，比如MongoDB，使用json文档来存储数据，更适合存储一对多的树形层级数据。</p><p>关系模型为了存储一对多的数据，需要使用多个表，这样读取信息的时候需要多次查询；而文档模型具有更好的局部性，只需要一次查询就可以了。</p><p>MySQL 5.7 添加了json。</p><p><strong>任何对人类有意义的东西都有可能在将来某个时刻发生变化，没有直接意义的就可以永远不需要变化</strong>。</p><p>数据库规范化的核心思想就是：<strong>消除重复</strong>。如果复制了多份重复数据，那么该模式通常就违背了规范化。</p><p>关系模型的一个核心要点是，<strong>只需要构建一次查询优化器，然后使用该数据库的所有应用程序都可以从中受益。</strong></p><p>模式：读时模式（数据的结构是隐式的，只有在读取的时候才解释），写时模式（关系数据库的传统方法，模式是显式的，写入时必须遵守）。</p><p>数据查询语言：</p><table><thead><tr><th>命令式</th><th>声明式</th></tr></thead><tbody><tr><td>告诉计算机以特定的顺序执行</td><td>只需指定所需的数据模式</td></tr><tr><td>数据有固定的顺序</td><td>数据无固定的顺序</td></tr><tr><td>很难并行化</td><td>适用于并行执行</td></tr></tbody></table><p>如果数据大多是一对多关系（树结构数据）或者记录之间没有关系，那么文档模型是最合适的。</p><p>图模型更为强大的用途在于，提供了单个数据存储区中保存完全不同类型对象的一致性方式。</p><p>图有利于演化：向应用程序添加功能时，图可以容易地扩展以适应数据结构的不断变化。</p><p>文档数据库和图数据库有一个共同点，就是它们通常不会对存储的数据强加某个模式，这可以使应用程序更容易适应不断变化的需求。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> cs </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> ddia </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>csapp ch02 (part 5): Summary</title>
       <link href="/csapp-ch02-part-5-summary/"/>
       <url>/csapp-ch02-part-5-summary/</url>

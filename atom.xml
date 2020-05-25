@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://deuterium.fun/"/>
-  <updated>2020-05-21T13:13:32.472Z</updated>
+  <updated>2020-05-25T03:00:02.053Z</updated>
   <id>http://deuterium.fun/</id>
   
   <author>
@@ -15,6 +15,36 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>ddia, Foundations of Data Systems (Part 1): Terminology, Approach, Data Models and Query Languages</title>
+    <link href="http://deuterium.fun/ddia-foundations-of-data-systems-part-1-terminology-approach-data-models-and-query-languages/"/>
+    <id>http://deuterium.fun/ddia-foundations-of-data-systems-part-1-terminology-approach-data-models-and-query-languages/</id>
+    <published>2020-05-25T02:57:08.000Z</published>
+    <updated>2020-05-25T03:00:02.053Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;blockquote&gt;
+&lt;p&gt;这篇文章是ddia第一部分数据系统基础中第一章和第二章的阅读笔记。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;1-Reliable-Scalable-and-Maintainable-Applications&quot;&gt;&lt;a
+        
+      
+    
+    </summary>
+    
+    
+      <category term="cs" scheme="http://deuterium.fun/categories/cs/"/>
+    
+    
+      <category term="ddia" scheme="http://deuterium.fun/tags/ddia/"/>
+    
+  </entry>
   
   <entry>
     <title>csapp ch02 (part 5): Summary</title>
@@ -569,35 +599,6 @@
         
           &lt;p&gt;在了解了使用&lt;code&gt;net/http&lt;/code&gt;构建go web服务之后，这篇文章深入了解一下在Go中如何处理一个请求。&lt;/p&gt;
 &lt;img
-        
-      
-    
-    </summary>
-    
-    
-      <category term="programming" scheme="http://deuterium.fun/categories/programming/"/>
-    
-    
-      <category term="go" scheme="http://deuterium.fun/tags/go/"/>
-    
-      <category term="web" scheme="http://deuterium.fun/tags/web/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Go Web (Part 1): Handler &amp; ServeMux</title>
-    <link href="http://deuterium.fun/go-web-part-1-handler-servemux/"/>
-    <id>http://deuterium.fun/go-web-part-1-handler-servemux/</id>
-    <published>2019-12-20T07:22:09.000Z</published>
-    <updated>2019-12-20T07:35:13.657Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;h3 id=&quot;1-Begin&quot;&gt;&lt;a href=&quot;#1-Begin&quot; class=&quot;headerlink&quot; title=&quot;1. Begin&quot;&gt;&lt;/a&gt;1.
         
       
     
