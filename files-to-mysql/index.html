@@ -26,9 +26,9 @@
     
     <script src="/libs/jquery/jquery.min.js"></script>
     
+<link rel="alternate" href="/atom.xml" title="Deuterium" type="application/atom+xml">
 <link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
-<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><link rel="alternate" href="/atom.xml" title="Deuterium" type="application/atom+xml">
-</head>
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
 
 
 <body>
@@ -382,7 +382,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    556
+                    627
                 </div>
                 
 
@@ -457,7 +457,18 @@ no      name
 -p db_name \
 /path/to/one_piece.txt
 /path/to/steins_gate.txt<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h3 id="4-使用LOAD-DATA导入文件"><a href="#4-使用LOAD-DATA导入文件" class="headerlink" title="4. 使用LOAD DATA导入文件"></a>4. 使用<code>LOAD DATA</code>导入文件</h3><p>mysqlimport其实是对<code>LOAD DATA</code>的一层封装，这样我们就可以使用<code>LOAD DATA</code>导入文件：</p>
+<h3 id="4-指定导入的字段"><a href="#4-指定导入的字段" class="headerlink" title="4. 指定导入的字段"></a>4. 指定导入的字段</h3><p>如果想只导入指定的字段，可以使用<code>--columns</code>选项（也叫<code>-c</code>）。字段使用英文逗号隔开。比如：</p>
+<pre class="line-numbers language-shell"><code class="language-shell">mysqlimport --ignore-lines=1 \
+--fields-terminated-by='\t' \
+--columns no,name
+--local \
+-h 10.55.142.100 \
+-P3596 \
+-u db_szdev \
+-p test \
+/path/to/one_piece.txt
+/path/to/steins_gate.txt<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="5-使用LOAD-DATA导入文件"><a href="#5-使用LOAD-DATA导入文件" class="headerlink" title="5. 使用LOAD DATA导入文件"></a>5. 使用<code>LOAD DATA</code>导入文件</h3><p>mysqlimport其实是对<code>LOAD DATA</code>的一层封装，这样我们就可以使用<code>LOAD DATA</code>导入文件：</p>
 <pre class="line-numbers language-mysql"><code class="language-mysql">LOAD DATA LOCAL INFILE '/path/to/one_piece.txt' 
 INTO TABLE one_piece 
 FIELDS TERMINATED BY '\t' 
@@ -465,7 +476,7 @@ LINES TERMINATED BY '\n'
 IGNORE 1 LINES 
 (no,name);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>结果是一样的。</p>
-<h3 id="4-mysqlimport常用选项"><a href="#4-mysqlimport常用选项" class="headerlink" title="4. mysqlimport常用选项"></a>4. mysqlimport常用选项</h3><p>mysqlimport的参数比较多，接下来看看一些常用的参数：</p>
+<h3 id="6-mysqlimport常用选项"><a href="#6-mysqlimport常用选项" class="headerlink" title="6. mysqlimport常用选项"></a>6. mysqlimport常用选项</h3><p>mysqlimport的参数比较多，接下来看看一些常用的参数：</p>
 <p><code>--ignore-lines</code>：用来标识忽略的行数，比如如果文件有表头的话，可以忽略这一行；</p>
 <p><code>--fields-terminated-by</code>：用来标识字段分隔符，常用的有<code>\t</code>和<code>,</code>；</p>
 <p><code>--local</code>：表示读取本地文件，如果不加的话就会出错；</p>
