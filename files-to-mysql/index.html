@@ -401,7 +401,7 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <p><strong>问题</strong>：把一个本地的文件（比如.txt或.csv文件）导入到指定的一张MySQL表中。可以使用mysqlimport或者<code>LOAD DATA</code>命令来完成。这篇文章仅仅是简单介绍一下mysqlimport和<code>LOAD DATA</code>的简单用法。关于<code>LOAD DATA</code>的详细说明，参考<a href="https://deuterium.fun/what-happens-when-using-load-data/">What Happens When Using LOAD DATA</a>。</p>
-<h3 id="1-Prework：创建测试表和文件"><a href="#1-Prework：创建测试表和文件" class="headerlink" title="1. Prework：创建测试表和文件"></a>1. Prework：创建测试表和文件</h3><p>首先创建一个测试表：</p>
+<h2 id="1-Prework：创建测试表和文件"><a href="#1-Prework：创建测试表和文件" class="headerlink" title="1. Prework：创建测试表和文件"></a>1. Prework：创建测试表和文件</h2><p>首先创建一个测试表：</p>
 <pre class="line-numbers language-mysql"><code class="language-mysql">CREATE TABLE one_piece (
     `no`    INT,
     `name`    VARCHAR(15)
@@ -419,7 +419,7 @@ no      name
 800     franky
 900     brook
 1000    jinbe<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h3 id="2-使用mysqlimport导入文件"><a href="#2-使用mysqlimport导入文件" class="headerlink" title="2. 使用mysqlimport导入文件"></a>2. 使用mysqlimport导入文件</h3><p>使用下面的命令可以将上面创建的one_piece.txt的内容导入表中：</p>
+<h2 id="2-使用mysqlimport导入文件"><a href="#2-使用mysqlimport导入文件" class="headerlink" title="2. 使用mysqlimport导入文件"></a>2. 使用mysqlimport导入文件</h2><p>使用下面的命令可以将上面创建的one_piece.txt的内容导入表中：</p>
 <pre class="line-numbers language-shell"><code class="language-shell">mysqlimport --ignore-lines=1 \
 --fields-terminated-by='\t' \
 --local \
@@ -447,7 +447,7 @@ no      name
 | 1000 | jinbe   |
 +------+---------+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>需要注意的是，导入的文件名需要和对应的表名一样，比如上面的one_piece.txt和对应的表名one_piece。不然会找不到表名。</p>
-<h3 id="3-导入多个文件到多张表中"><a href="#3-导入多个文件到多张表中" class="headerlink" title="3. 导入多个文件到多张表中"></a>3. 导入多个文件到多张表中</h3><p>使用上面的命令我们可以将多个文件导入多张表中：</p>
+<h2 id="3-导入多个文件到多张表中"><a href="#3-导入多个文件到多张表中" class="headerlink" title="3. 导入多个文件到多张表中"></a>3. 导入多个文件到多张表中</h2><p>使用上面的命令我们可以将多个文件导入多张表中：</p>
 <pre class="line-numbers language-shell"><code class="language-shell">mysqlimport --ignore-lines=1 \
 --fields-terminated-by='\t' \
 --local \
@@ -457,7 +457,7 @@ no      name
 -p db_name \
 /path/to/one_piece.txt
 /path/to/steins_gate.txt<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h3 id="4-指定导入的字段"><a href="#4-指定导入的字段" class="headerlink" title="4. 指定导入的字段"></a>4. 指定导入的字段</h3><p>如果想只导入指定的字段，可以使用<code>--columns</code>选项（也叫<code>-c</code>）。字段使用英文逗号隔开。比如：</p>
+<h2 id="4-指定导入的字段"><a href="#4-指定导入的字段" class="headerlink" title="4. 指定导入的字段"></a>4. 指定导入的字段</h2><p>如果想只导入指定的字段，可以使用<code>--columns</code>选项（也叫<code>-c</code>）。字段使用英文逗号隔开。比如：</p>
 <pre class="line-numbers language-shell"><code class="language-shell">mysqlimport --ignore-lines=1 \
 --fields-terminated-by='\t' \
 --columns no,name
@@ -468,7 +468,7 @@ no      name
 -p test \
 /path/to/one_piece.txt
 /path/to/steins_gate.txt<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h3 id="5-使用LOAD-DATA导入文件"><a href="#5-使用LOAD-DATA导入文件" class="headerlink" title="5. 使用LOAD DATA导入文件"></a>5. 使用<code>LOAD DATA</code>导入文件</h3><p>mysqlimport其实是对<code>LOAD DATA</code>的一层封装，这样我们就可以使用<code>LOAD DATA</code>导入文件：</p>
+<h2 id="5-使用LOAD-DATA导入文件"><a href="#5-使用LOAD-DATA导入文件" class="headerlink" title="5. 使用LOAD DATA导入文件"></a>5. 使用<code>LOAD DATA</code>导入文件</h2><p>mysqlimport其实是对<code>LOAD DATA</code>的一层封装，这样我们就可以使用<code>LOAD DATA</code>导入文件：</p>
 <pre class="line-numbers language-mysql"><code class="language-mysql">LOAD DATA LOCAL INFILE '/path/to/one_piece.txt' 
 INTO TABLE one_piece 
 FIELDS TERMINATED BY '\t' 
@@ -476,7 +476,7 @@ LINES TERMINATED BY '\n'
 IGNORE 1 LINES 
 (no,name);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>结果是一样的。</p>
-<h3 id="6-mysqlimport常用选项"><a href="#6-mysqlimport常用选项" class="headerlink" title="6. mysqlimport常用选项"></a>6. mysqlimport常用选项</h3><p>mysqlimport的参数比较多，接下来看看一些常用的参数：</p>
+<h2 id="6-mysqlimport常用选项"><a href="#6-mysqlimport常用选项" class="headerlink" title="6. mysqlimport常用选项"></a>6. mysqlimport常用选项</h2><p>mysqlimport的参数比较多，接下来看看一些常用的参数：</p>
 <p><code>--ignore-lines</code>：用来标识忽略的行数，比如如果文件有表头的话，可以忽略这一行；</p>
 <p><code>--fields-terminated-by</code>：用来标识字段分隔符，常用的有<code>\t</code>和<code>,</code>；</p>
 <p><code>--local</code>：表示读取本地文件，如果不加的话就会出错；</p>
