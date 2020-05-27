@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://deuterium.fun/"/>
-  <updated>2020-05-25T03:00:02.053Z</updated>
+  <updated>2020-05-27T07:36:52.709Z</updated>
   <id>http://deuterium.fun/</id>
   
   <author>
@@ -15,6 +15,36 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>ddia, Foundations of Data Systems (Part 2): Storage and Retrieval</title>
+    <link href="http://deuterium.fun/ddia-foundations-of-data-systems-part-2-storage-and-retrieval/"/>
+    <id>http://deuterium.fun/ddia-foundations-of-data-systems-part-2-storage-and-retrieval/</id>
+    <published>2020-05-27T07:30:25.000Z</published>
+    <updated>2020-05-27T07:36:52.709Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;blockquote&gt;
+&lt;p&gt;这篇文章是ddia第三章的阅读笔记。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;0-Pre&quot;&gt;&lt;a href=&quot;#0-Pre&quot; class=&quot;headerlink&quot; title=&quot;0. Pre&quot;&gt;&lt;/a&gt;0.
+        
+      
+    
+    </summary>
+    
+    
+      <category term="cs" scheme="http://deuterium.fun/categories/cs/"/>
+    
+    
+      <category term="ddia" scheme="http://deuterium.fun/tags/ddia/"/>
+    
+  </entry>
   
   <entry>
     <title>ddia, Foundations of Data Systems (Part 1): Terminology, Approach, Data Models and Query Languages</title>
@@ -581,36 +611,6 @@
     
     
       <category term="summary" scheme="http://deuterium.fun/tags/summary/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Go Web (Part 2): Request</title>
-    <link href="http://deuterium.fun/go-web-part-2-request/"/>
-    <id>http://deuterium.fun/go-web-part-2-request/</id>
-    <published>2019-12-24T05:23:10.000Z</published>
-    <updated>2019-12-24T05:27:00.706Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;在了解了使用&lt;code&gt;net/http&lt;/code&gt;构建go web服务之后，这篇文章深入了解一下在Go中如何处理一个请求。&lt;/p&gt;
-&lt;img
-        
-      
-    
-    </summary>
-    
-    
-      <category term="programming" scheme="http://deuterium.fun/categories/programming/"/>
-    
-    
-      <category term="go" scheme="http://deuterium.fun/tags/go/"/>
-    
-      <category term="web" scheme="http://deuterium.fun/tags/web/"/>
     
   </entry>
   

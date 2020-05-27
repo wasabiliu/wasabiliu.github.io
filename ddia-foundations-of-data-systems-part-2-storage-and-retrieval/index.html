@@ -1,0 +1,1063 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="ddia, Foundations of Data Systems (Part 2): Storage and Retrieval, Deuterium">
+    <meta name="description" content="
+这篇文章是ddia第三章的阅读笔记。
+
+0. Pre
+数据库的功能简单来说就是两个：
+
+插入数据时，数据库保存数据；
+检索时，数据库返回数据。
+
+很简单，但是为了达成这两个目的，数据库需要做好多事情。
+这就是这篇文章所要讲述的东西。
+即，">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>ddia, Foundations of Data Systems (Part 2): Storage and Retrieval | Deuterium</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+    
+    <script src="/libs/jquery/jquery.min.js"></script>
+    
+<link rel="alternate" href="/atom.xml" title="Deuterium" type="application/atom+xml">
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper head-container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">Deuterium</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>Home</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>Tags</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>Categories</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>About</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="https://valineliu.gitbook.io/deuterium-wiki/" target="_blank" rel="noopener" class="waves-effect waves-light">
+      
+      <i class="fab fa-wikipedia-w" style="zoom: 0.6;"></i>
+      
+      <span>Wiki</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>Friends</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="Search" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">Deuterium</div>
+        <div class="logo-desc">
+            
+            Software and anecdotes.
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			Home
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			Tags
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			Categories
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			About
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="https://valineliu.gitbook.io/deuterium-wiki/" target="_blank" rel="noopener" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fab fa-wikipedia-w"></i>
+			
+			Wiki
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			Friends
+		</a>
+          
+        </li>
+        
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/19.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <div class="description center-align post-title">
+                        ddia, Foundations of Data Systems (Part 2): Storage and Retrieval
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        height: calc(100vh - 250px);
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #3B5998;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #3B5998;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #3B5998;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/ddia/">
+                                <span class="chip bg-color">ddia</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/cs/" class="post-category">
+                                cs
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
+                    2020-05-27
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
+                    4.7k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>Read Times:&nbsp;&nbsp;
+                    16 Min
+                </div>
+                
+				
+                
+            </div>
+            
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <blockquote>
+<p>这篇文章是ddia第三章的阅读笔记。</p>
+</blockquote>
+<h2 id="0-Pre"><a href="#0-Pre" class="headerlink" title="0. Pre"></a>0. Pre</h2><p><img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/CS/3.Storage%20%26%20Retrieval.png" alt="3.Storage &amp; Retrieval"></p>
+<p>数据库的功能简单来说就是两个：</p>
+<ul>
+<li>插入数据时，数据库保存数据；</li>
+<li>检索时，数据库返回数据。</li>
+</ul>
+<p>很简单，但是为了达成这两个目的，数据库需要做好多事情。</p>
+<p>这就是这篇文章所要讲述的东西。</p>
+<p>即，数据库底层是如何存储数据的呢？当检索数据的时候，数据库又如何快速找到数据并返回呢？</p>
+<p>这就涉及到了数据库的存储引擎（storage engine）。</p>
+<h2 id="1-从hello-world开始"><a href="#1-从hello-world开始" class="headerlink" title="1. 从hello world开始"></a>1. 从hello world开始</h2><p>既然数据库的功能就是存数据（<code>set</code>）与返回数据（<code>get</code>），那么可以通过下面的Bash函数实现一个最简单的数据库：</p>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token shebang important">#!/bin/bash</span>
+db_set<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">echo</span> <span class="token string">"<span class="token variable">$1</span>,<span class="token variable">$2</span>"</span> <span class="token operator">>></span> database
+<span class="token punctuation">}</span>
+
+db_get<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">grep</span> <span class="token string">"^<span class="token variable">$1</span>,"</span> database <span class="token operator">|</span> <span class="token function">sed</span> -e <span class="token string">"s/^<span class="token variable">$1</span>,//"</span> <span class="token operator">|</span> <span class="token function">tail</span> -n 1
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>插入数据：<code>db_set key value</code>；查询数据：<code>db_get key</code>。</p>
+<p>这个最简单的数据库将数据存储在<code>database</code>文件中，新数据添加在文件的末尾，对于一个已有的key更新数据时不覆盖，而是直接添加到末尾。在查询这个key时，返回最后一条记录。</p>
+<p>虽然想法很简单，但很多数据库内部都使用类似的日志（log）结构，这就是<strong>基于日志</strong>的数据库（log-structured database）。</p>
+<p>另一种，是<strong>基于存储页</strong>（page-oriented）的。</p>
+<h2 id="2-Using-Index"><a href="#2-Using-Index" class="headerlink" title="2. Using Index"></a>2. Using Index</h2><p>需要从读和写两方面来审视这个最简单的数据库。</p>
+<p>由于直接在文件末尾添加数据，所以这个数据库的写操作是最简单的。</p>
+<p>随着数据量的增加，对于给定的一个key，需要从头到尾扫描所有的数据来找到这个key的位置，时间复杂度是$O(n)$。</p>
+<p>两个极端，需要平衡。这就是索引（index）的功能，提高读操作的性能。</p>
+<p>索引其实就是基于数据提取元数据作为数据的路标，帮助数据库快速找到数据。</p>
+<p>什么时候提取元数据？最好在插入数据的时候直接就提取了。</p>
+<p>这样，加入索引的代价就是写操作性能降低了。</p>
+<p><strong><em>trade-off</em></strong>是计算机中一个重要的思想。我们在计算机相关的设计中经常遇见它。</p>
+<h3 id="2-1-Hash-Indexes"><a href="#2-1-Hash-Indexes" class="headerlink" title="2.1 Hash Indexes"></a>2.1 Hash Indexes</h3><p>索引就是地图（map），拿着地图就可以找到目标在哪。</p>
+<p>而key-value类型的hash map是大多数编程语言内置的。所以最简单的索引就可以通过这个hash map来实现：</p>
+<p><img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/CS/key-values%20index.png" alt="key-values index"></p>
+<p>hash map的key就是存储数据的key，value就是对应数据在文件中的位置（偏移值）。</p>
+<p>如果把所有key和位置放进内存，这就构成了一个简单的索引系统。</p>
+<p>这样即使所有的value内存存不下也没关系，只需要一次磁盘寻址就可以找到它了。</p>
+<p>而且如果部分数据加载到内存中，这部分数据根本就不需要读磁盘。</p>
+<p>简单但可行，甚至这是Riak默认存储引擎Bitcask的核心做法。</p>
+<p>适用场景：<strong>每个键的值频繁更新的场景</strong>。</p>
+<h3 id="2-2-File-Gets-Bigger-Than-Bigger"><a href="#2-2-File-Gets-Bigger-Than-Bigger" class="headerlink" title="2.2 File Gets Bigger Than Bigger"></a>2.2 File Gets Bigger Than Bigger</h3><p>我们是使用一个文件来存储数据的，而且不会删除，只会增加。</p>
+<p>这样下去是不行的，首先查询效率低；其次，操作系统也不允许无限大的文件。</p>
+<p>咋整？分治吧，一个大文件拆成多个小文件。</p>
+<p>由于同一个key后面的比前面的新，前面的就可以删掉了，所以拆成多个的小文件，还可以压缩：</p>
+<p><img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/CS/compaction%20of%20key-value%20update%20log.png" alt="compaction of key-value update log"></p>
+<p>每个小文件压缩之后还可以将多个小文件合并，进一步压缩：</p>
+<p><img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/CS/segments%20merging.png" alt="segments merging"></p>
+<p>有了多个文件（也就是段，segment）之后，写入没问题，那么查询呢？</p>
+<p>每个文件对应一个自己的hash map，放在内存中作为索引。来一个查询，检查最新的段的hash map，如果没有就检查第二个，以此类推。</p>
+<p>由于压缩与合并的存在，其实不需要维护很多段。</p>
+<h3 id="2-3-More-Things-to-Consider"><a href="#2-3-More-Things-to-Consider" class="headerlink" title="2.3 More Things to Consider"></a>2.3 More Things to Consider</h3><p>想法很不错也简单，但还要注意很多细节。</p>
+<h4 id="2-3-1-实现细节"><a href="#2-3-1-实现细节" class="headerlink" title="2.3.1 实现细节"></a>2.3.1 实现细节</h4><p><strong>file format</strong></p>
+<p>我们用的是csv格式。有什么问题吗？当然了，如果数据中包含csv的分隔符（字段分隔符与行分隔符）就炸了。</p>
+<p>二进制格式文件是最常用的。</p>
+<p><strong>deleting records</strong></p>
+<p>那删除操作怎么办？</p>
+<p>可以用一个字段来标记一下（也可以叫做墓碑，tombstone），mysql中的<code>DELETE</code>就是这么做的。</p>
+<p>如果某条记录已经被删除，日志压缩合并的时候就可以忽略了。</p>
+<p><strong>crash recovery</strong></p>
+<p>如果数据库重启，那么内存中的hash map就会丢失。</p>
+<p>可以重新扫描日志文件来重建索引，但是如果日志量大的话重建过程很慢。</p>
+<p>可以将内存中的hash map的快照保存到磁盘中，下次重启就可以直接加载。</p>
+<p>Bitcask就是这么做的。</p>
+<p><strong>partially written records</strong></p>
+<p>如果由于数据库奔溃导致日志出现损坏，可以通过添加校验值来发现。</p>
+<p><strong>concurrency control</strong></p>
+<p>写日志是严格按照先后顺序写的，通常的实现只有一个写线程。</p>
+<p>日志文件是追加的且不可变，所以可以用多个读线程。</p>
+<h4 id="2-3-2-优势"><a href="#2-3-2-优势" class="headerlink" title="2.3.2 优势"></a>2.3.2 优势</h4><p>想法很简单，但是设计非常不错。优势：</p>
+<ul>
+<li>追加和分段合并主要是顺序写，通常比随机写快得多；</li>
+<li>日志文件是追加的或不可变的，那么并发和奔溃恢复就简单得多；</li>
+<li>日志合并可以避免碎片化问题。</li>
+</ul>
+<h4 id="2-3-3-局限"><a href="#2-3-3-局限" class="headerlink" title="2.3.3 局限"></a>2.3.3 局限</h4><ul>
+<li>hash map需要放进内存，如果放不下呢？</li>
+<li>日志记录是根据时间排序的，区间查询就不太行了。</li>
+</ul>
+<p>怎么办？</p>
+<h3 id="2-4-SSTables-amp-LSM-Tree"><a href="#2-4-SSTables-amp-LSM-Tree" class="headerlink" title="2.4 SSTables &amp; LSM-Tree"></a>2.4 SSTables &amp; LSM-Tree</h3><p>日志结构的存储段都是key-value对的序列，严格根据写入时间排序，同一个key后面的优于前面的，而key的排序不重要。</p>
+<p>前面提到了这种结构的一些不足，比如key不够存进内存以及区间查询等情况。</p>
+<p>这个时候就需要另一种索引，除了时间顺序外，对key也进行排序。</p>
+<p>这就是Sorted String Table，SSTable。</p>
+<p>SSTable要求每个键在每个合并段文件中只出现一次（可以在压缩过程中保证）。</p>
+<h4 id="2-4-1-合并与索引"><a href="#2-4-1-合并与索引" class="headerlink" title="2.4.1 合并与索引"></a>2.4.1 合并与索引</h4><p>既然是日志型数据库，对数据就要进行压缩与合并。由于对key进行了排序，SSTable合并可以更加高效：</p>
+<p><img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/CS/SSTable%20merging.png" alt="SSTable merging"></p>
+<p>同样由于对key进行了排序，我们就可以进行区间查找了。同时，我们也不需要把所有的key都保存在内存中，可以将一部分key作为区间的端点保存在内存中作为索引。结构如下：</p>
+<p><img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/CS/SSTable%20with%20in-memory%20index.png" alt="SSTable with in-memory index"></p>
+<h4 id="2-4-2-SSTable的构建与维护"><a href="#2-4-2-SSTable的构建与维护" class="headerlink" title="2.4.2 SSTable的构建与维护"></a>2.4.2 SSTable的构建与维护</h4><p>首先面对的一个问题就是，插入是随机的，怎么维护key的顺序呢？</p>
+<p>磁盘上排序可以使用B-tree，但是在内存中更容易，比如各种平衡树，插入的时候就可以维护key的顺序。</p>
+<p>既然在内存中排序，那就意味着我们需要在内存中维护部分数据。整体的流程如下：</p>
+<p><img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/CS/sstable.png" alt="sstable"></p>
+<p>这个方案基本上可以工作得很好。</p>
+<p>不过如果数据写入内存的时候数据库奔溃，导致部分数据没有写入到磁盘中，就会出现问题。</p>
+<p>这也好解决，只要在磁盘上维护一个单独的日志，每个写入都立即追加到这个日志即可。</p>
+<p>如果发生崩溃，就可以根据这个日志来进行恢复。同时这个日志也不需要按key排序，因为它的目的在于崩溃恢复。</p>
+<p>当内存表写入磁盘后，这个日志就可以丢弃了。</p>
+<h4 id="2-4-3-Making-an-LSM-tree-out-of-SSTables"><a href="#2-4-3-Making-an-LSM-tree-out-of-SSTables" class="headerlink" title="2.4.3 Making an LSM-tree out of SSTables"></a>2.4.3 Making an LSM-tree out of SSTables</h4><p>很多数据库比如LevelDB和RocksDB使用了上面描述的这个算法。</p>
+<p>这个索引结构最初由Patrick O’Neil等人以日志结构合并树（Log-Structured Merge-Tree，LSM-Tree）命名的。</p>
+<p>所以，基于合并和压缩排序文件原理的存储引擎通常都被称为LSM存储引擎。</p>
+<p>这也是Elasticsearch和Solr等全文搜索系统的索引引擎Lucene的基础。</p>
+<p>此外，还有很多可以考虑的细节。</p>
+<p>比如，如果一个key不存在，那么需要遍历所有key所在范围的段才能确定不存在。这时可以使用布隆过滤器。</p>
+<p>SSTable压缩和合并也有不同的策略，有大小分级和分层压缩等。</p>
+<h2 id="3-B-Tree"><a href="#3-B-Tree" class="headerlink" title="3. B-Tree"></a>3. B-Tree</h2><p>日志结构索引之外还有一种截然不同的索引结构：B-Tree。</p>
+<p>B-Tree和SSTable唯一相同之处在于也对key进行排序。SSTable使用不同的段来存储数据，而B-Tree是基于页的。</p>
+<p>每个页固定大小（通常4KB），是读写的最小单元，这样更接近于底层硬件。</p>
+<p>像内存中的指针一样，不同的页之间也可以互相引用。这样就可以构成树形结构：</p>
+<p><img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/CS/b-tree%20index.png" alt="b-tree index"></p>
+<p>其中的一页作为整棵树的根节点，每次查询都从它开始遍历。</p>
+<p>B-Tree底层的基本写操作是使用新数据来覆盖磁盘上的旧页，这和SSTable只追加不同，覆盖后的页引用可以不变。</p>
+<p>如果需要写的数据旧页装不下，那么就会发生页的分裂。分裂后需要更新父节点对这两个子页的引用。</p>
+<p>如果部分写入的时候发生崩溃，会导致索引破坏。为了解决这个问题，可以使用<strong>预写日志（write-ahead log, WAL）</strong>，也叫重做日志（redo-log）。</p>
+<p>在B-Tree之上的优化：</p>
+<ul>
+<li>使用写时复制来代替预写日志（LMDB）；</li>
+<li>保存键的缩略信息，一个页可以保存更多键，降低树的深度；</li>
+<li>相邻子页顺序保存在磁盘上；</li>
+<li>添加兄弟页的引用；</li>
+<li>分形树，减少磁盘寻道。</li>
+</ul>
+<p>下面简单比较一下两者的优劣。</p>
+<p>简单来说就是，<strong>B-Tree读快，LSM-Tree写快</strong>。</p>
+<p>LSM-Tree在磁盘上顺序写，支持更好地压缩，所以文件通常比B-Tree小，也没有磁盘碎片。由于顺序写，所以写更快。</p>
+<p>B-Tree的优点就是，每个键在索引上都有一个唯一对应的位置，这和LSM-Tree是不同的（LSM-Tree一个键可以在多个段中，只要每个段内键唯一即可）。</p>
+<p>这样B-Tree就可以提供更强的事务支持。</p>
+<p>不过最适用的才是最好的。</p>
+<h2 id="4-其他索引结构"><a href="#4-其他索引结构" class="headerlink" title="4. 其他索引结构"></a>4. 其他索引结构</h2><p>上面介绍的都是key-value索引，就像是关系型数据库中的主键，每个key唯一对应一条记录。</p>
+<p>此外，二级索引（secondary index）也很常见，使用二级索引可以高效地执行行联结操作。</p>
+<p>不过二级索引对应的值不是唯一的。不过值可以是匹配行的列表，也可以加追一些标识符来使键变成唯一的。</p>
+<p>B-Tree和LSM-Tree都支持二级索引。</p>
+<h3 id="4-1-value里存什么"><a href="#4-1-value里存什么" class="headerlink" title="4.1 value里存什么"></a>4.1 value里存什么</h3><p>key就是键，那value里面存什么呢？两种：</p>
+<p><img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/CS/values%20of%20indexes.png" alt="values of indexes"></p>
+<p>第二种堆文件比较常见，可以避免复制数据。</p>
+<p>不过索引到堆文件的跳转会有性能损耗，这样可以在value里直接存所有的数据，这就是聚集索引（clustered index）。</p>
+<p>比如在MySQL InnoDB中，主键始终是聚集索引，二级索引引用主键（而不是堆文件）。</p>
+<p>在聚集索引和非聚集索引之间，可以有一个折中设计，在value里存放部分值，叫做覆盖索引（covering index）或包含列的索引（index with included columns）。</p>
+<p>读取方便那么就会给写入带来麻烦。数据冗余在写入时需要更多工作，不然就会出现不一致的结果。</p>
+<h3 id="4-2-多列索引"><a href="#4-2-多列索引" class="headerlink" title="4.2 多列索引"></a>4.2 多列索引</h3><p>前面提到的索引都是只有一个值的键。多列索引可以同时查询多个列。</p>
+<p>最常见的多列索引是级联索引（concatenated index），只是简单地将多个列组合成一个列（组合的顺序按照索引定义的顺序）。</p>
+<p>级联索引的问题是，需要指定组成索引的第一个列之后才能查找第二个列。</p>
+<p>多维索引（multi-dimensional index）可以提供多个维度的同时筛选，这对于地理位置等很有用。</p>
+<p>不过B-Tree和LSM-Tree不支持多维索引。</p>
+<h3 id="4-3-内存数据库"><a href="#4-3-内存数据库" class="headerlink" title="4.3 内存数据库"></a>4.3 内存数据库</h3><p>随着内存成本的降低，也可以将所有的数据存储在内存中。</p>
+<p>内存数据库的优势并不是因为不需要从磁盘读取。如果内存足够，即使是基于磁盘的存储引擎，也可能不需要从磁盘中读取数据。内存数据库可以更快，是因为它们避免了将内存中的数据编码成磁盘存储格式的开销。</p>
+<p>内存数据库可以支持大于内存的数据量。通过<strong>反缓存方法</strong>，将最近最少使用的数据存入磁盘即可空余出更多的内存空间。</p>
+<h2 id="5-Transaction-Processing-or-Analytics？"><a href="#5-Transaction-Processing-or-Analytics？" class="headerlink" title="5. Transaction Processing or Analytics？"></a>5. Transaction Processing or Analytics？</h2><p>数据库的使用模式可以分为在线事务处理（online transaction processing, OLTP）和在线分析处理（online analytic processing, OLAP）。两者区别如下：</p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>OLTP</th>
+<th>OLAP</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>主要读特征</td>
+<td>基于键，每次查询返回很少的记录</td>
+<td>对大量记录进行汇总</td>
+</tr>
+<tr>
+<td>主要写特征</td>
+<td>随机访问，低延迟写入用户输入</td>
+<td>批量导入（ETL）或事件流</td>
+</tr>
+<tr>
+<td>典型使用场景</td>
+<td>终端用户，web应用</td>
+<td>内部分析师，为决策提供支持</td>
+</tr>
+<tr>
+<td>数据表征</td>
+<td>最新的数据状态（当前时间点）</td>
+<td>随着时间而变化的所有事件历史</td>
+</tr>
+<tr>
+<td>数据规模</td>
+<td>GB到TB</td>
+<td>TB到PB</td>
+</tr>
+</tbody></table>
+<p>SQL既可以用来做OLTP，也可以用来做OLAP。不过随着数据量的增加，现在开始使用独立的数据库来做OLAP，叫做数据仓库（data warehouse）。</p>
+<h3 id="5-1-Data-Warehouse"><a href="#5-1-Data-Warehouse" class="headerlink" title="5.1 Data Warehouse"></a>5.1 Data Warehouse</h3><p>业务可能会随着时间有越来越多的数据库，这些数据库对各自的业务都很重要，在这只上进行数据分析工作不太现实。</p>
+<p>首先是数据隔离。一个统计分析可以涉及到多个数据库，这需要做表join。</p>
+<p>其次，分析操作需要扫描大量记录，这对数据库的性能有很大的影响。</p>
+<p>所以可以将各个数据库的数据复制一份到另外的地方，来做分析工作。这就是提取-转换-加载（Extract-Transform-Load, ETL）过程：</p>
+<p><img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/CS/etl.png" alt="etl"></p>
+<p>前面介绍的数据库都不太适合做OLAP，所以需要面向分析优化的存储引擎。</p>
+<h3 id="5-2-星型与雪花型分析模型"><a href="#5-2-星型与雪花型分析模型" class="headerlink" title="5.2 星型与雪花型分析模型"></a>5.2 星型与雪花型分析模型</h3><p>和事务处理领域广泛使用了多种不同数据模型不同，分析型业务的数据模型很少。</p>
+<p>比如星型模型：</p>
+<p><img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/CS/star%20schema.png" alt="star schema"></p>
+<p>模型的中心是一个事实表（fact table），其中的列是属性，还有对其他表的外键，这些被引用的表叫做维度表（dimension tables）。</p>
+<p>星型模型的一个变体是雪花模型，其中维度进一步细分为子空间。</p>
+<p>数据仓库中的表可能非常宽，上百个列，包含所有分析数据的元数据。</p>
+<p>这么宽的表也为分析带来了难度，这时就出现了列式存储。</p>
+<h2 id="6-列式存储"><a href="#6-列式存储" class="headerlink" title="6. 列式存储"></a>6. 列式存储</h2><p>用于数据分析的事实表基本上很宽，数据也很多（巨多行），但是查询的时候只会选择其中的几个列，大多数OLTP数据库中，存储是面向行的，即使选择几列，也要把改行所有的数据取出来。</p>
+<p>这样一个直观的改变就是，面向列的存储：</p>
+<p><img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/CS/column%20storage.png" alt="column storage"></p>
+<p>每个列存在一个文件中，查询的时候只要解析使用的列就可以了。</p>
+<p>列文件中按照一定的顺序存储行对应字段的数据，如果要获取某一行的话，将所有列对应记录取出来就可以了。</p>
+<h3 id="6-1-列压缩"><a href="#6-1-列压缩" class="headerlink" title="6.1 列压缩"></a>6.1 列压缩</h3><p>数据库中的列，对应一个属性。而这个属性一般是小于行数的。</p>
+<p>所以可以对列进行压缩，来进一步降低对磁盘吞吐量的要求。</p>
+<p>对列的压缩可以使用位图编码：</p>
+<p><img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/CS/column%20bitmap.png" alt="column bitmap"></p>
+<p>也可以使用游程编码，进一步压缩。</p>
+<p>怎么查询呢？</p>
+<pre class="line-numbers language-sql"><code class="language-sql"><span class="token keyword">WHERE</span> product_sk <span class="token operator">IN</span> <span class="token punctuation">(</span><span class="token number">30</span><span class="token punctuation">,</span> <span class="token number">68</span><span class="token punctuation">,</span> <span class="token number">69</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>可以加载<code>product_sk = 30</code>, <code>product_sk = 68</code>和<code>product_sk = 69</code>三个位图，然后按位或操作即可。</p>
+<p>就很神奇。</p>
+<h3 id="6-2-列存储的写操作"><a href="#6-2-列存储的写操作" class="headerlink" title="6.2 列存储的写操作"></a>6.2 列存储的写操作</h3><p>列存储的特点是可以加速查询，但是写入就更加困难了。</p>
+<p>如果在表中插入一列，那么需要更新所有的列文件。不过可以使用类似LSM-Tree的方式，在文件结尾追加。</p>
+<p>也可以使用这种方式来进行排序。</p>
+<h3 id="6-3-Aggregation-Data-Cubes-and-Materialized-Views"><a href="#6-3-Aggregation-Data-Cubes-and-Materialized-Views" class="headerlink" title="6.3 Aggregation: Data Cubes and Materialized Views"></a>6.3 Aggregation: Data Cubes and Materialized Views</h3><p>数据仓库在做分析的时候使用最多的操作就是聚合，比如SQL中的COUNT, SUM, AVG, MIN或MAX等。</p>
+<p>如果聚合操作很多，那一个简单的想法就是，先对原始数据进行聚合，存起来，后面的分析不就可以直接使用了吗？</p>
+<p>物化视图（materialized views）就是实现这种缓存的一种方法。</p>
+<p>数据库中也有视图的概念，但那只是虚拟的，并没有真正存储数据。</p>
+<p>物化视图是写入磁盘的实际结果副本，当底层数据变化时，物化视图也要更新。</p>
+<p>物化视图的一个特殊情况是数据立方体（data cube），是由不同维度分组的聚合网格：</p>
+<p><img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/CS/data%20cube.png" alt="data cube"></p>
+<p>这里是两个维度：日期和产品。data cube可以扩展到多个维度，每一条记录都是所有维度的一个组合条件。</p>
+<p>优点就是查询快，作为在原始数据上只经过一步处理的数据，可以在此基础上做进一步分析，不需要去重新扫描原始数据。</p>
+<p>缺点也很明显，原始数据发生变化，data cube也要变化，显得不太灵活。</p>
+<p>面对不同场景的应用，需要使用不同的工具。不同的工具有自己的优劣，了解它们才能更好地使用。</p>
+
+            </div>
+            <hr/>
+
+            
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/ddia/">
+                                    <span class="chip bg-color">ddia</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="far fa-dot-circle"></i>&nbsp;Current
+            </div>
+            <div class="card">
+                <a href="/ddia-foundations-of-data-systems-part-2-storage-and-retrieval/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="ddia, Foundations of Data Systems (Part 2): Storage and Retrieval">
+                        
+                        <span class="card-title">ddia, Foundations of Data Systems (Part 2): Storage and Retrieval</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+这篇文章是ddia第三章的阅读笔记。
+
+0. Pre
+数据库的功能简单来说就是两个：
+
+插入数据时，数据库保存数据；
+检索时，数据库返回数据。
+
+很简单，但是为了达成这两个目的，数据库需要做好多事情。
+这就是这篇文章所要讲述的东西。
+即，
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-05-27
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/cs/" class="post-category">
+                                    cs
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/ddia/">
+                        <span class="chip bg-color">ddia</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                Next&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/ddia-foundations-of-data-systems-part-1-terminology-approach-data-models-and-query-languages/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/17.jpg" class="responsive-img" alt="ddia, Foundations of Data Systems (Part 1): Terminology, Approach, Data Models and Query Languages">
+                        
+                        <span class="card-title">ddia, Foundations of Data Systems (Part 1): Terminology, Approach, Data Models and Query Languages</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+这篇文章是ddia第一部分数据系统基础中第一章和第二章的阅读笔记。
+
+1. Reliable, Scalable, and Maintainable Applications
+应用系统包含的模块：
+
+数据库：用以存储数据，这样应用就可以再
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-05-25
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/cs/" class="post-category">
+                                    cs
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/ddia/">
+                        <span class="chip bg-color">ddia</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+    
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+<!-- 代码块折行 -->
+
+<style type="text/css">
+code[class*="language-"], pre[class*="language-"] { white-space: pre !important; }
+</style>
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;You Will See...</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+<script src="https://cdn.bootcss.com/mathjax/2.7.7/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script>
+    MathJax.Hub.Config({
+        tex2jax: {inlineMath: [['$', '$'], ['\(', '\)']]}
+    });
+</script>
+
+
+    <footer class="page-footer bg-color">
+    <div class="container row center-align">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            <span id="year">2020</span>
+            <a href="http://deuterium.fun" target="_blank">Valineliu</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+            
+            
+            
+            
+            
+            <br>
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link ">
+
+
+    <a href="mailto:1749118121@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;Search</span>
+            <input type="search" id="searchInput" name="s" placeholder="Please enter a search keyword"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
