@@ -1,0 +1,988 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="ddia, Foundations of Data Systems (Part 3): Encoding and Evolution, Deuterium">
+    <meta name="description" content="
+这篇文章是ddia第四章的阅读笔记。
+
+
+Everything changes and nothing stands still.
+
+0. Pre
+
+需求总是在变。上层程序变了，那么下层的数据库就有可能变。
+要么加字段、删字段，要么使用新">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>ddia, Foundations of Data Systems (Part 3): Encoding and Evolution | Deuterium</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+    
+    <script src="/libs/jquery/jquery.min.js"></script>
+    
+<link rel="alternate" href="/atom.xml" title="Deuterium" type="application/atom+xml">
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper head-container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">Deuterium</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>Home</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>Tags</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>Categories</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>About</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="https://valineliu.gitbook.io/deuterium-wiki/" target="_blank" rel="noopener" class="waves-effect waves-light">
+      
+      <i class="fab fa-wikipedia-w" style="zoom: 0.6;"></i>
+      
+      <span>Wiki</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>Friends</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="Search" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">Deuterium</div>
+        <div class="logo-desc">
+            
+            Software and anecdotes.
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			Home
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			Tags
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			Categories
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			About
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="https://valineliu.gitbook.io/deuterium-wiki/" target="_blank" rel="noopener" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fab fa-wikipedia-w"></i>
+			
+			Wiki
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			Friends
+		</a>
+          
+        </li>
+        
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/15.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <div class="description center-align post-title">
+                        ddia, Foundations of Data Systems (Part 3): Encoding and Evolution
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        height: calc(100vh - 250px);
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #3B5998;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #3B5998;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #3B5998;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/ddia/">
+                                <span class="chip bg-color">ddia</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/cs/" class="post-category">
+                                cs
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
+                    2020-06-01
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
+                    2.6k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>Read Times:&nbsp;&nbsp;
+                    9 Min
+                </div>
+                
+				
+                
+            </div>
+            
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <blockquote>
+<p>这篇文章是ddia第四章的阅读笔记。</p>
+</blockquote>
+<blockquote>
+<p><em>Everything changes and nothing stands still.</em></p>
+</blockquote>
+<h2 id="0-Pre"><a href="#0-Pre" class="headerlink" title="0. Pre"></a>0. Pre</h2><img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/CS/4.Encoding%20and%20Evolution.png">
+
+<p>需求总是在变。上层程序变了，那么下层的数据库就有可能变。</p>
+<p>要么加字段、删字段，要么使用新的方式来展示字段。</p>
+<p>现在的程序升级迭代，往往会造成复杂的情况。</p>
+<p>系统的滚动升级，导致系统中一部分使用旧代码，一部分使用新代码。</p>
+<p>新代码上线之后会使用新的方式来写数据，旧代码就可能读取到新的数据。</p>
+<p>这就要求，两个方向的兼容。</p>
+<p><strong>向后兼容（backward compatility）</strong>和<strong>向前兼容（foreward compatility）</strong>。</p>
+<p>向后兼容是指新代码可以读取旧代码编写的数据；向前兼容是指旧代码可以读取新代码编写的数据。</p>
+<p>向后兼容比较容易，编写新代码的时候只需要注意正确处理旧数据格式即可。</p>
+<p>对于向前兼容就有些麻烦了，旧代码需要忽略新代码的添加。</p>
+<p>数据编码的格式就像不同机器之间的协议一样。</p>
+<p>确定了格式才能正确处理数据。</p>
+<p>所以要先了解一下数据编码的格式有哪些，以及这些格式面对需求变更时是如何处理的。</p>
+<p>有了数据，那么如何使用数据也很重要。</p>
+<p>先看看数据编码的格式。</p>
+<h2 id="1-数据编码格式"><a href="#1-数据编码格式" class="headerlink" title="1. 数据编码格式"></a>1. 数据编码格式</h2><p>数据格式至少有两种。</p>
+<p>一种在内存中，就是各种编程语言中的数据结构。比如数组、结构体、对象等。</p>
+<p>在内存中通过指针可以高效访问这些类型的数据。</p>
+<p>还有一种是在多个主机之间共享的数据，比如通过文件或网络。</p>
+<p>这时指针就不行了。需要一种编码方式将数据编码。</p>
+<p>整体的流程就是，一台主机将内存中需要发送的数据编码，通过一定方式（文件或网络）将数据发送到另一台主机上。</p>
+<p>接收到数据的主机将数据解码加载到内存，然后处理。</p>
+<p>好的，怎么将内存中的数据进行编码呢？</p>
+<h3 id="1-1-语言特定的格式"><a href="#1-1-语言特定的格式" class="headerlink" title="1.1 语言特定的格式"></a>1.1 语言特定的格式</h3><p>首先大多数语言内置了这个功能。</p>
+<p>比如Java的<code>java.io.Serializable</code>等。</p>
+<p>虽然方便但是不推荐使用：</p>
+<ul>
+<li>与语言绑定在一起，使用另一种语言访问就很麻烦；</li>
+<li>有一些安全问题；</li>
+<li>效率低。</li>
+</ul>
+<h3 id="1-2-JSON-amp-XML"><a href="#1-2-JSON-amp-XML" class="headerlink" title="1.2 JSON &amp; XML"></a>1.2 JSON &amp; XML</h3><p>json和XML是可以由不同语言编写与访问的标准化编码，使用得比较广泛。</p>
+<p>json文档大多数语言都支持，这样在一个程序中可以将数据编码成json文档然后发送到另一个程序，解码之后处理，完美。</p>
+<p>这些都是文本格式，对人友好，不过也有一些问题：</p>
+<ul>
+<li>数字编码有一些模糊，比如json不区分整数和浮点数；</li>
+<li>不支持二进制字符串，不过可以通过base64编码解决，虽然数据大了。</li>
+</ul>
+<p>这些问题都不大，现在json和xml以及csv格式已经广泛使用了。</p>
+<p>如果是在组织内部使用，那么json占空间比较大。</p>
+<p>使用二进制编码的话会节省大量空间。</p>
+<h3 id="1-3-Thrift-amp-Protocol-Buffers"><a href="#1-3-Thrift-amp-Protocol-Buffers" class="headerlink" title="1.3 Thrift &amp; Protocol Buffers"></a>1.3 Thrift &amp; Protocol Buffers</h3><p>Thrift和Protocol Buffer是两种二进制编码格式。都需要先使用接口定义语言来描述模式。</p>
+<p>Thrift：</p>
+<pre class="line-numbers language-thift"><code class="language-thift">struct Person {
+    1: required string            userName,
+    2: optional i64                favoriteNumber,
+    3: optional list<string>    interests
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>Protocol Buffer：</p>
+<pre class="line-numbers language-protobuf"><code class="language-protobuf"><span class="token keyword">message</span> Peson <span class="token punctuation">{</span>
+    <span class="token builtin">required</span> <span class="token primitive symbol">string</span> use_name        <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token builtin">optional</span> <span class="token primitive symbol">int64</span> favorite_number    <span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">;</span>
+    <span class="token builtin">repeated</span> <span class="token primitive symbol">string</span> interests        <span class="token operator">=</span> <span class="token number">3</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>两者很相似。</p>
+<p>这里不详细介绍它们的编码方式，仅仅看看，它们是如何应对模式变化的。</p>
+<h4 id="1-3-1-字段标签和模式演化"><a href="#1-3-1-字段标签和模式演化" class="headerlink" title="1.3.1 字段标签和模式演化"></a>1.3.1 字段标签和模式演化</h4><p>Thrift和Protocol Buffer都使用标签来标识字段，标签是唯一的，字段名字没有影响。</p>
+<p>标签不可以更改，否则会使已有的编码数据无效。</p>
+<p><strong>添加新字段</strong></p>
+<p>添加新字段，只需要给一个新的标签。旧代码不认识新的字段，那么忽略即可。</p>
+<p>通过数据类型的注释来通知解析器跳过指定的字节数，这样就可以实现向前兼容。</p>
+<p>新代码可以读取旧数据，因为每个字段都有一个唯一的标签。但是当新增的字段是<code>required</code>的话，那么读取旧数据就会失败。</p>
+<p>因为旧数据不会有新增字段。</p>
+<p>所以新增字段需要是<code>optional</code>的，或者具有默认值才能实现向后兼容。</p>
+<p><strong>删除字段</strong></p>
+<p>和添加字段类似，不过兼容性问题刚好相反。</p>
+<p>就是说，只能删除<code>optional</code>的字段，这样旧代码才能成功读取新代码写的数据。</p>
+<p>所以<code>required</code>字段永远不能被删除。</p>
+<p>同时，被删除字段的标签不能再使用。因为系统中可能还有使用旧格式的旧代码在写入数据。</p>
+<h4 id="1-3-2-数据类型和模式演化"><a href="#1-3-2-数据类型和模式演化" class="headerlink" title="1.3.2 数据类型和模式演化"></a>1.3.2 数据类型和模式演化</h4><p>结论：<strong>更改数据类型可能会导致数据丢失精度或被截断的风险</strong>。</p>
+<p>比如将一个32位整数变成一个64位整数。</p>
+<p>新代码读取旧数据，可以自动填充缺失的位为0，没有影响。</p>
+<p>旧代码读取新数据，将一个64位整数解释成32位，就可能丢失数据。</p>
+<h3 id="1-4-Avro"><a href="#1-4-Avro" class="headerlink" title="1.4 Avro"></a>1.4 Avro</h3><p>Avro也使用模式来指定编码的数据结构。有两种模式，Avro IDL用于人工编辑，另一种基于json易于机器读取。</p>
+<p>Avro IDL：</p>
+<pre class="line-numbers language-idl"><code class="language-idl">record Person {
+    string                     userName;
+    union { null, long }    favoriteNumber = null;
+    array<string>            interests;
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>对应的json表示：</p>
+<pre class="line-numbers language-json"><code class="language-json"><span class="token punctuation">{</span>
+    <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"record"</span><span class="token punctuation">,</span>
+    <span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"Person"</span><span class="token punctuation">,</span>
+    <span class="token property">"fields"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">{</span><span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"userName"</span><span class="token punctuation">,</span>        <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"string"</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">{</span><span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"favoriteNumber"</span><span class="token punctuation">,</span>    <span class="token property">"type"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"null"</span><span class="token punctuation">,</span> <span class="token string">"long"</span><span class="token punctuation">]</span><span class="token punctuation">,</span>    <span class="token property">"default"</span><span class="token operator">:</span> <span class="token null">null</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">{</span><span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"interests"</span><span class="token punctuation">,</span>        <span class="token property">"type"</span><span class="token operator">:</span><span class="token punctuation">{</span><span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"array"</span><span class="token punctuation">,</span> <span class="token property">"items"</span><span class="token operator">:</span> <span class="token string">"string"</span><span class="token punctuation">}</span><span class="token punctuation">}</span>
+    <span class="token punctuation">]</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>模式中没有使用标签，为了解析二进制数据，按照出现在模式中的顺序遍历这些字段，然后直接采用模式中每个字段的数据类型进行解析。</p>
+<p>这就是说，只有读取数据的代码使用的模式与写入数据的代码使用的模式一致时，才能正确解析二进制数据。</p>
+<p>那么Avro怎么支持模式演化呢？</p>
+<h4 id="1-4-1-写模式与读模式"><a href="#1-4-1-写模式与读模式" class="headerlink" title="1.4.1 写模式与读模式"></a>1.4.1 写模式与读模式</h4><p>简单来说，编码使用的模式就是写模式，解码使用的模式就是读模式。</p>
+<p>同一个模式不同的目的就可以在读模式与写模式间切换。</p>
+<p>比如一个应用程序知道自己现在使用的模式。当程序用这个模式编码数据时，这就是写模式；使用这个模式来解码收到的数据时，就是读模式。</p>
+<p>Avro允许读模式和写模式不一样，只需要保持兼容即可。</p>
+<p>解码数据时，Avro通过对比查看写模式和读模式并将数据从写模式转换为读模式来解决差异：</p>
+<img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/CS/avro%20writer%27s%20schema%20and%20reader%27s%20schema.png">
+
+<p>使用字段名进行匹配，这样字段顺序就无关了。</p>
+<p>如果数据中有写模式中有但读模式中没有的字段，直接忽略。</p>
+<p>如果读取的数据需要某个字段，但是写模式中没有，则使用读模式中声明的默认值填充。</p>
+<h4 id="1-4-2-模式演化规则"><a href="#1-4-2-模式演化规则" class="headerlink" title="1.4.2 模式演化规则"></a>1.4.2 模式演化规则</h4><p>在Avro中，向前兼容意味着旧代码使用的模式是读模式，新代码使用的模式是写模式；</p>
+<p>向后兼容意味着新代码使用的模式是读模式，旧代码使用的模式是写模式。</p>
+<p>为了保持兼容性，只能添加或删除具有默认值的字段。</p>
+<p>所以不需要有可选或必须的标签（有联合类型和默认值）。</p>
+<h4 id="1-4-3-什么是写模式"><a href="#1-4-3-什么是写模式" class="headerlink" title="1.4.3 什么是写模式"></a>1.4.3 什么是写模式</h4><p>一个问题：reader怎么知道一个数据的写模式是什么呢？</p>
+<p>记录附带着写模式太不现实了，毕竟模式可能比数据还大。</p>
+<p>答案是Avro使用的上下文。比如：</p>
+<ul>
+<li><strong>有很多记录的大文件</strong>：这个时候只需要在开头加一个模式就可以了；</li>
+<li><strong>具有单独写入记录的数据库</strong>：将所有的模式存在单独的数据库中；</li>
+<li><strong>通过网络发送数据</strong>：在建立协议的时候协商模式即可。</li>
+</ul>
+<h4 id="1-4-4-动态生成的模式"><a href="#1-4-4-动态生成的模式" class="headerlink" title="1.4.4 动态生成的模式"></a>1.4.4 动态生成的模式</h4><p>由于Avro不使用标签，这对动态生成的模式更友好。</p>
+<p>一个例子就是导出关系型数据库中的数据。</p>
+<p>导出的时候根据表动态生成一个模式。</p>
+<p>之后数据库发生变化，还可以生成新的模式。</p>
+<p>所以导出的过程中不需要关注模式的变化，但是使用Thrift或Protocol Buffer的话，就需要小心地选择标签号了。</p>
+<h3 id="1-5-模式的优点"><a href="#1-5-模式的优点" class="headerlink" title="1.5 模式的优点"></a>1.5 模式的优点</h3><ul>
+<li>比二进制的json更紧凑；</li>
+<li>模式是一种最新的文档；</li>
+<li>模式数据库允许在部署任何内容之前检查模式更改的兼容性。</li>
+</ul>
+<h2 id="2-数据流模式"><a href="#2-数据流模式" class="headerlink" title="2. 数据流模式"></a>2. 数据流模式</h2><p>为了支持数据在不同进程之间的流动，才有了上面的那些编码方法。</p>
+<p>那么数据在不同的进程中都可以怎么流动呢？</p>
+<ul>
+<li>通过数据库；</li>
+<li>通过服务调用；</li>
+<li>通过异步消息传递。</li>
+</ul>
+<h3 id="2-1-通过数据库"><a href="#2-1-通过数据库" class="headerlink" title="2.1 通过数据库"></a>2.1 通过数据库</h3><p>写入数据库的进程对数据进行编码，读取数据库的进程对数据进行解码。</p>
+<p>数据库的模式更新也需要注意前后兼容和向前兼容。</p>
+<img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/CS/schema%20change%20in%20db.png">
+
+<h3 id="2-2-通过服务：REST和RPC"><a href="#2-2-通过服务：REST和RPC" class="headerlink" title="2.2 通过服务：REST和RPC"></a>2.2 通过服务：REST和RPC</h3><p>通过服务调用，数据也可以在不同的进程中流动。</p>
+<p>其中客户端对请求编码，服务端接收请求解码然后对响应编码，客户端再对响应解码。</p>
+<p>由于使用服务调用不能强迫客户升级，所以需要长期保持兼容性。</p>
+<p>这就涉及到API版本的管理了。</p>
+<h3 id="2-3-通过消息传递"><a href="#2-3-通过消息传递" class="headerlink" title="2.3 通过消息传递"></a>2.3 通过消息传递</h3><p>消息代理作为消息的中转，在数据流动的两个角色间进行处理。</p>
+<p>和RPC相比，使用消息代码有以下的好处：</p>
+<ul>
+<li>如果接收方不可用或过载，可以充当缓冲区；</li>
+<li>可以自动将消息重新发送到崩溃的进程，防止消息丢失；</li>
+<li>避免了发送方需要知道接收方的地址；</li>
+<li>在逻辑上将发送方与接收方分离。</li>
+</ul>
+<p>这一章最重要的是，知道数据编码的不同方式，知道如何保持两个方向的兼容性。</p>
+
+            </div>
+            <hr/>
+
+            
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/ddia/">
+                                    <span class="chip bg-color">ddia</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="far fa-dot-circle"></i>&nbsp;Current
+            </div>
+            <div class="card">
+                <a href="/ddia-foundations-of-data-systems-part-3-encoding-and-evolution/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/15.jpg" class="responsive-img" alt="ddia, Foundations of Data Systems (Part 3): Encoding and Evolution">
+                        
+                        <span class="card-title">ddia, Foundations of Data Systems (Part 3): Encoding and Evolution</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+这篇文章是ddia第四章的阅读笔记。
+
+
+Everything changes and nothing stands still.
+
+0. Pre
+
+需求总是在变。上层程序变了，那么下层的数据库就有可能变。
+要么加字段、删字段，要么使用新
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-06-01
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/cs/" class="post-category">
+                                    cs
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/ddia/">
+                        <span class="chip bg-color">ddia</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                Next&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/ddia-foundations-of-data-systems-part-2-storage-and-retrieval/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="ddia, Foundations of Data Systems (Part 2): Storage and Retrieval">
+                        
+                        <span class="card-title">ddia, Foundations of Data Systems (Part 2): Storage and Retrieval</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+这篇文章是ddia第三章的阅读笔记。
+
+0. Pre
+数据库的功能简单来说就是两个：
+
+插入数据时，数据库保存数据；
+检索时，数据库返回数据。
+
+很简单，但是为了达成这两个目的，数据库需要做好多事情。
+这就是这篇文章所要讲述的东西。
+即，
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-05-27
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/cs/" class="post-category">
+                                    cs
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/ddia/">
+                        <span class="chip bg-color">ddia</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+    
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+<!-- 代码块折行 -->
+
+<style type="text/css">
+code[class*="language-"], pre[class*="language-"] { white-space: pre !important; }
+</style>
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;You Will See...</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+    <footer class="page-footer bg-color">
+    <div class="container row center-align">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            <span id="year">2020</span>
+            <a href="http://deuterium.fun" target="_blank">Valineliu</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+            
+            
+            
+            
+            
+            <br>
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link ">
+
+
+    <a href="mailto:1749118121@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;Search</span>
+            <input type="search" id="searchInput" name="s" placeholder="Please enter a search keyword"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>

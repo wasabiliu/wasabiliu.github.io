@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://deuterium.fun/"/>
-  <updated>2020-05-27T07:36:52.709Z</updated>
+  <updated>2020-06-01T08:06:15.383Z</updated>
   <id>http://deuterium.fun/</id>
   
   <author>
@@ -15,6 +15,37 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>ddia, Foundations of Data Systems (Part 3): Encoding and Evolution</title>
+    <link href="http://deuterium.fun/ddia-foundations-of-data-systems-part-3-encoding-and-evolution/"/>
+    <id>http://deuterium.fun/ddia-foundations-of-data-systems-part-3-encoding-and-evolution/</id>
+    <published>2020-06-01T08:03:54.000Z</published>
+    <updated>2020-06-01T08:06:15.383Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;blockquote&gt;
+&lt;p&gt;这篇文章是ddia第四章的阅读笔记。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;em&gt;Everything changes and nothing stands
+        
+      
+    
+    </summary>
+    
+    
+      <category term="cs" scheme="http://deuterium.fun/categories/cs/"/>
+    
+    
+      <category term="ddia" scheme="http://deuterium.fun/tags/ddia/"/>
+    
+  </entry>
   
   <entry>
     <title>ddia, Foundations of Data Systems (Part 2): Storage and Retrieval</title>
@@ -580,37 +611,6 @@
       <category term="go" scheme="http://deuterium.fun/tags/go/"/>
     
       <category term="web" scheme="http://deuterium.fun/tags/web/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Year Reading in 2019</title>
-    <link href="http://deuterium.fun/year-reading-in-2019/"/>
-    <id>http://deuterium.fun/year-reading-in-2019/</id>
-    <published>2019-12-27T04:01:00.000Z</published>
-    <updated>2020-03-24T06:25:14.357Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;又是一年岁暮时。&lt;/p&gt;
-&lt;p&gt;最近才意识到，便随着2019年的过去，一个时代也过去了。&lt;/p&gt;
-&lt;p&gt;年初定的超过2017年的读书计划，接近但是没有完成（2017年120本，2019年113本，2018年太惨了28本）。&lt;/p&gt;
-&lt;p&gt;一个华丽的柱状图：&lt;/p&gt;
-&lt;p&gt;&lt;
-        
-      
-    
-    </summary>
-    
-    
-      <category term="reading" scheme="http://deuterium.fun/categories/reading/"/>
-    
-    
-      <category term="summary" scheme="http://deuterium.fun/tags/summary/"/>
     
   </entry>
   
