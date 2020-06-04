@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://deuterium.fun/"/>
-  <updated>2020-06-01T08:06:15.383Z</updated>
+  <updated>2020-06-04T06:29:26.552Z</updated>
   <id>http://deuterium.fun/</id>
   
   <author>
@@ -15,6 +15,36 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>ddia, Distributed Data (Part 1): Replication</title>
+    <link href="http://deuterium.fun/ddia-distributed-data-part-1-replication/"/>
+    <id>http://deuterium.fun/ddia-distributed-data-part-1-replication/</id>
+    <published>2020-06-04T06:23:17.000Z</published>
+    <updated>2020-06-04T06:29:26.552Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;blockquote&gt;
+&lt;p&gt;这篇文章是ddia第五章的阅读笔记。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;0x00-Pre&quot;&gt;&lt;a href=&quot;#0x00-Pre&quot; class=&quot;headerlink&quot; title=&quot;0x00 Pre&quot;&gt;&lt;/a&gt;0x00
+        
+      
+    
+    </summary>
+    
+    
+      <category term="cs" scheme="http://deuterium.fun/categories/cs/"/>
+    
+    
+      <category term="ddia" scheme="http://deuterium.fun/tags/ddia/"/>
+    
+  </entry>
   
   <entry>
     <title>ddia, Foundations of Data Systems (Part 3): Encoding and Evolution</title>
@@ -568,36 +598,6 @@
         
           &lt;p&gt;HTTP是一个无状态的协议。&lt;/p&gt;
 &lt;p&gt;这意味着服务器不会记录客户的状态。但是有时候服务器需要知道客户端的状态，这个时候就可以使用Cookie了。&lt;/p&gt;
-&lt;img
-        
-      
-    
-    </summary>
-    
-    
-      <category term="programming" scheme="http://deuterium.fun/categories/programming/"/>
-    
-    
-      <category term="go" scheme="http://deuterium.fun/tags/go/"/>
-    
-      <category term="web" scheme="http://deuterium.fun/tags/web/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Go Web (Part 3): response</title>
-    <link href="http://deuterium.fun/go-web-part-3-response/"/>
-    <id>http://deuterium.fun/go-web-part-3-response/</id>
-    <published>2020-01-02T09:07:02.000Z</published>
-    <updated>2020-01-02T09:07:33.593Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;有请求就要有响应，一来一回。这篇文章来看看response的细节。&lt;/p&gt;
 &lt;img
         
       
