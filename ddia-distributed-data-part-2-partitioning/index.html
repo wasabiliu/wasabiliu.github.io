@@ -34,9 +34,9 @@
     
     <script src="/libs/jquery/jquery.min.js"></script>
     
+<link rel="alternate" href="/atom.xml" title="Deuterium" type="application/atom+xml">
 <link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
-<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><link rel="alternate" href="/atom.xml" title="Deuterium" type="application/atom+xml">
-</head>
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
 
 
 <body>
@@ -416,7 +416,7 @@
 <img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/CS/replication%20and%20partitioning.png">
 
 <p>既然要将一个数据副本分成多块，那么第一个问题就是，怎么决定一个副本的记录放到那个分区上呢？</p>
-<h2 id="0x1-键值数据的分区"><a href="#0x1-键值数据的分区" class="headerlink" title="0x1 键值数据的分区"></a>0x1 键值数据的分区</h2><p>将数据分到多个节点上，那么就应该尽量均衡，否则就会出现热点（Hotspot）。</p>
+<h2 id="0x01-键值数据的分区"><a href="#0x01-键值数据的分区" class="headerlink" title="0x01 键值数据的分区"></a>0x01 键值数据的分区</h2><p>将数据分到多个节点上，那么就应该尽量均衡，否则就会出现热点（Hotspot）。</p>
 <p>避免热点最简单的就是将数据随机分配给所有的节点。</p>
 <p>不过这样的话读取数据的时候就麻烦了。</p>
 <p>如果数据是键值类型的话，可以简单改进。</p>
