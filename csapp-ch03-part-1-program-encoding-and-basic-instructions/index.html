@@ -1,0 +1,1538 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="csapp ch03 (part 1): Program Encoding and Basic Instructions, Deuterium">
+    <meta name="description" content="
+这篇文章是csapp第三章前五节的阅读笔记。
+
+0x00 程序编码对于两个C程序，可以通过如下的方式编译：
+gcc -Og -o p p1.c p2.c
+其中-Og选项告诉编译器不进行优化，直接根据C代码生成对应的汇编代码。
+给出下面的C">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>csapp ch03 (part 1): Program Encoding and Basic Instructions | Deuterium</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+    
+    <script src="/libs/jquery/jquery.min.js"></script>
+    
+<link rel="alternate" href="/atom.xml" title="Deuterium" type="application/atom+xml">
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper head-container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">Deuterium</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>Home</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>Tags</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>Categories</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>About</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="https://valineliu.gitbook.io/deuterium-wiki/" target="_blank" rel="noopener" class="waves-effect waves-light">
+      
+      <i class="fab fa-wikipedia-w" style="zoom: 0.6;"></i>
+      
+      <span>Wiki</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>Friends</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="Search" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">Deuterium</div>
+        <div class="logo-desc">
+            
+            Software and anecdotes.
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			Home
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			Tags
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			Categories
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			About
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="https://valineliu.gitbook.io/deuterium-wiki/" target="_blank" rel="noopener" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fab fa-wikipedia-w"></i>
+			
+			Wiki
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			Friends
+		</a>
+          
+        </li>
+        
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/23.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <div class="description center-align post-title">
+                        csapp ch03 (part 1): Program Encoding and Basic Instructions
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        height: calc(100vh - 250px);
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #3B5998;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #3B5998;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #3B5998;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/csapp/">
+                                <span class="chip bg-color">csapp</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/cs/" class="post-category">
+                                cs
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
+                    2020-06-08
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
+                    2.8k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>Read Times:&nbsp;&nbsp;
+                    12 Min
+                </div>
+                
+				
+                
+            </div>
+            
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <blockquote>
+<p>这篇文章是csapp第三章前五节的阅读笔记。</p>
+</blockquote>
+<h2 id="0x00-程序编码"><a href="#0x00-程序编码" class="headerlink" title="0x00 程序编码"></a>0x00 程序编码</h2><p>对于两个C程序，可以通过如下的方式编译：</p>
+<pre class="line-numbers language-shell"><code class="language-shell">gcc -Og -o p p1.c p2.c<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>其中<code>-Og</code>选项告诉编译器不进行优化，直接根据C代码生成对应的汇编代码。</p>
+<p>给出下面的C代码：</p>
+<pre class="line-numbers language-c"><code class="language-c"><span class="token keyword">long</span> <span class="token function">mult2</span><span class="token punctuation">(</span><span class="token keyword">long</span><span class="token punctuation">,</span> <span class="token keyword">long</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">void</span> <span class="token function">multstore</span><span class="token punctuation">(</span><span class="token keyword">long</span> x<span class="token punctuation">,</span> <span class="token keyword">long</span> y<span class="token punctuation">,</span> <span class="token keyword">long</span> <span class="token operator">*</span>dest<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">long</span> t <span class="token operator">=</span> <span class="token function">mult2</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token operator">*</span>dest <span class="token operator">=</span> t<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>为了查看生成的汇编代码，在编译的时候可以加上<code>-S</code>选项：</p>
+<pre class="line-numbers language-shell"><code class="language-shell">gcc -Og -S mstore.c<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>结果如下：</p>
+<pre class="line-numbers language-assembly"><code class="language-assembly">        .file   "mstore.c"
+        .text
+        .globl  multstore
+        .type   multstore, @function
+multstore:
+.LFB0:
+        .cfi_startproc
+        pushq   %rbx
+        .cfi_def_cfa_offset 16
+        .cfi_offset 3, -16
+        movq    %rdx, %rbx
+        call    mult2
+        movq    %rax, (%rbx)
+        popq    %rbx
+        .cfi_def_cfa_offset 8
+        ret
+        .cfi_endproc
+.LFE0:
+        .size   multstore, .-multstore
+        .ident  "GCC: (GNU) 4.8.5 20150623 (Red Hat 4.8.5-5)"
+        .section        .note.GNU-stack,"",@progbits<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>其中以<code>.</code>开头的都是为了方便汇编器和链接器的内容。</p>
+<p>如果使用<code>-c</code>选项的话，就可以生成<code>.o</code>和<code>.s</code>文件了：</p>
+<pre class="line-numbers language-shell"><code class="language-shell">gcc -Og -c mstore.c<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>如果只有<code>.o</code>文件，那么也可以通过工具来生产对应的<code>.s</code>文件：</p>
+<pre class="line-numbers language-shell"><code class="language-shell">objdump -d mstore.o<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>结果：</p>
+<pre class="line-numbers language-assembly"><code class="language-assembly">mstore.o:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+0000000000000000 <multstore>:
+   0:   53                      push   %rbx
+   1:   48 89 d3                mov    %rdx,%rbx
+   4:   e8 00 00 00 00          callq  9 <multstore+0x9>
+   9:   48 89 03                mov    %rax,(%rbx)
+   c:   5b                      pop    %rbx
+   d:   c3                      retq<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>生成一个可执行文件需要对<code>.o</code>文件进行链接，其中需要有一个<code>main</code>函数。比如下面的main.c：</p>
+<pre class="line-numbers language-c"><code class="language-c"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h></span></span>
+
+<span class="token keyword">void</span> <span class="token function">multstore</span><span class="token punctuation">(</span><span class="token keyword">long</span><span class="token punctuation">,</span> <span class="token keyword">long</span><span class="token punctuation">,</span> <span class="token keyword">long</span> <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">long</span> d<span class="token punctuation">;</span>
+    <span class="token function">multstore</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>d<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"2 * 3 --> %ld\n"</span><span class="token punctuation">,</span> d<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">long</span> <span class="token function">mult2</span><span class="token punctuation">(</span><span class="token keyword">long</span> a<span class="token punctuation">,</span> <span class="token keyword">long</span> b<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">long</span> s <span class="token operator">=</span> a <span class="token operator">*</span> b<span class="token punctuation">;</span>
+    <span class="token keyword">return</span> s<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>编译可执行文件：</p>
+<pre class="line-numbers language-shell"><code class="language-shell">gcc -Og -o prog main.c mstore.c<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>就会生成一个名为<code>prog</code>的可执行文件。</p>
+<p>可以对这个文件进行反编译：</p>
+<pre class="line-numbers language-shell"><code class="language-shell">objdump -d prog<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>其中就有我们之前看到的mstore.s的汇编代码：</p>
+<pre class="line-numbers language-assembly"><code class="language-assembly">0000000000400570 <multstore>:
+  400570:       53                      push   %rbx
+  400571:       48 89 d3                mov    %rdx,%rbx
+  400574:       e8 ed ff ff ff          callq  400566 <mult2>
+  400579:       48 89 03                mov    %rax,(%rbx)
+  40057c:       5b                      pop    %rbx
+  40057d:       c3                      retq   
+  40057e:       66 90                   xchg   %ax,%ax<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>不同在于，在<code>retq</code>执行令之后还有一个指令，这是为了补齐，使得程序刚好是16字节的整数倍。</p>
+<h2 id="0x01-数据格式"><a href="#0x01-数据格式" class="headerlink" title="0x01 数据格式"></a>0x01 数据格式</h2><p>不同的数据类型有不同的字节数，在汇编语言中，使用一个字母的后缀来表示对应指令操作的数据类型：</p>
+<table>
+<thead>
+<tr>
+<th>C declaration</th>
+<th>Intel data type</th>
+<th>Assembly-code suffix</th>
+<th>Size (bytes)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>char</code></td>
+<td>Byte</td>
+<td><code>b</code></td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>short</code></td>
+<td>Word</td>
+<td><code>w</code></td>
+<td>2</td>
+</tr>
+<tr>
+<td><code>int</code></td>
+<td>Double word</td>
+<td><code>l</code></td>
+<td>4</td>
+</tr>
+<tr>
+<td><code>long</code></td>
+<td>Quad word</td>
+<td><code>q</code></td>
+<td>8</td>
+</tr>
+<tr>
+<td><code>char*</code></td>
+<td>Quad word</td>
+<td><code>q</code></td>
+<td>8</td>
+</tr>
+<tr>
+<td><code>float</code></td>
+<td>Single precision</td>
+<td><code>s</code></td>
+<td>4</td>
+</tr>
+<tr>
+<td><code>double</code></td>
+<td>Double precison</td>
+<td><code>l</code></td>
+<td>8</td>
+</tr>
+</tbody></table>
+<p>其中<code>l</code>对应两个类型：<code>short</code>和<code>double</code>。</p>
+<h2 id="0x02-寄存器"><a href="#0x02-寄存器" class="headerlink" title="0x02 寄存器"></a>0x02 寄存器</h2><p>x86-64的处理器有16个通用寄存器，每个寄存器都可以用来存储数字和指针：</p>
+<img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/CS/integer%20registers.png">
+
+<p> 这16个寄存器每一个还都可以分成小的来使用，比如%rax是8字节，%eax是4字节，%ax是2字节，%al是一个字节。</p>
+<p>有一些寄存器有特殊的用途：</p>
+<ul>
+<li>%rsp：栈指针；</li>
+<li>%rax：返回值；</li>
+<li>%rdi：第一个参数；</li>
+<li>%rsi：第二个参数；</li>
+<li>%rdx：第三个参数；</li>
+<li>%rcx：第四个参数；</li>
+<li>%r8：第五个参数；</li>
+<li>%r9：第六个参数。</li>
+</ul>
+<h2 id="0x03-操作数指示符"><a href="#0x03-操作数指示符" class="headerlink" title="0x03 操作数指示符"></a>0x03 操作数指示符</h2><p>寄存器是指令存放数据的地方，为了能够顺利执行指令，还需要指定对应的操作数。</p>
+<p>操作数有三种来源：</p>
+<ul>
+<li>常量；</li>
+<li>来自寄存器；</li>
+<li>来自内存。</li>
+</ul>
+<p>所以获取操作数的方式也有三大类：</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Form</th>
+<th>Operand Value</th>
+<th>Name</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Immediate</td>
+<td>$$Imm$</td>
+<td>$Imm$</td>
+<td>Immediate</td>
+</tr>
+<tr>
+<td>Register</td>
+<td>$r_a$</td>
+<td>$R[r_a]$</td>
+<td>Register</td>
+</tr>
+<tr>
+<td>Memory</td>
+<td>$Imm$</td>
+<td>$M[Imm]$</td>
+<td>Absolute</td>
+</tr>
+<tr>
+<td>Memory</td>
+<td>$(r_a)$</td>
+<td>$M[R[r_a]]$</td>
+<td>Indirect</td>
+</tr>
+<tr>
+<td>Memory</td>
+<td>$Imm(r_b)$</td>
+<td>$M[Imm+R[r_b]]$</td>
+<td>Base+displacement</td>
+</tr>
+<tr>
+<td>Memory</td>
+<td>$(r_b,r_i)$</td>
+<td>$M[R[r_b]+R[r_i]]$</td>
+<td>Indexed</td>
+</tr>
+<tr>
+<td>Memory</td>
+<td>$Imm(r_b,r_i)$</td>
+<td>$M[Imm+R[r_b]+R[r_i]]$</td>
+<td>Indexed</td>
+</tr>
+<tr>
+<td>Memory</td>
+<td>$(,r_i,s)$</td>
+<td>$M[R[r_i]\cdot s]$</td>
+<td>Scaled indexed</td>
+</tr>
+<tr>
+<td>Memory</td>
+<td>$Imm(,r_j,s)$</td>
+<td>$M[Imm+R[r_j]\cdot s]$</td>
+<td>Scaled indexed</td>
+</tr>
+<tr>
+<td>Memory</td>
+<td>$(r_b,r_i,s)$</td>
+<td>$M[R[r_b]+R[r_i]\cdot s]$</td>
+<td>Scaled indexed</td>
+</tr>
+<tr>
+<td>Memory</td>
+<td>$Imm(r_b,r_i,s)$</td>
+<td>$M[Imm+R[r_b]+R[r_i]\cdot s]$</td>
+<td>Scaled indexed</td>
+</tr>
+</tbody></table>
+<p>通过一个例子就能理解了。</p>
+<p>这里是一些寄存器和内存中的数据：</p>
+<table>
+<thead>
+<tr>
+<th>Address</th>
+<th>Value</th>
+<th>Register</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0x100</td>
+<td>0xFF</td>
+<td>%rax</td>
+<td>0x100</td>
+</tr>
+<tr>
+<td>0x104</td>
+<td>0xAB</td>
+<td>%rcx</td>
+<td>0x1</td>
+</tr>
+<tr>
+<td>0x108</td>
+<td>0x13</td>
+<td>%rdx</td>
+<td>0x3</td>
+</tr>
+<tr>
+<td>0x10c</td>
+<td>0x11</td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p>下面给出获取操作数的过程：</p>
+<table>
+<thead>
+<tr>
+<th>Operand</th>
+<th>Type</th>
+<th>Value</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>%rax</code></td>
+<td>Register</td>
+<td><code>0x100</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>0x104</code></td>
+<td>Memory</td>
+<td><code>0xAB</code></td>
+<td>$M[Imm]$</td>
+</tr>
+<tr>
+<td><code>$0x108</code></td>
+<td>Immediate</td>
+<td><code>0x108</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>(%rax)</code></td>
+<td>Memory</td>
+<td><code>0xFF</code></td>
+<td>$M[R[r_a]]$</td>
+</tr>
+<tr>
+<td><code>4(%rax)</code></td>
+<td>Memory</td>
+<td><code>0xAB</code></td>
+<td>$M[Imm+R[r_b]]$</td>
+</tr>
+<tr>
+<td><code>9(%rax,%rdx)</code></td>
+<td>Memory</td>
+<td><code>0x11</code></td>
+<td>$M[Imm+R[r_b]+R[r_i]]$</td>
+</tr>
+<tr>
+<td><code>260(%rcx,%rdx)</code></td>
+<td>Memory</td>
+<td><code>0x13</code></td>
+<td>$M[Imm+R[r_b]+R[r_i]]$</td>
+</tr>
+<tr>
+<td><code>0xFC(,%rcx,4)</code></td>
+<td>Memory</td>
+<td><code>0xFF</code></td>
+<td>$M[Imm+R[r_j]\cdot s]$</td>
+</tr>
+<tr>
+<td><code>(%rax,%rdx,4)</code></td>
+<td>Memory</td>
+<td><code>0x11</code></td>
+<td>$M[R[r_b]+R[r_i]\cdot s]$</td>
+</tr>
+</tbody></table>
+<h2 id="0x04-数据传送指令"><a href="#0x04-数据传送指令" class="headerlink" title="0x04 数据传送指令"></a>0x04 数据传送指令</h2><p>数据传输指令是使用非常频繁的指令，这些指令将数据从一个地方传送到另一个地方。</p>
+<p>其中数据源可以是常量、寄存器和内存，目的地是寄存器和内存，不能是常量。</p>
+<p>同时，还有一个规则，<strong>数据源和目的地不能都是内存</strong>。</p>
+<table>
+<thead>
+<tr>
+<th>Instruction</th>
+<th>Effect</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>MOV S, D</code></td>
+<td>$D\leftarrow S$</td>
+<td>Move</td>
+</tr>
+<tr>
+<td><code>movb</code></td>
+<td></td>
+<td>Move byte</td>
+</tr>
+<tr>
+<td><code>movw</code></td>
+<td></td>
+<td>Move word</td>
+</tr>
+<tr>
+<td><code>movl</code></td>
+<td></td>
+<td>Move double word</td>
+</tr>
+<tr>
+<td><code>movq</code></td>
+<td></td>
+<td>Move quad word</td>
+</tr>
+<tr>
+<td><code>movabsq I,R</code></td>
+<td>$R\leftarrow I$</td>
+<td>Move absolute quad word</td>
+</tr>
+</tbody></table>
+<p>最后一个指令<code>movabsq</code>是为了处理64位常数的，指令<code>movq</code>的数据源如果是常数的话只能是32位补码数，将这个数放入寄存器后，高位会使用补码的最高位填充。</p>
+<p>而指令<code>movabsq</code>可以将任意64位的数放入寄存器中。</p>
+<p>如果目的地是寄存器的话，大多数指令只是根据后缀标识的大小来覆盖相应寄存器中的数据，比如<code>movb $FF %al</code>只是将%rax中最后的一个字节置成<code>0xFF</code>。</p>
+<p>唯一的例外是<code>movl</code>，这个指令会将高位置成0：</p>
+<pre class="line-numbers language-assembly"><code class="language-assembly">movabsq    $0x0011223344556677, %rax    ; %rax = 0011223344556677
+movb    $-1, %al                   ; %rax = 00112233445566FF
+movw    $-1, %ax                   ; %rax = 001122334455FFFF
+movl    $-1, %eax                   ; $rax = 00000000FFFFFFFF
+movq    $-1, %rax                   ; $rax = FFFFFFFFFFFFFFFF<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>当数据源的位数小于目的地时，对于高位有两种处理方式，补零，或者使用源数据的最高位填充。</p>
+<p>补零：</p>
+<table>
+<thead>
+<tr>
+<th>Instruction</th>
+<th>Effect</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>MOVZ S, R</code></td>
+<td>$R\leftarrow ZeroExtend(S)$</td>
+<td>Move with zero extension</td>
+</tr>
+<tr>
+<td><code>movzbw</code></td>
+<td></td>
+<td>Move zero-extended byte to word</td>
+</tr>
+<tr>
+<td><code>movzbl</code></td>
+<td></td>
+<td>Move zero-extended byte to double word</td>
+</tr>
+<tr>
+<td><code>movzbq</code></td>
+<td></td>
+<td>Move zero-extended byte to quad word</td>
+</tr>
+<tr>
+<td><code>movzwl</code></td>
+<td></td>
+<td>Move zero-extended word to double word</td>
+</tr>
+<tr>
+<td><code>movzwq</code></td>
+<td></td>
+<td>Move zero-extended word to quad word</td>
+</tr>
+</tbody></table>
+<p>其中没有从double word到quad word的<code>movzlq</code>指令，因为<code>movl</code>指令默认就是补零。</p>
+<p>使用最高位填充：</p>
+<table>
+<thead>
+<tr>
+<th>Instruction</th>
+<th>Effect</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>MOVS S, R</code></td>
+<td>$R\leftarrow SignExtend(S)$</td>
+<td>Move with sign extension</td>
+</tr>
+<tr>
+<td><code>movsbw</code></td>
+<td></td>
+<td>Move sign-extended byte to word</td>
+</tr>
+<tr>
+<td><code>movsbl</code></td>
+<td></td>
+<td>Move sign-extended byte to double word</td>
+</tr>
+<tr>
+<td><code>movsbq</code></td>
+<td></td>
+<td>Move sign-extended byte to quad word</td>
+</tr>
+<tr>
+<td><code>movswl</code></td>
+<td></td>
+<td>Move sign-extended word to double word</td>
+</tr>
+<tr>
+<td><code>movswq</code></td>
+<td></td>
+<td>Move sign-extended word to quad word</td>
+</tr>
+<tr>
+<td><code>movslq</code></td>
+<td></td>
+<td>Move sign-extended double to quad word</td>
+</tr>
+<tr>
+<td><code>cltq</code></td>
+<td>$%rax\leftarrow SignExtend(%eax)$</td>
+<td>Sign-extended %eax to %rax</td>
+</tr>
+</tbody></table>
+<p>其中最后一个指令<code>cltq</code>没有操作数，这个指令和<code>movslq %eax, %rax</code>效果一样，不过更加精简。</p>
+<p>例子：</p>
+<pre class="line-numbers language-assembly"><code class="language-assembly">movabsq $0011223344556677, %rax    ; %rax = 0011223344556677
+movb $0xAA, %dl                   ; %dl = AA
+movb %dl, %al                   ; %rax = 00112233445566AA
+movsbq %dl, %rax               ; %rax = FFFFFFFFFFFFFFAA
+movzbq %dl, %rax               ; %rax = 00000000000000AA<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="0x05-数据传送示例"><a href="#0x05-数据传送示例" class="headerlink" title="0x05 数据传送示例"></a>0x05 数据传送示例</h2><p>比如下面的C代码：</p>
+<pre class="line-numbers language-c"><code class="language-c"><span class="token keyword">long</span> <span class="token function">exchange</span><span class="token punctuation">(</span><span class="token keyword">long</span><span class="token operator">*</span> xp<span class="token punctuation">,</span> <span class="token keyword">long</span> y<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">long</span> x <span class="token operator">=</span> <span class="token operator">*</span>xp<span class="token punctuation">;</span>
+    <span class="token operator">*</span>xp <span class="token operator">=</span> y<span class="token punctuation">;</span>
+    <span class="token keyword">return</span> x<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>编译后的汇编代码如下：</p>
+<pre class="line-numbers language-assembly"><code class="language-assembly">exchange:
+    .cfi_startproc
+    movq    (%rdi), %rax
+    movq    %rsi, (%rdi)
+    ret<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>首先，函数的两个参数<code>xp</code>和<code>y</code>分别存放在寄存器%rdi和%rsi中。</p>
+<p>编译后一共两个指令，第一个指令是将寄存器%rdi地址中的数放入寄存器%rax中。</p>
+<p>数据源是从内存中取数据，对应指针<code>xp</code>的解引用；</p>
+<p>而寄存器%rax用于返回值，刚好对应<code>return x</code>。</p>
+<p>然后第二个指令将寄存器%rsi中的数放入内存中，地址在%rdi中。</p>
+<p>对应语句<code>*xp = y</code>。</p>
+<p>从这里就可以看出，C语言中的指针仅仅是内存的地址；</p>
+<p>指针的解引用就是将这个地址复制到寄存器中，然后使用那个寄存器来获取内存中的数据；</p>
+<p>同样，函数的局部变量通常放在寄存器中，而不是放在内存里。</p>
+<h2 id="0x06-入栈和出栈"><a href="#0x06-入栈和出栈" class="headerlink" title="0x06 入栈和出栈"></a>0x06 入栈和出栈</h2><p>16个寄存器中有一个专门指栈地址的寄存器%rsp。</p>
+<p>下面这两个指令就是和栈有关：入栈和出栈。</p>
+<table>
+<thead>
+<tr>
+<th>Instruction</th>
+<th>Effect</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>pushq S</code></td>
+<td>$R[%rsp]\leftarrow R[%rsp]-8;M[R[%rsp]]\leftarrow S$</td>
+<td>Push quad word</td>
+</tr>
+<tr>
+<td><code>popq D</code></td>
+<td>$D\leftarrow M[R[%rsp]];R[%rsp]\leftarrow R[%rsp]+8$</td>
+<td>Pop quad word</td>
+</tr>
+</tbody></table>
+<p>比如下面的例子：</p>
+<img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/CS/stack%20operation.png">
+
+<h2 id="0x07-算术和逻辑操作"><a href="#0x07-算术和逻辑操作" class="headerlink" title="0x07 算术和逻辑操作"></a>0x07 算术和逻辑操作</h2><p>下面列出了一些x86-64的整数和逻辑运算符：</p>
+<table>
+<thead>
+<tr>
+<th>Instruction</th>
+<th>Effect</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>leaq S, D</code></td>
+<td>$D\leftarrow &amp;S$</td>
+<td>Load effective address</td>
+</tr>
+<tr>
+<td><code>INC D</code></td>
+<td>$D\leftarrow D+1$</td>
+<td>Increment</td>
+</tr>
+<tr>
+<td><code>DEC D</code></td>
+<td>$D\leftarrow D-1$</td>
+<td>Decrement</td>
+</tr>
+<tr>
+<td><code>NEG D</code></td>
+<td>$D\leftarrow -D$</td>
+<td>Negate</td>
+</tr>
+<tr>
+<td><code>NOT D</code></td>
+<td>$D\leftarrow not D$</td>
+<td>Complement</td>
+</tr>
+<tr>
+<td><code>Add S, D</code></td>
+<td>$D\leftarrow D+S$</td>
+<td>Add</td>
+</tr>
+<tr>
+<td><code>SUB S, D</code></td>
+<td>$D\leftarrow D-S$</td>
+<td>Subtract</td>
+</tr>
+<tr>
+<td><code>IMUL S, D</code></td>
+<td>$D\leftarrow D * S$</td>
+<td>Multiply</td>
+</tr>
+<tr>
+<td><code>XOR S, D</code></td>
+<td>$D\leftarrow DxorS$</td>
+<td>Exclusive-or</td>
+</tr>
+<tr>
+<td><code>OR S, D</code></td>
+<td>$D\leftarrow D</td>
+<td>S$</td>
+</tr>
+<tr>
+<td><code>AND S, D</code></td>
+<td>$D\leftarrow D&amp;S$</td>
+<td>And</td>
+</tr>
+<tr>
+<td><code>SAL k, D</code></td>
+<td>$D\leftarrow D&lt;&lt;k$</td>
+<td>Left shift</td>
+</tr>
+<tr>
+<td><code>SHL k, D</code></td>
+<td>$D\leftarrow D&lt;&lt;k$</td>
+<td>Left shift (same as SAL)</td>
+</tr>
+<tr>
+<td><code>SAR k, D</code></td>
+<td>$D\leftarrow D&gt;&gt;_Ak$</td>
+<td>Arithmetic right shift</td>
+</tr>
+<tr>
+<td><code>SHR k, D</code></td>
+<td>$D\leftarrow D&gt;&gt;_Lk$</td>
+<td>Logical right shift</td>
+</tr>
+</tbody></table>
+<p>先来看看<code>leaq</code>指令。</p>
+<p>这个指令其实是<code>movq</code>的变形，但是它将有效的地址复制到对应的寄存器中。</p>
+<p>这个指令还可以用来进行算术运算。比如如果<code>%rax</code>中存放值<code>x</code>，那么<code>leaq 7(%rdx,%rdx,4), %rax</code>将计算<code>5x+7</code>。</p>
+<p>这个指令的目标操作数必须是一个寄存器。</p>
+<p>下面是更多的例子（其中%rax中是x，%rcx中是y）：</p>
+<table>
+<thead>
+<tr>
+<th>Instruction</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>leaq 6(%rax), %rdx</code></td>
+<td><code>6+x</code></td>
+</tr>
+<tr>
+<td><code>leaq (%rax,%rcx), %rdx</code></td>
+<td><code>x+y</code></td>
+</tr>
+<tr>
+<td><code>leaq (%rax,%rcx,4), %rdx</code></td>
+<td><code>x+4y</code></td>
+</tr>
+<tr>
+<td><code>leaq 7(%rax,%rax,8), %rdx</code></td>
+<td><code>7+9x</code></td>
+</tr>
+<tr>
+<td><code>leaq 0xA(,%rcx,4), %rdx</code></td>
+<td><code>10+4y</code></td>
+</tr>
+<tr>
+<td><code>leaq 9(%rax,%rcx,2), %rdx</code></td>
+<td><code>9+x+2y</code></td>
+</tr>
+</tbody></table>
+<p>在上面的指令中，有的指令需要一个操作数，有的需要两个。</p>
+<p>对于<code>INC D</code>指令来说，可以实现C语言中的++运算符。</p>
+<p>对于<code>ADD S, D</code>指令来说，可以使用C语言中+=运算符。</p>
+<h2 id="0x08-移位操作"><a href="#0x08-移位操作" class="headerlink" title="0x08 移位操作"></a>0x08 移位操作</h2><p>上面指令中的最后四个是关于移位操作的。</p>
+<p>第一个操作数用来指定移动的位数，既可以是一个常数，也可以从寄存器%cl中读取。</p>
+<p>寄存器%cl有一个字节，那么可以表示最大到255，而第二个操作数可以有不同的字节。</p>
+<p>那么怎么来用%cl中的数来表示移动的位数而不会超过规定的最大位移数呢？</p>
+<p>比如quad word是64位，那么就读取%cl中的最低6位就可以了；</p>
+<p>对于double word的32位，读取%cl中的最低5位就可以了；</p>
+<p>对于word的16位，读取%cl中的最低4位就可以了；</p>
+<p>对于byte的8位，读取%cl中的最低3位就可以了。</p>
+<h2 id="0x09-特殊的算术操作"><a href="#0x09-特殊的算术操作" class="headerlink" title="0x09 特殊的算术操作"></a>0x09 特殊的算术操作</h2><p>下面列出了一些特殊的算术操作：</p>
+<table>
+<thead>
+<tr>
+<th>Instruction</th>
+<th>Effect</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>imulq S</code></td>
+<td>$R[%rdx]:R[%rax]\leftarrow S\times R[%rax]$</td>
+<td>Signed full multiply</td>
+</tr>
+<tr>
+<td><code>mulq S</code></td>
+<td>$R[%rdx]:R[%rax]\leftarrow S\times R[%rax]$</td>
+<td>Unsigned full multiply</td>
+</tr>
+<tr>
+<td><code>cqto</code></td>
+<td>$R[%rdx]\leftarrow SignExtend(R[%rax])$</td>
+<td>Convert to oct word</td>
+</tr>
+<tr>
+<td><code>idivq S</code></td>
+<td>$R[%rdx]\leftarrow R[%rdx]:R[%rax], mod,S;R[%rax]\leftarrow R[%rdx]:R[%rax]\div S$</td>
+<td>Signed divide</td>
+</tr>
+<tr>
+<td><code>divq S</code></td>
+<td>$R[%rdx]\leftarrow R[%rdx]:R[%rax], mod ,S;R[%rax]\leftarrow R[%rdx]:R[%rax]\div S$</td>
+<td>Unsigned divide</td>
+</tr>
+</tbody></table>
+<p>其中oct word是16个字节。</p>
+<p>需要注意的是，对于有符号和无符号的乘法和除法来说，指令下的操作方式是一样的。</p>
+<p>这是因为不管是有符号还是无符号数，底层的运算规则都是一样的。</p>
+<p>那么处理器就无法仅仅通过操作来判断是有符号还是无符号了，只能通过不同的指令名字来指明。</p>
+<p>这就是编译过程中把C语言中的类型翻译成不同的指令来完成的。</p>
+<p>后面还有一些这样的例子。</p>
+
+            </div>
+            <hr/>
+
+            
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/csapp/">
+                                    <span class="chip bg-color">csapp</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="far fa-dot-circle"></i>&nbsp;Current
+            </div>
+            <div class="card">
+                <a href="/csapp-ch03-part-1-program-encoding-and-basic-instructions/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/23.jpg" class="responsive-img" alt="csapp ch03 (part 1): Program Encoding and Basic Instructions">
+                        
+                        <span class="card-title">csapp ch03 (part 1): Program Encoding and Basic Instructions</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+这篇文章是csapp第三章前五节的阅读笔记。
+
+0x00 程序编码对于两个C程序，可以通过如下的方式编译：
+gcc -Og -o p p1.c p2.c
+其中-Og选项告诉编译器不进行优化，直接根据C代码生成对应的汇编代码。
+给出下面的C
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-06-08
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/cs/" class="post-category">
+                                    cs
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/csapp/">
+                        <span class="chip bg-color">csapp</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                Next&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/ddia-distributed-data-part-2-partitioning/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/15.jpg" class="responsive-img" alt="ddia, Distributed Data (Part 2): Partitioning">
+                        
+                        <span class="card-title">ddia, Distributed Data (Part 2): Partitioning</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+这篇文章是ddia第六章的阅读笔记。
+
+0x00 Pre
+
+第五章的复制有一个假设，数据副本可以在一台机器上存储。
+如果不行的话，就需要将一个副本放在多个机器上了。
+这就是分区（partitions），也叫分片（sharding）。
+分区
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-06-06
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/cs/" class="post-category">
+                                    cs
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/ddia/">
+                        <span class="chip bg-color">ddia</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+    
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+<!-- 代码块折行 -->
+
+<style type="text/css">
+code[class*="language-"], pre[class*="language-"] { white-space: pre !important; }
+</style>
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;You Will See...</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+<script src="https://cdn.bootcss.com/mathjax/2.7.7/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script>
+    MathJax.Hub.Config({
+        tex2jax: {inlineMath: [['$', '$'], ['\(', '\)']]}
+    });
+</script>
+
+
+    <footer class="page-footer bg-color">
+    <div class="container row center-align">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            <span id="year">2020</span>
+            <a href="http://deuterium.fun" target="_blank">Valineliu</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+            
+            
+            
+            
+            
+            <br>
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link ">
+
+
+    <a href="mailto:1749118121@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;Search</span>
+            <input type="search" id="searchInput" name="s" placeholder="Please enter a search keyword"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>

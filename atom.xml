@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://deuterium.fun/"/>
-  <updated>2020-06-06T11:18:23.452Z</updated>
+  <updated>2020-06-08T05:03:36.724Z</updated>
   <id>http://deuterium.fun/</id>
   
   <author>
@@ -15,6 +15,36 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>csapp ch03 (part 1): Program Encoding and Basic Instructions</title>
+    <link href="http://deuterium.fun/csapp-ch03-part-1-program-encoding-and-basic-instructions/"/>
+    <id>http://deuterium.fun/csapp-ch03-part-1-program-encoding-and-basic-instructions/</id>
+    <published>2020-06-08T05:01:53.000Z</published>
+    <updated>2020-06-08T05:03:36.724Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;blockquote&gt;
+&lt;p&gt;这篇文章是csapp第三章前五节的阅读笔记。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;0x00-程序编码&quot;&gt;&lt;a href=&quot;#0x00-程序编码&quot; class=&quot;headerlink&quot; title=&quot;0x00
+        
+      
+    
+    </summary>
+    
+    
+      <category term="cs" scheme="http://deuterium.fun/categories/cs/"/>
+    
+    
+      <category term="csapp" scheme="http://deuterium.fun/tags/csapp/"/>
+    
+  </entry>
   
   <entry>
     <title>ddia, Distributed Data (Part 2): Partitioning</title>
@@ -572,34 +602,6 @@
         
         
           &lt;p&gt;在&lt;a href=&quot;https://deuterium.fun/ssl-and-tls-part-1-brief-intro/&quot;&gt;SSL and TLS (Part 1): Brief
-        
-      
-    
-    </summary>
-    
-    
-      <category term="cryptography" scheme="http://deuterium.fun/categories/cryptography/"/>
-    
-    
-      <category term="tls" scheme="http://deuterium.fun/tags/tls/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>SSL and TLS (Part 1): Brief Intro</title>
-    <link href="http://deuterium.fun/ssl-and-tls-part-1-brief-intro/"/>
-    <id>http://deuterium.fun/ssl-and-tls-part-1-brief-intro/</id>
-    <published>2020-01-15T02:43:21.000Z</published>
-    <updated>2020-01-15T02:44:46.567Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;在万物互联的时代，We don’t connect to the Internet, we &lt;em&gt;are&lt;/em&gt; the Internet.&lt;/p&gt;
-&lt;p&gt;如此重要的互联网，需要一种协议来保护传输中的信息安全，那就是SSL（Secure Socket
         
       
     
