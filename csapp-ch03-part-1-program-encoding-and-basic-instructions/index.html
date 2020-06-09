@@ -576,68 +576,68 @@ Disassembly of section .text:
 </thead>
 <tbody><tr>
 <td>Immediate</td>
-<td>$$Imm$</td>
-<td>$Imm$</td>
+<td><code>$Imm</code></td>
+<td><code>Imm</code></td>
 <td>Immediate</td>
 </tr>
 <tr>
 <td>Register</td>
-<td>$r_a$</td>
-<td>$R[r_a]$</td>
+<td><code>ra</code></td>
+<td><code>R[ra]</code></td>
 <td>Register</td>
 </tr>
 <tr>
 <td>Memory</td>
-<td>$Imm$</td>
-<td>$M[Imm]$</td>
+<td><code>Imm</code></td>
+<td><code>M[Imm]</code></td>
 <td>Absolute</td>
 </tr>
 <tr>
 <td>Memory</td>
-<td>$(r_a)$</td>
-<td>$M[R[r_a]]$</td>
+<td><code>(ra)</code></td>
+<td><code>M[R[ra]]</code></td>
 <td>Indirect</td>
 </tr>
 <tr>
 <td>Memory</td>
-<td>$Imm(r_b)$</td>
-<td>$M[Imm+R[r_b]]$</td>
+<td><code>Imm(rb)</code></td>
+<td><code>M[Imm+R[rb]]</code></td>
 <td>Base+displacement</td>
 </tr>
 <tr>
 <td>Memory</td>
-<td>$(r_b,r_i)$</td>
-<td>$M[R[r_b]+R[r_i]]$</td>
+<td><code>(rb,ri)</code></td>
+<td><code>M[R[rb]+R[ri]]</code></td>
 <td>Indexed</td>
 </tr>
 <tr>
 <td>Memory</td>
-<td>$Imm(r_b,r_i)$</td>
-<td>$M[Imm+R[r_b]+R[r_i]]$</td>
+<td><code>Imm(rb,ri)</code></td>
+<td><code>M[Imm+R[rb]+R[ri]]</code></td>
 <td>Indexed</td>
 </tr>
 <tr>
 <td>Memory</td>
-<td>$(,r_i,s)$</td>
-<td>$M[R[r_i]\cdot s]$</td>
+<td><code>(,ri,s)</code></td>
+<td><code>M[R[ri]·s]</code></td>
 <td>Scaled indexed</td>
 </tr>
 <tr>
 <td>Memory</td>
-<td>$Imm(,r_j,s)$</td>
-<td>$M[Imm+R[r_j]\cdot s]$</td>
+<td><code>Imm(,rj,s)</code></td>
+<td><code>M[Imm+R[rj]·s]</code></td>
 <td>Scaled indexed</td>
 </tr>
 <tr>
 <td>Memory</td>
-<td>$(r_b,r_i,s)$</td>
-<td>$M[R[r_b]+R[r_i]\cdot s]$</td>
+<td><code>(rb,ri,s)</code></td>
+<td><code>M[R[rb]+R[ri]·s]</code></td>
 <td>Scaled indexed</td>
 </tr>
 <tr>
 <td>Memory</td>
-<td>$Imm(r_b,r_i,s)$</td>
-<td>$M[Imm+R[r_b]+R[r_i]\cdot s]$</td>
+<td><code>Imm(rb,ri,s)</code></td>
+<td><code>M[Imm+R[rb]+R[ri]·s]</code></td>
 <td>Scaled indexed</td>
 </tr>
 </tbody></table>
@@ -697,7 +697,7 @@ Disassembly of section .text:
 <td><code>0x104</code></td>
 <td>Memory</td>
 <td><code>0xAB</code></td>
-<td>$M[Imm]$</td>
+<td><code>M[Imm]</code></td>
 </tr>
 <tr>
 <td><code>$0x108</code></td>
@@ -709,37 +709,37 @@ Disassembly of section .text:
 <td><code>(%rax)</code></td>
 <td>Memory</td>
 <td><code>0xFF</code></td>
-<td>$M[R[r_a]]$</td>
+<td><code>M[R[ra]]</code></td>
 </tr>
 <tr>
 <td><code>4(%rax)</code></td>
 <td>Memory</td>
 <td><code>0xAB</code></td>
-<td>$M[Imm+R[r_b]]$</td>
+<td><code>M[Imm+R[rb]]</code></td>
 </tr>
 <tr>
 <td><code>9(%rax,%rdx)</code></td>
 <td>Memory</td>
 <td><code>0x11</code></td>
-<td>$M[Imm+R[r_b]+R[r_i]]$</td>
+<td><code>M[Imm+R[rb]+R[ri]]</code></td>
 </tr>
 <tr>
 <td><code>260(%rcx,%rdx)</code></td>
 <td>Memory</td>
 <td><code>0x13</code></td>
-<td>$M[Imm+R[r_b]+R[r_i]]$</td>
+<td><code>M[Imm+R[rb]+R[ri]]</code></td>
 </tr>
 <tr>
 <td><code>0xFC(,%rcx,4)</code></td>
 <td>Memory</td>
 <td><code>0xFF</code></td>
-<td>$M[Imm+R[r_j]\cdot s]$</td>
+<td><code>M[Imm+R[rj]·s]</code></td>
 </tr>
 <tr>
 <td><code>(%rax,%rdx,4)</code></td>
 <td>Memory</td>
 <td><code>0x11</code></td>
-<td>$M[R[r_b]+R[r_i]\cdot s]$</td>
+<td><code>M[R[rb]+R[ri]·s]</code></td>
 </tr>
 </tbody></table>
 <h2 id="0x04-数据传送指令"><a href="#0x04-数据传送指令" class="headerlink" title="0x04 数据传送指令"></a>0x04 数据传送指令</h2><p>数据传输指令是使用非常频繁的指令，这些指令将数据从一个地方传送到另一个地方。</p>
@@ -755,7 +755,7 @@ Disassembly of section .text:
 </thead>
 <tbody><tr>
 <td><code>MOV S, D</code></td>
-<td>$D\leftarrow S$</td>
+<td><code>D &lt;- S</code></td>
 <td>Move</td>
 </tr>
 <tr>
@@ -780,7 +780,7 @@ Disassembly of section .text:
 </tr>
 <tr>
 <td><code>movabsq I,R</code></td>
-<td>$R\leftarrow I$</td>
+<td><code>R &lt;- I</code></td>
 <td>Move absolute quad word</td>
 </tr>
 </tbody></table>
@@ -805,7 +805,7 @@ movq    $-1, %rax                   ; $rax = FFFFFFFFFFFFFFFF<span aria-hidden="
 </thead>
 <tbody><tr>
 <td><code>MOVZ S, R</code></td>
-<td>$R\leftarrow ZeroExtend(S)$</td>
+<td><code>R &lt;- ZeroExtend(S)</code></td>
 <td>Move with zero extension</td>
 </tr>
 <tr>
@@ -846,7 +846,7 @@ movq    $-1, %rax                   ; $rax = FFFFFFFFFFFFFFFF<span aria-hidden="
 </thead>
 <tbody><tr>
 <td><code>MOVS S, R</code></td>
-<td>$R\leftarrow SignExtend(S)$</td>
+<td><code>R &lt;- SignExtend(S)</code></td>
 <td>Move with sign extension</td>
 </tr>
 <tr>
@@ -881,7 +881,7 @@ movq    $-1, %rax                   ; $rax = FFFFFFFFFFFFFFFF<span aria-hidden="
 </tr>
 <tr>
 <td><code>cltq</code></td>
-<td>$%rax\leftarrow SignExtend(%eax)$</td>
+<td><code>\%rax &lt;- SignExtend(\%eax)</code></td>
 <td>Sign-extended %eax to %rax</td>
 </tr>
 </tbody></table>
@@ -925,12 +925,12 @@ movzbq %dl, %rax               ; %rax = 00000000000000AA<span aria-hidden="true"
 </thead>
 <tbody><tr>
 <td><code>pushq S</code></td>
-<td>$R[%rsp]\leftarrow R[%rsp]-8;M[R[%rsp]]\leftarrow S$</td>
+<td><code>R[%rsp] &lt;- R[%rsp]-8;M[R[%rsp]] &lt;- S</code></td>
 <td>Push quad word</td>
 </tr>
 <tr>
 <td><code>popq D</code></td>
-<td>$D\leftarrow M[R[%rsp]];R[%rsp]\leftarrow R[%rsp]+8$</td>
+<td><code>D &lt;- M[R[%rsp]];R[%rsp] &lt;- R[%rsp]+8</code></td>
 <td>Pop quad word</td>
 </tr>
 </tbody></table>
@@ -948,77 +948,77 @@ movzbq %dl, %rax               ; %rax = 00000000000000AA<span aria-hidden="true"
 </thead>
 <tbody><tr>
 <td><code>leaq S, D</code></td>
-<td>$D\leftarrow &amp;S$</td>
+<td><code>D &lt;- &amp;S</code></td>
 <td>Load effective address</td>
 </tr>
 <tr>
 <td><code>INC D</code></td>
-<td>$D\leftarrow D+1$</td>
+<td><code>D &lt;- D+1</code></td>
 <td>Increment</td>
 </tr>
 <tr>
 <td><code>DEC D</code></td>
-<td>$D\leftarrow D-1$</td>
+<td><code>D &lt;- D-1</code></td>
 <td>Decrement</td>
 </tr>
 <tr>
 <td><code>NEG D</code></td>
-<td>$D\leftarrow -D$</td>
+<td><code>D &lt;- -D</code></td>
 <td>Negate</td>
 </tr>
 <tr>
 <td><code>NOT D</code></td>
-<td>$D\leftarrow not D$</td>
+<td><code>D &lt;- ~D</code></td>
 <td>Complement</td>
 </tr>
 <tr>
 <td><code>Add S, D</code></td>
-<td>$D\leftarrow D+S$</td>
+<td><code>D &lt;- D+S</code></td>
 <td>Add</td>
 </tr>
 <tr>
 <td><code>SUB S, D</code></td>
-<td>$D\leftarrow D-S$</td>
+<td><code>D &lt;- D-S</code></td>
 <td>Subtract</td>
 </tr>
 <tr>
 <td><code>IMUL S, D</code></td>
-<td>$D\leftarrow D * S$</td>
+<td><code>D &lt;- D*S</code></td>
 <td>Multiply</td>
 </tr>
 <tr>
 <td><code>XOR S, D</code></td>
-<td>$D\leftarrow DxorS$</td>
+<td><code>D &lt;- D^S</code></td>
 <td>Exclusive-or</td>
 </tr>
 <tr>
 <td><code>OR S, D</code></td>
-<td>$D\leftarrow D</td>
-<td>S$</td>
+<td>`D &lt;- D</td>
+<td>S`</td>
 </tr>
 <tr>
 <td><code>AND S, D</code></td>
-<td>$D\leftarrow D&amp;S$</td>
+<td><code>D &lt;- D&amp;S</code></td>
 <td>And</td>
 </tr>
 <tr>
 <td><code>SAL k, D</code></td>
-<td>$D\leftarrow D&lt;&lt;k$</td>
+<td><code>D &lt;- D&lt;&lt;k</code></td>
 <td>Left shift</td>
 </tr>
 <tr>
 <td><code>SHL k, D</code></td>
-<td>$D\leftarrow D&lt;&lt;k$</td>
+<td><code>D &lt;- D&lt;&lt;k</code></td>
 <td>Left shift (same as SAL)</td>
 </tr>
 <tr>
 <td><code>SAR k, D</code></td>
-<td>$D\leftarrow D&gt;&gt;_Ak$</td>
+<td><code>D &lt;- D&gt;&gt;_A k</code></td>
 <td>Arithmetic right shift</td>
 </tr>
 <tr>
 <td><code>SHR k, D</code></td>
-<td>$D\leftarrow D&gt;&gt;_Lk$</td>
+<td><code>D &lt;- D&gt;&gt;_L k</code></td>
 <td>Logical right shift</td>
 </tr>
 </tbody></table>
@@ -1081,27 +1081,27 @@ movzbq %dl, %rax               ; %rax = 00000000000000AA<span aria-hidden="true"
 </thead>
 <tbody><tr>
 <td><code>imulq S</code></td>
-<td>$R[%rdx]:R[%rax]\leftarrow S\times R[%rax]$</td>
+<td><code>R[%rdx]:R[%rax] &lt;- S * R[%rax]</code></td>
 <td>Signed full multiply</td>
 </tr>
 <tr>
 <td><code>mulq S</code></td>
-<td>$R[%rdx]:R[%rax]\leftarrow S\times R[%rax]$</td>
+<td><code>R[%rdx]:R[%rax] &lt;- S * R[%rax]</code></td>
 <td>Unsigned full multiply</td>
 </tr>
 <tr>
 <td><code>cqto</code></td>
-<td>$R[%rdx]\leftarrow SignExtend(R[%rax])$</td>
+<td><code>R[%rdx] &lt;- SignExtend(R[%rax])</code></td>
 <td>Convert to oct word</td>
 </tr>
 <tr>
 <td><code>idivq S</code></td>
-<td>$R[%rdx]\leftarrow R[%rdx]:R[%rax], mod,S;R[%rax]\leftarrow R[%rdx]:R[%rax]\div S$</td>
+<td><code>R[%rdx] &lt;- R[%rdx]:R[%rax] mod S;R[%rax] &lt;- R[%rdx]:R[%rax] / S</code></td>
 <td>Signed divide</td>
 </tr>
 <tr>
 <td><code>divq S</code></td>
-<td>$R[%rdx]\leftarrow R[%rdx]:R[%rax], mod ,S;R[%rax]\leftarrow R[%rdx]:R[%rax]\div S$</td>
+<td><code>R[%rdx] &lt;- R[%rdx]:R[%rax] mod S;R[%rax] &lt;- R[%rdx]:R[%rax] / S</code></td>
 <td>Unsigned divide</td>
 </tr>
 </tbody></table>
@@ -1404,13 +1404,6 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
 
 </main>
 
-
-<script src="https://cdn.bootcss.com/mathjax/2.7.7/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-<script>
-    MathJax.Hub.Config({
-        tex2jax: {inlineMath: [['$', '$'], ['\(', '\)']]}
-    });
-</script>
 
 
     <footer class="page-footer bg-color">
