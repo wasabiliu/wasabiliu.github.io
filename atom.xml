@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://deuterium.fun/"/>
-  <updated>2020-06-09T03:23:20.778Z</updated>
+  <updated>2020-06-10T01:45:30.519Z</updated>
   <id>http://deuterium.fun/</id>
   
   <author>
@@ -15,6 +15,36 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>csapp ch03 (part 2): Control</title>
+    <link href="http://deuterium.fun/csapp-ch03-part-2-control/"/>
+    <id>http://deuterium.fun/csapp-ch03-part-2-control/</id>
+    <published>2020-06-10T01:44:55.000Z</published>
+    <updated>2020-06-10T01:45:30.519Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;blockquote&gt;
+&lt;p&gt;这篇文章是csapp第三章第六节的阅读笔记。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;0x00-条件码&quot;&gt;&lt;a href=&quot;#0x00-条件码&quot; class=&quot;headerlink&quot; title=&quot;0x00 条件码&quot;&gt;&lt;/a&gt;0x00
+        
+      
+    
+    </summary>
+    
+    
+      <category term="cs" scheme="http://deuterium.fun/categories/cs/"/>
+    
+    
+      <category term="csapp" scheme="http://deuterium.fun/tags/csapp/"/>
+    
+  </entry>
   
   <entry>
     <title>csapp ch03 (part 1): Program Encoding and Basic Instructions</title>
@@ -575,33 +605,6 @@
         
         
           &lt;p&gt;在前面的文章中，我们从密码学的角度讨论了一些主要的密码原语（cryptographic
-        
-      
-    
-    </summary>
-    
-    
-      <category term="cryptography" scheme="http://deuterium.fun/categories/cryptography/"/>
-    
-    
-      <category term="tls" scheme="http://deuterium.fun/tags/tls/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>SSL and TLS (Part 2): Cryptography</title>
-    <link href="http://deuterium.fun/ssl-and-tls-part-2-cryptography/"/>
-    <id>http://deuterium.fun/ssl-and-tls-part-2-cryptography/</id>
-    <published>2020-01-19T09:45:18.000Z</published>
-    <updated>2020-01-21T07:12:17.000Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;在&lt;a href=&quot;https://deuterium.fun/ssl-and-tls-part-1-brief-intro/&quot;&gt;SSL and TLS (Part 1): Brief
         
       
     
