@@ -1,0 +1,1181 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="csapp ch03 (part 4): Data Structures, Deuterium">
+    <meta name="description" content="
+这篇文章是csapp第三章第8和第9节的阅读笔记。
+
+接下来，从汇编代码的角度来看看C语言中数据结构的实现。
+0x00 Array先看看数组。
+1.1 基本规则对于具有N个类型T的元素的数组来说，C语言中是这么声明的：
+T A[N];
+令">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>csapp ch03 (part 4): Data Structures | Deuterium</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+    
+    <script src="/libs/jquery/jquery.min.js"></script>
+    
+<link rel="alternate" href="/atom.xml" title="Deuterium" type="application/atom+xml">
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper head-container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">Deuterium</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>Home</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>Tags</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>Categories</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>About</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="https://valineliu.gitbook.io/deuterium-wiki/" target="_blank" rel="noopener" class="waves-effect waves-light">
+      
+      <i class="fab fa-wikipedia-w" style="zoom: 0.6;"></i>
+      
+      <span>Wiki</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>Friends</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="Search" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">Deuterium</div>
+        <div class="logo-desc">
+            
+            Software and anecdotes.
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			Home
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			Tags
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			Categories
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			About
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="https://valineliu.gitbook.io/deuterium-wiki/" target="_blank" rel="noopener" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fab fa-wikipedia-w"></i>
+			
+			Wiki
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			Friends
+		</a>
+          
+        </li>
+        
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/25.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <div class="description center-align post-title">
+                        csapp ch03 (part 4): Data Structures
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        height: calc(100vh - 250px);
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #3B5998;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #3B5998;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #3B5998;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/csapp/">
+                                <span class="chip bg-color">csapp</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/cs/" class="post-category">
+                                cs
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
+                    2020-06-15
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
+                    1.8k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>Read Times:&nbsp;&nbsp;
+                    8 Min
+                </div>
+                
+				
+                
+            </div>
+            
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <blockquote>
+<p>这篇文章是csapp第三章第8和第9节的阅读笔记。</p>
+</blockquote>
+<p>接下来，从汇编代码的角度来看看C语言中数据结构的实现。</p>
+<h2 id="0x00-Array"><a href="#0x00-Array" class="headerlink" title="0x00 Array"></a>0x00 Array</h2><p>先看看数组。</p>
+<h3 id="1-1-基本规则"><a href="#1-1-基本规则" class="headerlink" title="1.1 基本规则"></a>1.1 基本规则</h3><p>对于具有N个类型T的元素的数组来说，C语言中是这么声明的：</p>
+<pre class="line-numbers language-c"><code class="language-c">T A<span class="token punctuation">[</span>N<span class="token punctuation">]</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>令Xa为这个数组的起始地址，这样的声明有两个效果：</p>
+<ul>
+<li>声明一个连续的内存，大小是L·N个字节，其中L是类型T的大小；</li>
+<li>引入一个标识符A，可以用作这个数组的起始的地址，值就是Xa。</li>
+</ul>
+<p>对于数组中的元素，可以通过起始地址Xa，以及范围是0到N-1的下标i来获取，这个元素的地址就是Xa+L·i。</p>
+<p>还可以声明元素是指针的数组：</p>
+<pre class="line-numbers language-c"><code class="language-c"><span class="token keyword">char</span><span class="token operator">*</span> B<span class="token punctuation">[</span><span class="token number">8</span><span class="token punctuation">]</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>这时T就是<code>char*</code>，L就是8，因为指针的大小是8 bytes。整个数组所占的连续内存大小是64 bytes。</p>
+<h3 id="1-2-指针的算术运算"><a href="#1-2-指针的算术运算" class="headerlink" title="1.2 指针的算术运算"></a>1.2 指针的算术运算</h3><p>C语言允许对指针的算术运算，包括加减。</p>
+<p>不过每次加减的值都是L的倍数，如果<code>p</code>是类型T的指针，<code>p</code>的值是Xp，那么表达式<code>p+i</code>的值就是Xp+L·i。</p>
+<p>下面是一些常见的指针算术运算，其中E的起始地址和下标i分别存在%rdx和%rcx中，计算的结果存在%eax（数据）或%rax（指针）中：</p>
+<table>
+<thead>
+<tr>
+<th>Expression</th>
+<th>Type</th>
+<th>Value</th>
+<th>Assembly code</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>E</code></td>
+<td>int*</td>
+<td>XE</td>
+<td><code>movl %rdx, %rax</code></td>
+</tr>
+<tr>
+<td><code>E[0]</code></td>
+<td>int</td>
+<td>M[XE]</td>
+<td><code>movl (%rdx), %eax</code></td>
+</tr>
+<tr>
+<td><code>E[i]</code></td>
+<td>int</td>
+<td>M[XE+4i]</td>
+<td><code>movl (%rdx, %rcx, 4), %eax</code></td>
+</tr>
+<tr>
+<td><code>&amp;E[2]</code></td>
+<td>int*</td>
+<td>XE+8</td>
+<td><code>leaq 8(%rdx), %rax</code></td>
+</tr>
+<tr>
+<td><code>E+i-1</code></td>
+<td>int*</td>
+<td>XE+4i-4</td>
+<td><code>leaq -4(%rdx, %rcx, 4), %rax</code></td>
+</tr>
+<tr>
+<td><code>*(E+i-3)</code></td>
+<td>int</td>
+<td>M[XE+4i-12]</td>
+<td><code>movl -12(%rdx, %rcx, 4), %eax</code></td>
+</tr>
+<tr>
+<td><code>&amp;E[i]-E</code></td>
+<td>long</td>
+<td>i</td>
+<td><code>movq %rcx, %rax</code></td>
+</tr>
+</tbody></table>
+<h3 id="1-3-嵌套数组"><a href="#1-3-嵌套数组" class="headerlink" title="1.3 嵌套数组"></a>1.3 嵌套数组</h3><p>数组中的元素还可以是一个数组，构成一个多维数组或嵌套数组。</p>
+<p>比如：</p>
+<pre class="line-numbers language-c"><code class="language-c"><span class="token keyword">int</span> A<span class="token punctuation">[</span><span class="token number">5</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>可以表示成：</p>
+<pre class="line-numbers language-c"><code class="language-c"><span class="token keyword">typedef</span> <span class="token keyword">int</span> row3_t<span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+row3_t A<span class="token punctuation">[</span><span class="token number">5</span><span class="token punctuation">]</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>构成一个5行3列的数组。</p>
+<p>对于下面的二维数组来说（起始地址是Xd）：</p>
+<pre class="line-numbers language-c"><code class="language-c">T D<span class="token punctuation">[</span>R<span class="token punctuation">]</span><span class="token punctuation">[</span>C<span class="token punctuation">]</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>元素<code>D[i][j]</code>的地址就是Xd+L(C·i+j)。</p>
+<p>看一个例子：</p>
+<pre class="line-numbers language-c"><code class="language-c"><span class="token macro property">#<span class="token directive keyword">define</span>:</span>
+
+<span class="token keyword">long</span> P<span class="token punctuation">[</span>M<span class="token punctuation">]</span><span class="token punctuation">[</span>N<span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token keyword">long</span> Q<span class="token punctuation">[</span>N<span class="token punctuation">]</span><span class="token punctuation">[</span>M<span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+<span class="token keyword">long</span> <span class="token function">sum_element</span><span class="token punctuation">(</span><span class="token keyword">long</span> i<span class="token punctuation">,</span> <span class="token keyword">long</span> j<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> P<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">[</span>j<span class="token punctuation">]</span> <span class="token operator">+</span> Q<span class="token punctuation">[</span>j<span class="token punctuation">]</span><span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>编译之后的结果：</p>
+<pre class="line-numbers language-assembly"><code class="language-assembly">sum_element:
+    leaq    0(, %rdi, 8), %rdx        ; Compute 8i
+    subq    %rdi, %rdx                ; Compute 7i
+    addq    %rsi, %rdx                ; Compute 7i + j
+    leaq    (%rsi, %rsi, 4), %rax    ; Compute 5j
+    addq    %rax, %rdi                ; Compute 5j + i
+    movq    Q(, %rdi, 8), %rax        ; Retrieve M[Xq + 8 (5j + i)]
+    addq    P(, %rdx, 8), %rax        ; Add M[Xp + 8 (7i + j)]
+    ret<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>所以，M就是5，N就是7。</p>
+<h3 id="1-4-固定大小的数组"><a href="#1-4-固定大小的数组" class="headerlink" title="1.4 固定大小的数组"></a>1.4 固定大小的数组</h3><p>C编译器会对多维数组进行很多优化，可以使用<code>-O1</code>选项来指定。</p>
+<p>比如下面的多维数据：</p>
+<pre class="line-numbers language-c"><code class="language-c"><span class="token macro property">#<span class="token directive keyword">define</span> N 16</span>
+<span class="token keyword">typedef</span> <span class="token keyword">int</span> fix_matrix<span class="token punctuation">[</span>N<span class="token punctuation">]</span><span class="token punctuation">[</span>N<span class="token punctuation">]</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>编译器可以通过对指针的解引用来访问数据元素。</p>
+<pre class="line-numbers language-c"><code class="language-c"><span class="token comment" spellcheck="true">/* Compute i,k of fixed matrix product */</span>
+<span class="token keyword">int</span> <span class="token function">fix_prod_ele</span><span class="token punctuation">(</span>fix_matrix A<span class="token punctuation">,</span> fix_matrix B<span class="token punctuation">,</span> <span class="token keyword">long</span> i<span class="token punctuation">,</span> <span class="token keyword">long</span> k<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">long</span> j<span class="token punctuation">;</span>
+    <span class="token keyword">int</span> result <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span>j <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> j <span class="token operator">&lt;</span> N<span class="token punctuation">;</span> j<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        result <span class="token operator">+</span><span class="token operator">=</span> A<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">[</span>j<span class="token punctuation">]</span> <span class="token operator">*</span> B<span class="token punctuation">[</span>j<span class="token punctuation">]</span><span class="token punctuation">[</span>k<span class="token punctuation">]</span><span class="token punctuation">;</span>p
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> result<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>编译后的代码：</p>
+<pre class="line-numbers language-assembly"><code class="language-assembly">fix_prod_ele:
+    salq    $6, %rdx                ; Compute 64 * i
+    addq    %rdx, %rdi                ; Compute Aptr = Xa + 64i = &A[i][0]
+    leaq    (%rsi, %rcx, 4), %rcx    ; Compute Bptr = Xb + 4k = &B[0][k]
+    leaq    1024(%rcx), %rsi        ; Compute Bend = Xb + 4k + 1024 = &B[N][k]
+    movl    $0, %eax                ; Set result = 0
+.L7:                                ; loop:
+    movl    (%rdi), %eax            ; Read *Aptr
+    imull    (%rcx), %eax            ; Multiply by *Bptr
+    addl    %edx, %eax;                ; Add to result
+    addq    $4, %rdi                ; Increment Aptr ++
+    addq    $64, %rcx                ; Increment Bptr += N
+    cmpq    %rsi, %rcx                ; Compare Bptr:Bend
+    jne        .L7                        ; If !=, goto loop
+    rep; ret                        ; Return<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>翻译成C代码：</p>
+<pre class="line-numbers language-c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">fix_prod_ele_opt</span><span class="token punctuation">(</span>fix_matrix A<span class="token punctuation">,</span> fix_matrix B<span class="token punctuation">,</span> <span class="token keyword">long</span> i<span class="token punctuation">,</span> <span class="token keyword">long</span> k<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">int</span> <span class="token operator">*</span>Aptr <span class="token operator">=</span> <span class="token operator">&amp;</span>A<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">;</span>            <span class="token comment" spellcheck="true">/* Points to elements in row i of A */</span>
+    <span class="token keyword">int</span> <span class="token operator">*</span>Bptr <span class="token operator">=</span> <span class="token operator">&amp;</span>B<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">[</span>k<span class="token punctuation">]</span><span class="token punctuation">;</span>            <span class="token comment" spellcheck="true">/* Points to elements in column k of B */</span>
+    <span class="token keyword">int</span> <span class="token operator">*</span>Bend <span class="token operator">=</span> <span class="token operator">&amp;</span>B<span class="token punctuation">[</span>N<span class="token punctuation">]</span><span class="token punctuation">[</span>k<span class="token punctuation">]</span><span class="token punctuation">;</span>            <span class="token comment" spellcheck="true">/* Marks stopping point for Bptr */</span>
+    <span class="token keyword">int</span> result <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">do</span> <span class="token punctuation">{</span>                            <span class="token comment" spellcheck="true">/* No need for initial test */</span>
+        result <span class="token operator">+</span><span class="token operator">=</span> <span class="token operator">*</span>Aptr <span class="token operator">*</span> <span class="token operator">*</span>Bptr<span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">/* Add next product to sum */</span>
+        Aptr<span class="token operator">++</span><span class="token punctuation">;</span>                        <span class="token comment" spellcheck="true">/* Move Aptr to next column */</span>
+        Bptr <span class="token operator">+</span><span class="token operator">=</span> N<span class="token punctuation">;</span>                    <span class="token comment" spellcheck="true">/* Move Bptr to next row */</span>
+    <span class="token punctuation">}</span> <span class="token keyword">while</span> <span class="token punctuation">(</span>Bptr <span class="token operator">!=</span> Bend<span class="token punctuation">)</span><span class="token punctuation">;</span>            <span class="token comment" spellcheck="true">/* Test for stopping point */</span>
+    <span class="token keyword">return</span> result<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="1-5-可变大小数组"><a href="#1-5-可变大小数组" class="headerlink" title="1.5 可变大小数组"></a>1.5 可变大小数组</h3><p>C语言支持多位数组的大小在编译期间确定，比如：</p>
+<pre class="line-numbers language-c"><code class="language-c"><span class="token keyword">int</span> A<span class="token punctuation">[</span>expr1<span class="token punctuation">]</span><span class="token punctuation">[</span>expr2<span class="token punctuation">]</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>不过需要使用者自己通过<code>malloc</code>或<code>calloc</code>等函数申请内存，然后安排多维数组的存储形式。</p>
+<p>比如下面的函数：</p>
+<pre class="line-numbers language-c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">var_ele</span><span class="token punctuation">(</span><span class="token keyword">long</span> n<span class="token punctuation">,</span> <span class="token keyword">int</span> A<span class="token punctuation">[</span>n<span class="token punctuation">]</span><span class="token punctuation">[</span>n<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token keyword">long</span> i<span class="token punctuation">,</span> <span class="token keyword">long</span> j<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> A<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">[</span>j<span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>参数<code>n</code>需要在参数<code>A</code>前面。</p>
+<p>编译后：</p>
+<pre class="line-numbers language-assembly"><code class="language-assembly">var_ele:
+    imulq    %rdx, %rdi                ; Compute n * i
+    leaq    (%rsi, %rdi, 4), %rax    ; Compute Xa + 4(n*i)
+    movl    (%rax, %rcx, 4), %eax    ; Read from M[Xa+4(n*i)]
+    ret<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这里在计算n*i时使用了乘法，这是和固定大小的数组不一样的地方。</p>
+<p>如果启用优化的话，如果程序中使用了多维数组，gcc可以避免通过乘法操作来获取元素，要么直接获取到指定元素的地址，要么通过一维数组的方式来获取指定元素，这两种方式都可以提高性能。</p>
+<h2 id="0x01-异质数据结构"><a href="#0x01-异质数据结构" class="headerlink" title="0x01 异质数据结构"></a>0x01 异质数据结构</h2><p>C中还提供了两种结构：<code>struct</code>和<code>union</code>。</p>
+<h3 id="1-1-Struct"><a href="#1-1-Struct" class="headerlink" title="1.1 Struct"></a>1.1 Struct</h3><p>比如下面的结构体：</p>
+<pre class="line-numbers language-c"><code class="language-c"><span class="token keyword">struct</span> rec <span class="token punctuation">{</span>
+    <span class="token keyword">int</span> i<span class="token punctuation">;</span>
+    <span class="token keyword">int</span> j<span class="token punctuation">;</span>
+    <span class="token keyword">int</span> a<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token keyword">int</span> <span class="token operator">*</span>p<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>布局如下：</p>
+<pre class="line-numbers language-shell"><code class="language-shell">  offset:      0     4     8         16         24
+              |---|---|---|---|-------|
+contents:    |i    |j    |a0    |a1    |p        |
+            |---|---|---|---|-------|<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>为了访问struct中的元素，编译器直接通过对struct的指针加上待访问成员的offset即可。</p>
+<p>比如<code>r</code>是<code>rec*</code>类型的变量且存在%rdi中，那么下面的语句就是将<code>r-&gt;i</code>赋值给<code>r-&gt;j</code>：</p>
+<pre class="line-numbers language-assembly"><code class="language-assembly">movl    (%rdi), %eax    ; Get r->i
+movl    %eax, 4(%rdi)    ; Store in r->j<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>再看一个复杂的例子：</p>
+<pre class="line-numbers language-c"><code class="language-c">r<span class="token operator">-></span>p <span class="token operator">=</span> <span class="token operator">&amp;</span>r<span class="token operator">-></span>a<span class="token punctuation">[</span>r<span class="token operator">-></span>i <span class="token operator">+</span> r<span class="token operator">-></span>j<span class="token punctuation">]</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>汇编代码（<code>r</code>存在%rdi中）：</p>
+<pre class="line-numbers language-assembly"><code class="language-assembly">movl    4(%rdi), %eax            ; Get r->j
+addl    (%rdi), %eax            ; Add r->i
+cltq                            ; Extend to 8 bytes
+leaq    8(%rdi, %rax, 4), %rax    ; Compute &r->a[r->i + r-> j]
+movq    %rax, 16(%rdi)            ; Store in r->p<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>也就是说，对结构体成员的访问都是在编译期间完成的，机器码完全不知道和结构体有关的信息。</p>
+<h3 id="1-2-Union"><a href="#1-2-Union" class="headerlink" title="1.2 Union"></a>1.2 Union</h3><p>union和struct类似，但也有很大的不同。比如：</p>
+<pre class="line-numbers language-c"><code class="language-c"><span class="token keyword">struct</span> S3 <span class="token punctuation">{</span>
+    <span class="token keyword">char</span> c<span class="token punctuation">;</span>
+    <span class="token keyword">int</span> i<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token keyword">double</span> v<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token keyword">union</span> U3 <span class="token punctuation">{</span>
+    <span class="token keyword">char</span> c<span class="token punctuation">;</span>
+    <span class="token keyword">int</span> i<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token keyword">double</span> v<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>虽然成员都一样，但是它们每个成员的offset却不同：</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th><code>c</code></th>
+<th><code>i</code></th>
+<th><code>v</code></th>
+<th>Size</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S3</td>
+<td>0</td>
+<td>4</td>
+<td>16</td>
+<td>24</td>
+</tr>
+<tr>
+<td>U3</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>8</td>
+</tr>
+</tbody></table>
+<p>union在一些场景下有用，但大多数情况只会带来讨厌的bug。</p>
+<p>关于union就这样吧，也不咋用。</p>
+<h3 id="1-3-Data-Alignment"><a href="#1-3-Data-Alignment" class="headerlink" title="1.3 Data Alignment"></a>1.3 Data Alignment</h3><p>struct中的数据是需要对齐的，而不是紧密排列的。</p>
+<p>比如：</p>
+<pre class="line-numbers language-c"><code class="language-c"><span class="token keyword">struct</span> S1 <span class="token punctuation">{</span>
+    <span class="token keyword">int</span> i<span class="token punctuation">;</span>
+    <span class="token keyword">char</span> c<span class="token punctuation">;</span>
+    <span class="token keyword">int</span> j<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>实际的布局是这样的：</p>
+<pre><code>  offset:     0     45     8     12
+              |---|---|---|
+  contents:    |i    |c    |j    |
+              |---|---|---|</code></pre><p>c后面进行了填充，为了补齐4个字节。</p>
+<p>即使<code>c</code>放在最后面，也需要进行对齐，这是为了方便数组访问（这个struct作为元素类型）。</p>
+<p>为了高效地访问内存，会对struct的布局进行对齐，对齐的规则如下：</p>
+<p><font color="red">对于是K字节的基本类型对象来说，它的地址一定要是K的倍数。</font></p>
+<p>其中K的取值如下：</p>
+<table>
+<thead>
+<tr>
+<th>K</th>
+<th>Types</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>char</td>
+</tr>
+<tr>
+<td>2</td>
+<td>short</td>
+</tr>
+<tr>
+<td>4</td>
+<td>int, float</td>
+</tr>
+<tr>
+<td>8</td>
+<td>long, double, char*</td>
+</tr>
+</tbody></table>
+<p>给出一些对齐的例子：</p>
+<p>A. <code>struct P1 {short i; int c; int *j; short *d;};</code></p>
+<table>
+<thead>
+<tr>
+<th><code>i</code></th>
+<th><code>c</code></th>
+<th><code>j</code></th>
+<th><code>d</code></th>
+<th>Total</th>
+<th>Alignment</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>2</td>
+<td>6</td>
+<td>14</td>
+<td>16</td>
+<td>8</td>
+</tr>
+</tbody></table>
+<p>B. <code>struct P2 {int i[2]; char c[8]; short d[4]; long *j;};</code></p>
+<table>
+<thead>
+<tr>
+<th><code>i</code></th>
+<th><code>c</code></th>
+<th><code>d</code></th>
+<th><code>j</code></th>
+<th>Total</th>
+<th>Alignment</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>8</td>
+<td>16</td>
+<td>24</td>
+<td>32</td>
+<td>8</td>
+</tr>
+</tbody></table>
+<p>C. <code>struct P3 {long w[2]; int *c[2]};</code></p>
+<table>
+<thead>
+<tr>
+<th><code>w</code></th>
+<th><code>c</code></th>
+<th>Total</th>
+<th>Alignment</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>16</td>
+<td>32</td>
+<td>8</td>
+</tr>
+</tbody></table>
+<p>D. <code>struct P4 {char w[16]; char *c[2]};</code></p>
+<table>
+<thead>
+<tr>
+<th><code>w</code></th>
+<th><code>c</code></th>
+<th>Total</th>
+<th>Alignment</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>16</td>
+<td>32</td>
+<td>8</td>
+</tr>
+</tbody></table>
+<p>E. <code>struct P5 {struct P4 a[2]; struct P1 t};</code></p>
+<table>
+<thead>
+<tr>
+<th><code>a</code></th>
+<th><code>t</code></th>
+<th>Total</th>
+<th>Alignment</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>24</td>
+<td>40</td>
+<td>8</td>
+</tr>
+</tbody></table>
+
+            </div>
+            <hr/>
+
+            
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/csapp/">
+                                    <span class="chip bg-color">csapp</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="far fa-dot-circle"></i>&nbsp;Current
+            </div>
+            <div class="card">
+                <a href="/csapp-ch03-part-4-data-structures/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/25.jpg" class="responsive-img" alt="csapp ch03 (part 4): Data Structures">
+                        
+                        <span class="card-title">csapp ch03 (part 4): Data Structures</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+这篇文章是csapp第三章第8和第9节的阅读笔记。
+
+接下来，从汇编代码的角度来看看C语言中数据结构的实现。
+0x00 Array先看看数组。
+1.1 基本规则对于具有N个类型T的元素的数组来说，C语言中是这么声明的：
+T A[N];
+令
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-06-15
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/cs/" class="post-category">
+                                    cs
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/csapp/">
+                        <span class="chip bg-color">csapp</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                Next&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/csapp-ch03-part-3-procedures/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/10.jpg" class="responsive-img" alt="csapp ch03 (part 3): Procedures">
+                        
+                        <span class="card-title">csapp ch03 (part 3): Procedures</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+这篇文章是csapp第七节的阅读笔记
+
+0x00 运行时栈过程（procedures）是一个非常重要的抽象，它隐藏了一部分实现细节，对外提供一个功能。
+在程序中的任何地方都可以随时调用这个过程，得到结果后继续执行。
+也叫函数（functi
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-06-12
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/cs/" class="post-category">
+                                    cs
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/csapp/">
+                        <span class="chip bg-color">csapp</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+    
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+<!-- 代码块折行 -->
+
+<style type="text/css">
+code[class*="language-"], pre[class*="language-"] { white-space: pre !important; }
+</style>
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;You Will See...</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+    <footer class="page-footer bg-color">
+    <div class="container row center-align">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            <span id="year">2020</span>
+            <a href="http://deuterium.fun" target="_blank">Valineliu</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+            
+            
+            
+            
+            
+            <br>
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link ">
+
+
+    <a href="mailto:1749118121@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;Search</span>
+            <input type="search" id="searchInput" name="s" placeholder="Please enter a search keyword"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>

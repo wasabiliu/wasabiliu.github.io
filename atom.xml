@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://deuterium.fun/"/>
-  <updated>2020-06-12T01:51:22.281Z</updated>
+  <updated>2020-06-15T02:02:40.411Z</updated>
   <id>http://deuterium.fun/</id>
   
   <author>
@@ -15,6 +15,37 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>csapp ch03 (part 4): Data Structures</title>
+    <link href="http://deuterium.fun/csapp-ch03-part-4-data-structures/"/>
+    <id>http://deuterium.fun/csapp-ch03-part-4-data-structures/</id>
+    <published>2020-06-15T02:02:12.000Z</published>
+    <updated>2020-06-15T02:02:40.411Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;blockquote&gt;
+&lt;p&gt;这篇文章是csapp第三章第8和第9节的阅读笔记。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;接下来，从汇编代码的角度来看看C语言中数据结构的实现。&lt;/p&gt;
+&lt;h2 id=&quot;0x00-Array&quot;&gt;&lt;a href=&quot;#0x00-Array&quot;
+        
+      
+    
+    </summary>
+    
+    
+      <category term="cs" scheme="http://deuterium.fun/categories/cs/"/>
+    
+    
+      <category term="csapp" scheme="http://deuterium.fun/tags/csapp/"/>
+    
+  </entry>
   
   <entry>
     <title>csapp ch03 (part 3): Procedures</title>
@@ -575,37 +606,6 @@
 &lt;p&gt;这篇文章是根据假期看的《罗马人的故事》记录的罗马流水线的第二部分：罗马帝国。罗马帝国从27BC开始到467AD西罗马帝国灭亡共500年的历史，不包括东罗马帝国（拜占庭帝国）。&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h2
-        
-      
-    
-    </summary>
-    
-    
-      <category term="reading" scheme="http://deuterium.fun/categories/reading/"/>
-    
-    
-      <category term="history" scheme="http://deuterium.fun/tags/history/"/>
-    
-      <category term="rome" scheme="http://deuterium.fun/tags/rome/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Roman Republic</title>
-    <link href="http://deuterium.fun/roman-republic/"/>
-    <id>http://deuterium.fun/roman-republic/</id>
-    <published>2020-03-02T03:21:23.000Z</published>
-    <updated>2020-03-18T06:41:13.929Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;blockquote&gt;
-&lt;p&gt;由于疫情，有了一个漫长的假期。不玩游戏不看电影不追剧，看书成了唯一的消遣。十几天的时间看完了盐野七生的15卷本《罗马人的故事》，对古罗马的脉络有了一个大体的了解。在这篇文章中，对罗马王政时期和共和国时期的历史做一下简单的梳理。&lt;/p&gt;
-&lt;/bloc
         
       
     
