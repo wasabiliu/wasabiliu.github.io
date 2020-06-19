@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://deuterium.fun/"/>
-  <updated>2020-06-15T02:02:40.411Z</updated>
+  <updated>2020-06-19T06:27:01.377Z</updated>
   <id>http://deuterium.fun/</id>
   
   <author>
@@ -15,6 +15,36 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>csapp ch03 (part 5): Combining Control and Data</title>
+    <link href="http://deuterium.fun/csapp-ch03-part-5-combining-control-and-data/"/>
+    <id>http://deuterium.fun/csapp-ch03-part-5-combining-control-and-data/</id>
+    <published>2020-06-19T06:24:50.000Z</published>
+    <updated>2020-06-19T06:27:01.377Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;blockquote&gt;
+&lt;p&gt;这篇文章是csapp第三章第10节的阅读笔记。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;0x00-指针&quot;&gt;&lt;a href=&quot;#0x00-指针&quot; class=&quot;headerlink&quot; title=&quot;0x00 指针&quot;&gt;&lt;/a&gt;0x00
+        
+      
+    
+    </summary>
+    
+    
+      <category term="cs" scheme="http://deuterium.fun/categories/cs/"/>
+    
+    
+      <category term="csapp" scheme="http://deuterium.fun/tags/csapp/"/>
+    
+  </entry>
   
   <entry>
     <title>csapp ch03 (part 4): Data Structures</title>
@@ -405,9 +435,9 @@
       <category term="mysql" scheme="http://deuterium.fun/categories/mysql/"/>
     
     
-      <category term="mysql" scheme="http://deuterium.fun/tags/mysql/"/>
-    
       <category term="tips" scheme="http://deuterium.fun/tags/tips/"/>
+    
+      <category term="mysql" scheme="http://deuterium.fun/tags/mysql/"/>
     
   </entry>
   
@@ -586,38 +616,6 @@
     
     
       <category term="partition" scheme="http://deuterium.fun/tags/partition/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Roman Empire</title>
-    <link href="http://deuterium.fun/roman-empire/"/>
-    <id>http://deuterium.fun/roman-empire/</id>
-    <published>2020-03-04T02:03:42.000Z</published>
-    <updated>2020-03-04T02:26:59.728Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;blockquote&gt;
-&lt;p&gt;这篇文章是根据假期看的《罗马人的故事》记录的罗马流水线的第二部分：罗马帝国。罗马帝国从27BC开始到467AD西罗马帝国灭亡共500年的历史，不包括东罗马帝国（拜占庭帝国）。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2
-        
-      
-    
-    </summary>
-    
-    
-      <category term="reading" scheme="http://deuterium.fun/categories/reading/"/>
-    
-    
-      <category term="history" scheme="http://deuterium.fun/tags/history/"/>
-    
-      <category term="rome" scheme="http://deuterium.fun/tags/rome/"/>
     
   </entry>
   

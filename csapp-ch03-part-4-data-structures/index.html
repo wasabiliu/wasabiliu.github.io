@@ -815,37 +815,34 @@ movq    %rax, 16(%rdi)            ; Store in r->p<span aria-hidden="true" class=
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="far fa-dot-circle"></i>&nbsp;Current
-            </div>
+                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
             <div class="card">
-                <a href="/csapp-ch03-part-4-data-structures/">
+                <a href="/csapp-ch03-part-5-combining-control-and-data/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/25.jpg" class="responsive-img" alt="csapp ch03 (part 4): Data Structures">
+                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="csapp ch03 (part 5): Combining Control and Data">
                         
-                        <span class="card-title">csapp ch03 (part 4): Data Structures</span>
+                        <span class="card-title">csapp ch03 (part 5): Combining Control and Data</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
                             
-这篇文章是csapp第三章第8和第9节的阅读笔记。
+这篇文章是csapp第三章第10节的阅读笔记。
 
-接下来，从汇编代码的角度来看看C语言中数据结构的实现。
-0x00 Array先看看数组。
-1.1 基本规则对于具有N个类型T的元素的数组来说，C语言中是这么声明的：
-T A[N];
-令
+0x00 指针
+每一个指针都有对应的类型。不过指针类型不包含在汇编代码中，而是C对程序员提供的一种抽象；
+每一个指针都有值。这个值就是某个对象的地址，特殊的值NULL (0)表明这个指针不
                         
                     </div>
                     <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-06-15
-                            </span>
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2020-06-19
+                        </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -858,7 +855,6 @@ T A[N];
                         </span>
                     </div>
                 </div>
-
                 
                 <div class="card-action article-tags">
                     

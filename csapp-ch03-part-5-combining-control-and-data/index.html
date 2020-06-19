@@ -4,14 +4,13 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="csapp ch02 (part 2): Integer Representations, Deuterium">
+    <meta name="keywords" content="csapp ch03 (part 5): Combining Control and Data, Deuterium">
     <meta name="description" content="
-这篇文章是csapp第二章第二节的阅读笔记。
+这篇文章是csapp第三章第10节的阅读笔记。
 
-既然知道了信息是如何存储的，那么接下来看看，整数是如何存储的。整数包括两种：有符号整数和无符号整数，分别对应可为负和不可为负。
-这里会涉及到如下的一些符号（其中下标的w表示数据的位数）：
-
-">
+0x00 指针
+每一个指针都有对应的类型。不过指针类型不包含在汇编代码中，而是C对程序员提供的一种抽象；
+每一个指针都有值。这个值就是某个对象的地址，特殊的值NULL (0)表明这个指针不">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -19,7 +18,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>csapp ch02 (part 2): Integer Representations | Deuterium</title>
+    <title>csapp ch03 (part 5): Combining Control and Data | Deuterium</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -226,13 +225,13 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/2.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/0.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
                     <div class="description center-align post-title">
-                        csapp ch02 (part 2): Integer Representations
+                        csapp ch03 (part 5): Combining Control and Data
                     </div>
                 </div>
             </div>
@@ -375,7 +374,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
-                    2020-05-07
+                    2020-06-19
                 </div>
                 
 
@@ -384,14 +383,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    2.3k
+                    1.3k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>Read Times:&nbsp;&nbsp;
-                    9 Min
+                    5 Min
                 </div>
                 
 				
@@ -403,235 +402,202 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <blockquote>
-<p>这篇文章是csapp第二章第二节的阅读笔记。</p>
+<p>这篇文章是csapp第三章第10节的阅读笔记。</p>
 </blockquote>
-<p>既然知道了信息是如何存储的，那么接下来看看，整数是如何存储的。整数包括两种：有符号整数和无符号整数，分别对应可为负和不可为负。</p>
-<p>这里会涉及到如下的一些符号（其中下标的w表示数据的位数）：</p>
+<h2 id="0x00-指针"><a href="#0x00-指针" class="headerlink" title="0x00 指针"></a>0x00 指针</h2><ul>
+<li><strong>每一个指针都有对应的类型</strong>。不过指针类型不包含在汇编代码中，而是C对程序员提供的一种抽象；</li>
+<li><strong>每一个指针都有值</strong>。这个值就是某个对象的地址，特殊的值<code>NULL</code> (0)表明这个指针不指向任何地址；</li>
+<li><strong>通过&amp;操作符创建指针</strong>。这会使用<code>leaq</code>指令来完成；</li>
+<li><strong>指针通过*操作符进行解引用</strong>。就是读取内存中的内容；</li>
+<li><strong>数组和指针很相似</strong>。数组名字就像指针，但是不能更新值；</li>
+<li><strong>指针类型可以转换</strong>；</li>
+<li><strong>指针还可以指向函数</strong>。</li>
+</ul>
+<h2 id="0x01-超出范围的内存引用和缓冲区溢出"><a href="#0x01-超出范围的内存引用和缓冲区溢出" class="headerlink" title="0x01 超出范围的内存引用和缓冲区溢出"></a>0x01 超出范围的内存引用和缓冲区溢出</h2><p>C语言不对数组引用的边界进行检查，同样函数的本地变量和栈上的一些信息存放在一起，比如保存的寄存器的值和函数返回地址等。</p>
+<p>这样就可能发生超出范围的内存引用，导致一些信息被覆盖。</p>
+<p>比如下面的例子：</p>
+<pre class="line-numbers language-c"><code class="language-c"><span class="token comment" spellcheck="true">/* Implementation of library function gets() */</span>
+<span class="token keyword">char</span><span class="token operator">*</span> <span class="token function">gets</span><span class="token punctuation">(</span><span class="token keyword">char</span><span class="token operator">*</span> s<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">int</span> c<span class="token punctuation">;</span>
+    <span class="token keyword">char</span><span class="token operator">*</span> dest <span class="token operator">=</span> s<span class="token punctuation">;</span>
+    <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>c <span class="token operator">=</span> <span class="token function">getchar</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token string">'\n'</span> <span class="token operator">&amp;&amp;</span> c <span class="token operator">!=</span> <span class="token constant">EOF</span><span class="token punctuation">)</span>
+        <span class="token operator">*</span>dest<span class="token operator">++</span> <span class="token operator">=</span> c<span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>c <span class="token operator">==</span> <span class="token constant">EOF</span> <span class="token operator">&amp;&amp;</span> dest <span class="token operator">==</span> s<span class="token punctuation">)</span>
+        <span class="token keyword">return</span> <span class="token constant">NULL</span><span class="token punctuation">;</span>
+    <span class="token operator">*</span>dest<span class="token operator">++</span> <span class="token operator">=</span> <span class="token string">'\0'</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> s<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">/* Read input line and write it back */</span>
+<span class="token keyword">void</span> <span class="token function">echo</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">char</span> buf<span class="token punctuation">[</span><span class="token number">8</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token function">gets</span><span class="token punctuation">(</span>buf<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">puts</span><span class="token punctuation">(</span>buf<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>编译后的代码：</p>
+<pre class="line-numbers language-assembly"><code class="language-assembly">echo:
+    subq    %24, %rsp    ; Allocate 24 bytes on stack
+    movq    %rsp, %rdi    ; Compute buf as %rsp
+    call    gets        ; Call gets
+    movq    %rsp, %rdi    ; Compute buf as %rsp
+    call    puts        ; Call puts
+    addq    $24, %rsp    ; Deallocate stack space
+    ret                    ; Return<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>运行时栈的布局如下：</p>
+<img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/CS/stack%20organization%20for%20echo.png">
+
+<p>当写入的字符超过24个时，就会覆盖返回地址。</p>
 <table>
 <thead>
 <tr>
-<th>Symbol</th>
-<th>Type</th>
-<th>Meaning</th>
+<th>Characters typed</th>
+<th>Additional corrupted state</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>$B2T_w$</td>
-<td>函数</td>
-<td>二进制到补码</td>
+<td>0-7</td>
+<td>None</td>
 </tr>
 <tr>
-<td>$B2U_w$</td>
-<td>函数</td>
-<td>二进制到无符号</td>
+<td>9-23</td>
+<td>Unused stack space</td>
 </tr>
 <tr>
-<td>$U2B_w$</td>
-<td>函数</td>
-<td>无符号到二进制</td>
+<td>24-31</td>
+<td>Return address</td>
 </tr>
 <tr>
-<td>$U2T_w$</td>
-<td>函数</td>
-<td>无符号到补码</td>
-</tr>
-<tr>
-<td>$T2B_w$</td>
-<td>函数</td>
-<td>补码到二进制</td>
-</tr>
-<tr>
-<td>$T2U_w$</td>
-<td>函数</td>
-<td>补码到无符号</td>
-</tr>
-<tr>
-<td>$TMin_w$</td>
-<td>常量</td>
-<td>补码最小值</td>
-</tr>
-<tr>
-<td>$TMax_w$</td>
-<td>常量</td>
-<td>补码最大值</td>
-</tr>
-<tr>
-<td>$UMax_w$</td>
-<td>常量</td>
-<td>无符号最大值</td>
+<td>32+</td>
+<td>Saved state in caller</td>
 </tr>
 </tbody></table>
-<h2 id="1-整型数据类型"><a href="#1-整型数据类型" class="headerlink" title="1. 整型数据类型"></a>1. 整型数据类型</h2><p>首先来看看C语言中几种整型在不同位数的机器下所能表示的范围。</p>
+<p>这就需要有些方式防止这种问题与攻击。</p>
+<h2 id="0x02-防止缓冲区溢出攻击"><a href="#0x02-防止缓冲区溢出攻击" class="headerlink" title="0x02 防止缓冲区溢出攻击"></a>0x02 防止缓冲区溢出攻击</h2><p>现在的gcc可以通过如下几种方式来防止缓冲区溢出攻击。</p>
+<h3 id="2-1-Stack-Randomization"><a href="#2-1-Stack-Randomization" class="headerlink" title="2.1 Stack Randomization"></a>2.1 Stack Randomization</h3><p>为了达到缓冲区溢出攻击的目的，攻击者需要能够计算出函数返回地址在栈中的偏移量，然后准确计算出需要覆盖的值。</p>
+<p>所以可以在申请栈空间的时候引入一个随机量，这样不同的机器函数返回地址在栈中的偏移量是不同的，就增加了攻击的难度。</p>
+<p>这就是stack randomization，可以通过<code>alloca</code>函数完成。</p>
+<p>通过下面的代码可以查看当前栈的地址：</p>
+<pre class="line-numbers language-c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">long</span> local<span class="token punctuation">;</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"local at %p\n"</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>local<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>不过一个攻击者可以通过蛮力来搜索，并且添加一系列的<code>nop</code>指令来跳过无用的地址。</p>
+<p>比如如果上面的代码执行10000次，发现大致的范围是<code>0xffffb754</code>到<code>0xffffd754</code>，那么随机的空间就是2^13，如果攻击者使用了128个字节的<code>nop</code>指令的话，那么需要尝试64次就可以了。</p>
+<h3 id="2-2-Stack-Corruption-Detection"><a href="#2-2-Stack-Corruption-Detection" class="headerlink" title="2.2 Stack Corruption Detection"></a>2.2 Stack Corruption Detection</h3><p>第二种方法可以检测是否发生了对超出范围的栈空间进行了写入操作。</p>
+<p>这个方法是在申请的空间后面添加一个标志，函数返回的时候检查这个标志，如果有变动，说明发生了错误。</p>
+<p>这个特殊的值叫做canary，可以从内存中随机选取：</p>
+<img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/CS/stack%20organization%20for%20echo%20with%20stack%20protector%20enabled.png">
+
+<p>现在的编译器默认就是启用了这个特征，如果不启用的话，可以使用<code>-fno-stack-protector</code>选项。</p>
+<p>下面的代码是启用了这个特征的代码：</p>
+<pre class="line-numbers language-assembly"><code class="language-assembly">echo:
+    subq     $24, %rsp             ; Allocate 24 bytes on stack
+    movq     %fs:40, %rax         ; Retrieve canary
+    movq     %rax, 8(%rsp)         ; Store on stack
+    xorl     %eax, %eax             ; Zero out register
+    movq     %rsp, %rdi             ; Compute buf as %rsp
+    call     gets                 ; Call gets
+    movq     %rsp, %rdi             ; Compute buf as %rsp
+    call     puts                 ; Call puts
+    movq     8(%rsp), %rax         ; Retrieve canary
+    xorq     %fs:40, %rax         ; Compare to stored value
+    je         .L9                 ; If =, goto ok
+    call     __stack_chk_fail     ; Stack corrupted!
+.L9:                             ; ok:
+    addq $24, %rsp                 ; Deallocate stack space
+    ret<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>上面的代码可以清楚地看出这个策略。</p>
+<h3 id="2-3-Limiting-Executable-Code-Regions"><a href="#2-3-Limiting-Executable-Code-Regions" class="headerlink" title="2.3 Limiting Executable Code Regions"></a>2.3 Limiting Executable Code Regions</h3><p>第三种方法就是限制可执行的代码区域，这样即使插入代码也不能执行，防止了缓冲区溢出攻击。</p>
+<h2 id="0x03-可变大小的栈Frame"><a href="#0x03-可变大小的栈Frame" class="headerlink" title="0x03 可变大小的栈Frame"></a>0x03 可变大小的栈Frame</h2><p>前面的一些例子中，编译期间就可以知道所需要的栈空间大小。</p>
+<p>还有一种情况，需要使用可变大小的栈空间，这里看看是如何实现的。</p>
+<p>比如下面的函数：</p>
+<pre class="line-numbers language-c"><code class="language-c"><span class="token keyword">long</span> <span class="token function">vframe</span><span class="token punctuation">(</span><span class="token keyword">long</span> n<span class="token punctuation">,</span> <span class="token keyword">long</span> idx<span class="token punctuation">,</span> <span class="token keyword">long</span> <span class="token operator">*</span>p<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">long</span> i<span class="token punctuation">;</span>
+    <span class="token keyword">long</span> <span class="token operator">*</span>p<span class="token punctuation">[</span>n<span class="token punctuation">]</span><span class="token punctuation">;</span>
+    p<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token operator">&amp;</span>i<span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span>i <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> n<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span>
+        p<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> q<span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token operator">*</span>p<span class="token punctuation">[</span>idx<span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这里就是根据参数<code>n</code>在栈上创建一个数组，这个大小在编译期间是不确定的，需要在执行的时候才能知道大小。</p>
+<p>编译后的代码：</p>
+<pre class="line-numbers language-assembly"><code class="language-assembly">vframe:
+    pushq     %rbp                 ; Save old %rbp
+    movq     %rsp, %rbp             ; Set frame pointer
+    subq     $16, %rsp             ; Allocate space for i (%rsp = s1)
+    leaq     22(,%rdi,8), %rax    ; Compute 22 + n*8 as x
+    andq     $-16, %rax            ; Make x = 16 + n*8(n is odd) or 8 + n*8(n is even)
+    subq     %rax, %rsp             ; Allocate space for array p (%rsp = s2)
+    leaq     7(%rsp), %rax        ; Add bias to round up
+    shrq     $3, %rax            ; divided by 8
+    leaq     0(,%rax,8), %r8     ; Set %r8 to &p[0]
+    movq     %r8, %rcx             ; Set %rcx to &p[0] (%rcx = p)
+.L3:                             ; loop:
+    movq     %rdx, (%rcx,%rax,8) ; Set p[i] to q
+    addq     $1, %rax             ; Increment i
+    movq     %rax, -8(%rbp)         ; Store on stack
+.L2:
+    movq     -8(%rbp), %rax         ; Retrieve i from stack
+    cmpq     %rdi, %rax             ; Compare i:n
+    jl         .L3                 ; If <, goto loop
+    leave                         ; Restore %rbp and %rsp
+    ret                         ; Return<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>栈的布局如下：</p>
+<img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/CS/stack%20frame%20structure%20for%20vframe.png">
+
+<p>上面的代码使用了一系列的技巧，来在栈中申请一块满足对齐的空间。</p>
+<ul>
+<li><p>首先在第2行将%rbp保存在栈中，这个%rbp作为base pointer（使用%rsp作为初始值）；</p>
+</li>
+<li><p>第3行中在栈中申请16字节的空间，用来保存函数的局部变量i；</p>
+</li>
+<li><p>参数n存在%rdi中，第四行计算22+n*8，结果保存在%rax中，开始计算所需空间了；</p>
+</li>
+<li><p>第6行的<code>andq</code>指令使用了一个小技巧，-16的编码是<code>0xFFFFFFF0</code>，将%rax中低4位的值置零，是为了得到一个刚好是16的倍数。这样%rax中的值就是<code>16+n*8</code>（n为奇数）或<code>8+n*8</code>（n为偶数）；</p>
+</li>
+<li><p>第7行就直接在栈上申请空间了；</p>
+</li>
+<li><p>接下来需要挪动一下p的值，来进行对齐；</p>
+</li>
+<li><p>8-10行就是对p进行对齐的，其中的7就是bias，向上取整，然后p的值就存在%rcx中了；</p>
+</li>
+<li><p>接下来就是循环操作了；</p>
+</li>
+<li><p>最后的<code>leave</code>指令恢复%rbp和%rsp的值，效果同：</p>
+<pre class="line-numbers language-assembly"><code class="language-assembly">movq    %rbp, %rsp
+popq    %rbp<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+</li>
+</ul>
+<p>下面的两个例子展示了不同情况下图中的一些值：</p>
 <table>
 <thead>
 <tr>
-<th>C data type</th>
-<th>Min in 32</th>
-<th>Max in 32</th>
-<th>Min in 64</th>
-<th>Max in 64</th>
+<th>n</th>
+<th>s1</th>
+<th>s2</th>
+<th>p</th>
+<th>e1</th>
+<th>e2</th>
 </tr>
 </thead>
 <tbody><tr>
-<td><code>[signed] char</code></td>
-<td>$-2^7$</td>
-<td>$2^7-1$</td>
-<td>$-2^7$</td>
-<td>$2^7-1$</td>
+<td>5</td>
+<td>2065</td>
+<td>2017</td>
+<td>2024</td>
+<td>1</td>
+<td>7</td>
 </tr>
 <tr>
-<td><code>unsigned char</code></td>
+<td>6</td>
+<td>2064</td>
+<td>2000</td>
+<td>2000</td>
+<td>16</td>
 <td>0</td>
-<td>$2^8-1$</td>
-<td>0</td>
-<td>$2^8-1$</td>
-</tr>
-<tr>
-<td><code>short</code></td>
-<td>$-2^{15}$</td>
-<td>$2^{15}-1$</td>
-<td>$-2^{15}$</td>
-<td>$2^{15}-1$</td>
-</tr>
-<tr>
-<td><code>unsigned short</code></td>
-<td>0</td>
-<td>$2^{16}-1$</td>
-<td>0</td>
-<td>$2^{16}-1$</td>
-</tr>
-<tr>
-<td><code>int</code></td>
-<td>$-2^{31}$</td>
-<td>$2^{31}-1$</td>
-<td>$2^{31}-1$</td>
-<td>$2^{31}-1$</td>
-</tr>
-<tr>
-<td><code>unsigned</code></td>
-<td>0</td>
-<td>$2^{32}-1$</td>
-<td>0</td>
-<td>$2^{32}-1$</td>
-</tr>
-<tr>
-<td><code>long</code></td>
-<td>$-2^{31}$</td>
-<td>$2^{31}-1$</td>
-<td>$-2^{64}$</td>
-<td>$2^{64}-1$</td>
-</tr>
-<tr>
-<td><code>unsigned long</code></td>
-<td>0</td>
-<td>$2^{32}-1$</td>
-<td>0</td>
-<td>$2^{64}-1$</td>
-</tr>
-<tr>
-<td><code>int32_t</code></td>
-<td>$-2^{31}$</td>
-<td>$2^{31}-1$</td>
-<td>$-2^{31}$</td>
-<td>$2^{31}-1$</td>
-</tr>
-<tr>
-<td><code>uint32_t</code></td>
-<td>0</td>
-<td>$2^{32}-1$</td>
-<td>0</td>
-<td>$2^{32}-1$</td>
-</tr>
-<tr>
-<td><code>int64_t</code></td>
-<td>$-2^{63}$</td>
-<td>$2^{63}-1$</td>
-<td>$-2^{63}$</td>
-<td>$2^{63}-1$</td>
-</tr>
-<tr>
-<td><code>uint64_t</code></td>
-<td>0</td>
-<td>$2^{64}-1$</td>
-<td>0</td>
-<td>$2^{64}-1$</td>
 </tr>
 </tbody></table>
-<h2 id="2-无符号数的编码"><a href="#2-无符号数的编码" class="headerlink" title="2. 无符号数的编码"></a>2. 无符号数的编码</h2><p>既然有无符号和有符号两种，那么每种的编码应该是不一样的。首先看看无符号的编码，毕竟这个比较简单。</p>
-<p>我们知道，信息的存储就是一个比特序列。如果数据有w位，那么这个数据就可以表示成一个w位的向量$\vec{x}=[x_{w-1},w_{w-2},…,x_0]$，其中每一个$x_i$的取值是0或1。</p>
-<p>那么将这个二进制形式的数据转换成无符号类型的十进制数可以：<br>$$<br>B2U_w(\vec{x})=\sum_{i=0}^{w-1}x_i2^i<br>$$<br>接下来看看w位无符号整数的范围。最小值当然就是0，最大值$UMax_w$对应的二进制数据都是1，那么：<br>$$<br>UMax_w=\sum_{i=0}^{w-1}1·2^i=2^w-1<br>$$<br>当w=4的时候，$UMax_4=2^4-1=15$。</p>
-<p>需要注意的是，<strong>函数$B2U_w$是一个双射（bijection）函数。</strong></p>
-<h2 id="3-补码编码"><a href="#3-补码编码" class="headerlink" title="3. 补码编码"></a>3. 补码编码</h2><p>无符号编码不可以表示负数，因为最小值就是0。为了可以表示负数，需要使用补码编码（Two’s-Complement Encodings）。</p>
-<p>我们使用符号$B2T_w$来表示将一个二进制编码转换成对应的十进制补码数值。对于一个二进制向量$\vec{x}=[x_{w-1},x_{w-2},…,x_0]$来说，可以通过下面的方式进行转换：<br>$$<br>B2T_w(\vec{x})=-x_{w-1}2^{w-1}+\sum_{i=0}^{w-2}x_i2^i<br>$$<br>补码编码将最高位当做标志位，当最高位$x_{w-1}=1$时表示负数；当$x_{w-1}=0$时表示正数。为了统一，这个最高位也加上一个权值$-2^{w-1}$，就可以计算整个向量对应的十进制值了。</p>
-<p>接下来看看补码可以表示的范围。当$\vec{x}=[1,0,…,0]$时，表示最小值，即$TMin_w=-2^{w-1}$；当$\vec{x}=[0,1,…,1]$时表示最大值，即$TMax_w=2^{w-1}-1$。</p>
-<p>同样，<strong>函数$B2T_w$也是一个双射函数</strong>。</p>
-<p>可知：</p>
-<ul>
-<li>$|TMin_w|=|TMax_w|+1$</li>
-<li>$UMax_w=2TMax_w+1$</li>
-</ul>
-<h2 id="4-有符号与无符号数之间的转换"><a href="#4-有符号与无符号数之间的转换" class="headerlink" title="4. 有符号与无符号数之间的转换"></a>4. 有符号与无符号数之间的转换</h2><p>既然信息的底层存储是一样的，那么不同的解释方法会得到不同的结果。接下来就看看，对于同一个二进制编码来说，使用不同的解释方法（无符号编码和补码编码）得到的结果之间的关系。</p>
-<p>无符号编码的取值范围是$[0,UMax_w]$，补码编码的取值范围是$[TMin_w,TMax_w]$。</p>
-<p>先看看将补码编码转换成无符号编码。令$T2U_w(x)=B2U_w(T2B_w(x))$，其中$TMin_w\leq x \leq TMax_w$，有：<br>$$<br>T2U_w(x)=<br>\begin{cases}<br>x+2^w, &amp; \text{x&lt;0}\<br>x, &amp; \text{x $\geq$ 0}<br>\end{cases}<br>$$<br>比如，$T2U_{16}(-12345)=-12345+2^{16}=53191$，同时可得：$T2U_w(-1)=-1+2^w=UMax_w$。</p>
-<p>对于一个$\vec{x}$，我们知道$B2U_w(\vec{x})$和$B2T_w(\vec{x})$，那么：<br>$$<br>B2U_w(\vec{x})-B2T_w(\vec{x})=(\sum_{i=0}^{w-1}x_i2^i)-(-x_{w-1}2^{w-1}+\sum_{i=0}^{w-2}x_i2^i)=x_{w-1}2^w<br>$$<br>也就是说$B2U_w(\vec{x})=B2T_w(\vec{x})+x_{w-1}2^w$，所以：<br>$$<br>B2U_w(T2B_w(x))=T2U_w(x)=x+x_{w-1}2^w<br>$$<br>这样就可以通过这个公式将一个有符号数转换成无符号数了。</p>
-<p>接下来看看从无符号数到有符号数的转换，这个函数记作$U2T_w(u)$。</p>
-<p>那么对于$0 \leq u \leq UMax_w$，有：<br>$$<br>U2T_w(u)=\left{<br>\begin{aligned}<br>u&amp;,&amp;u \leq TMax_w\<br>u-2^w&amp;,&amp;u &gt; TMax_w<br>\end{aligned}<br>\right.<br>$$<br>令$\vec{u}=U2B_w(u)$，那么这个编码也就是$U2T_w(u)$的编码，同时有：<br>$$<br>B2T_w(u)=B2U_w(u)-u_{w-1}2^w<br>$$<br>所以：<br>$$<br>U2T_w(u)=B2T(U2B_w(u))=B2U_w(U2B_w(u))-U_{w-1}2^w=u-u_{w-1}2^w<br>$$<br>比如，$T2U_{16}(-12345)=65536-12345=53191$。</p>
-<h2 id="5-C语言中的有符号数和无符号数"><a href="#5-C语言中的有符号数和无符号数" class="headerlink" title="5. C语言中的有符号数和无符号数"></a>5. C语言中的有符号数和无符号数</h2><p>C语言中的数字默认是有符号的，可以通过在数字的末尾加上<code>u</code>或<code>U</code>来指明是无符号的，比如<code>12345U</code>。</p>
-<p>C语言中会发生无符号和有符号数之间的转换。要么是显式的：</p>
-<pre class="line-numbers language-c"><code class="language-c"><span class="token keyword">int</span> tx<span class="token punctuation">,</span> ty<span class="token punctuation">;</span>
-<span class="token keyword">unsigned</span> ux<span class="token punctuation">,</span> uy<span class="token punctuation">;</span>
-
-tx <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">)</span> ux<span class="token punctuation">;</span>
-uy <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">unsigned</span><span class="token punctuation">)</span> ty<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>要么是隐式的：</p>
-<pre class="line-numbers language-c"><code class="language-c"><span class="token keyword">int</span> tx<span class="token punctuation">,</span> ty<span class="token punctuation">;</span>
-<span class="token keyword">unsigned</span> ux<span class="token punctuation">,</span> uy<span class="token punctuation">;</span>
-
-tx <span class="token operator">=</span> ux<span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">// Cast to signed</span>
-uy <span class="token operator">=</span> ty<span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">// Cast to unsigned</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>需要注意的是，<strong>当有符号和无符号数放在一起运算的时候，C会隐式地将有符号数转换成无符号数。</strong></p>
-<p>比如判断<code>-1&lt;0U</code>，<code>-1</code>是有符号数而<code>0U</code>是无符号数，那么<code>-1</code>就会转换成无符号数，$T2U_w(-1)=UMax_w$，导致判断为假。</p>
-<h2 id="6-扩展一个数字的位表示"><a href="#6-扩展一个数字的位表示" class="headerlink" title="6. 扩展一个数字的位表示"></a>6. 扩展一个数字的位表示</h2><p>将一个数扩展成更大的位数表示，同时保留原来的值。对于有符号和无符号，扩展方法不同。</p>
-<p>对于无符号数，扩展的最高位直接用0补齐即可。</p>
-<p>对于有符号数，需要看原来表示的最高位，用那个最高位来补齐。</p>
-<p>需要注意的一点是：当涉及到扩展位数和有符号与无符号之间的转换时，<strong>先扩展位数，然后转换类型</strong>：</p>
-<pre class="line-numbers language-c"><code class="language-c"><span class="token keyword">short</span> sx <span class="token operator">=</span> <span class="token operator">-</span><span class="token number">12345</span><span class="token punctuation">;</span>
-<span class="token keyword">unsigned</span> uy <span class="token operator">=</span> sx<span class="token punctuation">;</span>
-
-<span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"uy = %u:\t"</span><span class="token punctuation">,</span> uy<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token function">show_bytes</span><span class="token punctuation">(</span><span class="token punctuation">(</span>byte_pointer<span class="token punctuation">)</span> <span class="token operator">&amp;</span>uy<span class="token punctuation">,</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span><span class="token keyword">unsigned</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>会得到不一样的结果，<code>uy</code>的值变成了4294954951。</p>
-<h2 id="7-减少一个数字的位表示"><a href="#7-减少一个数字的位表示" class="headerlink" title="7. 减少一个数字的位表示"></a>7. 减少一个数字的位表示</h2><p>反过来，减少一个数字的位表示，就会改变所表示的数值了。</p>
-<p>对于无符号数，截断后的值$x’=x,mod,2^k$，其中$k$就是截断后的位数。因为：<br>$$<br>B2U_w([x_{w-1},x_{w-2},…,x_0]),mod,2^k=[\sum_{i=0}^{w-1}x_i2^i],mod,2^k=[\sum_{i=0}^{k-1}x_i2^i],mod,2^k=\sum_{i=0}^{k-1}x_i2^i=B2U_k([x_{k-1},x_{k-2},…,x_0])<br>$$<br>对于有符号数，截断后的值$x’=U2T_k(x,mod,2^k)$。截断后的编码不管是有符号还是无符号都是一样的，所以对于有符号数，截断后的编码还是$[x_{k-1},x_{k-2},…,x_0]$，那么只需要把这个编码转换成对应的有符号数就可以了：<br>$$<br>x’=U2T_k(B2U_k([x_{k-1},x_{k-2},…,x_0]))=U2T_k(x,mod,2^k)<br>$$</p>
-<h2 id="8-关于有符号和无符号数的建议"><a href="#8-关于有符号和无符号数的建议" class="headerlink" title="8. 关于有符号和无符号数的建议"></a>8. 关于有符号和无符号数的建议</h2><p>由于C语言中会有有符号与无符号之间的隐式转换，所以一些情况下会有奇怪的bug出现。比如：</p>
-<pre class="line-numbers language-c"><code class="language-c"><span class="token keyword">float</span> <span class="token function">sum_elements</span><span class="token punctuation">(</span><span class="token keyword">float</span> a<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token keyword">unsigned</span> length<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    <span class="token keyword">int</span> i<span class="token punctuation">;</span>
-    <span class="token keyword">float</span> result <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-    <span class="token keyword">for</span><span class="token punctuation">(</span>i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;=</span> length<span class="token number">-1</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span>
-        result <span class="token operator">+</span><span class="token operator">=</span> a<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span>
-    <span class="token keyword">return</span> result<span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>当<code>length=0</code>的时候会出错。这是因为<code>length</code>是无符号的，计算<code>length-1</code>的时候会产生一个巨大的无符号整数，导致判断为真，然后访问非法的地址。</p>
-<p>只需要将循环里的判断条件改成<code>i &lt; length</code>即可。</p>
-<p>使用无符号数就可能会导致上面类似的问题，那么一个建议就是不使用无符号数。</p>
-<p>不过无符号数在一些情况下也是有用的，比如仅仅看作位的集合而不考虑数字的含义的时候：</p>
-<ul>
-<li>存储的每一位都是标记（flag）；</li>
-<li>内存地址也是无符号的——系统程序员；</li>
-<li>数学中的多精度计算，数字是由字的数组表示，也可以使用无符号数。</li>
-</ul>
-<h2 id="9-重要的事儿"><a href="#9-重要的事儿" class="headerlink" title="9. 重要的事儿"></a>9. 重要的事儿</h2><ul>
-<li>二进制转无符号数：$B2U_w(\vec{x})=\sum_{i=0}^{w-1}x_i2^i$</li>
-<li>无符号数的最大值：$UMax_w=2^w-1$</li>
-<li>二进制转有符号数：$B2T_w(\vec{x})=-x_{w-1}2^{w-1}+\sum_{i=0}^{w-2}x_i2^i$</li>
-<li>有符号最大值和最小值的关系：$|TMin_w|=|TMax_w|+1$</li>
-<li>无符号数最大值和有符号数最大值的关系：$UMax_w=2TMax_w+1$</li>
-<li>有符号数转无符号数：$T2U_w(x)=x+x_{w-1}2^w$</li>
-<li>无符号数转有符号数：$U2T_w(u)=u-u_{w-1}2^w$</li>
-<li>同一二进制编码下有符号数和无符号数的关系：$B2U_w(u)-B2T_w(u)=u_{w-1}2^w$</li>
-<li>截断无符号数：$x’=x,mod,2^k$</li>
-<li>截断有符号数：$x’=U2T_k(x,mod,2^k)$</li>
-</ul>
 
             </div>
             <hr/>
@@ -684,51 +650,53 @@ uy <span class="token operator">=</span> ty<span class="token punctuation">;</sp
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
+                <i class="far fa-dot-circle"></i>&nbsp;Current
+            </div>
             <div class="card">
-                <a href="/use-pt-osc-to-alter-mysql-table/">
+                <a href="/csapp-ch03-part-5-combining-control-and-data/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="Use pt-osc to ALTER MySQL table">
+                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="csapp ch03 (part 5): Combining Control and Data">
                         
-                        <span class="card-title">Use pt-osc to ALTER MySQL table</span>
+                        <span class="card-title">csapp ch03 (part 5): Combining Control and Data</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            1. 怎么了（问题）之前有一个张MySQL表用一个使用了utf8编码的text类型的content字段来保存文章。最近发现当文章中有emoji表情时，保存会失败：
-Incorrect string value: '\\xF0\\x9F\\x
+                            
+这篇文章是csapp第三章第10节的阅读笔记。
+
+0x00 指针
+每一个指针都有对应的类型。不过指针类型不包含在汇编代码中，而是C对程序员提供的一种抽象；
+每一个指针都有值。这个值就是某个对象的地址，特殊的值NULL (0)表明这个指针不
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-05-08
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-06-19
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/mysql/" class="post-category">
-                                    mysql
+                            <a href="/categories/cs/" class="post-category">
+                                    cs
                                 </a>
                             
                             
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/tips/">
-                        <span class="chip bg-color">tips</span>
-                    </a>
-                    
-                    <a href="/tags/mysql/">
-                        <span class="chip bg-color">mysql</span>
+                    <a href="/tags/csapp/">
+                        <span class="chip bg-color">csapp</span>
                     </a>
                     
                 </div>
@@ -742,29 +710,31 @@ Incorrect string value: '\\xF0\\x9F\\x
                 Next&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/csapp-ch02-part-1-information-storage/">
+                <a href="/csapp-ch03-part-4-data-structures/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="csapp ch02 (part 1): Information Storage">
+                        <img src="/medias/featureimages/25.jpg" class="responsive-img" alt="csapp ch03 (part 4): Data Structures">
                         
-                        <span class="card-title">csapp ch02 (part 1): Information Storage</span>
+                        <span class="card-title">csapp ch03 (part 4): Data Structures</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
                             
-这篇文章是csapp第二章第一节的阅读笔记。
+这篇文章是csapp第三章第8和第9节的阅读笔记。
 
-机器级的程序把内存当做一个大数组，数组里的元素就是字节。
-接下来就应该看看，编译器和运行时系统是如何把由一块块字节组成的信息翻译成它本来的养子。
-1 十六进制表示法在C语言中，我们可以通过0
+接下来，从汇编代码的角度来看看C语言中数据结构的实现。
+0x00 Array先看看数组。
+1.1 基本规则对于具有N个类型T的元素的数组来说，C语言中是这么声明的：
+T A[N];
+令
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-05-06
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-06-15
                             </span>
                         <span class="publish-author">
                             
@@ -919,13 +889,6 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
 
 </main>
 
-
-<script src="https://cdn.bootcss.com/mathjax/2.7.7/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-<script>
-    MathJax.Hub.Config({
-        tex2jax: {inlineMath: [['$', '$'], ['\(', '\)']]}
-    });
-</script>
 
 
     <footer class="page-footer bg-color">
