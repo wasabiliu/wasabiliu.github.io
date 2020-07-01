@@ -571,7 +571,7 @@
       
       <categories>
           
-          <category> cryptography </category>
+          <category> security </category>
           
       </categories>
       
@@ -596,7 +596,7 @@
       
       <categories>
           
-          <category> cryptography </category>
+          <category> security </category>
           
       </categories>
       
@@ -621,7 +621,7 @@
       
       <categories>
           
-          <category> cryptography </category>
+          <category> security </category>
           
       </categories>
       
@@ -865,9 +865,9 @@
       
         <tags>
             
-            <tag> redis </tag>
-            
             <tag> tips </tag>
+            
+            <tag> redis </tag>
             
         </tags>
       
