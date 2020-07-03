@@ -4,8 +4,8 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Category: security, Deuterium">
-    <meta name="description" content="Category: security | Deuterium">
+    <meta name="keywords" content="Category: database, Deuterium">
+    <meta name="description" content="Category: database | Deuterium">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -13,7 +13,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Category: security | Deuterium</title>
+    <title>Category: database | Deuterium</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -273,7 +273,7 @@
                 
                 <a href="/categories/database/" title="database: 7">
                     <span class="chip center-align waves-effect waves-light
-                             chip-default "
+                             chip-active "
                             style="background-color: #F9EBEA;">database
                         <span class="tag-length">7</span>
                     </span>
@@ -300,7 +300,7 @@
                 
                 <a href="/categories/security/" title="security: 3">
                     <span class="chip center-align waves-effect waves-light
-                             chip-active "
+                             chip-default "
                             style="background-color: #E8F8F5;">security
                         <span class="tag-length">3</span>
                     </span>
@@ -346,32 +346,34 @@
             
             <div class="article tag-post col s12 m6 l4" data-aos="zoom-in">
                 <div class="card">
-                    <a href="/ssl-and-tls-part-3-protocol/">
+                    <a href="/all-you-need-to-know-about-mysql-partitions-part-2/">
                         <div class="card-image tag-image">
                             
                             
-                            <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="SSL and TLS (Part 3): Protocol">
+                            <img src="/medias/featureimages/20.jpg" class="responsive-img" alt="All You Need to Know About MySQL Partitions (Part 2)">
                             
-                            <span class="card-title">SSL and TLS (Part 3): Protocol</span>
+                            <span class="card-title">All You Need to Know About MySQL Partitions (Part 2)</span>
                         </div>
                     </a>
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                在前面的文章中，我们从密码学的角度讨论了一些主要的密码原语（cryptographic primitive），最后通过组合这些密码原语构成一个可用的安全通信协议。
-这篇文章更进一步，看看TLS是怎么做的。不过TLS的细节太多了也有点难，这里
+                                
+在Part 1中，已经详细介绍了MySQL中的几种分区方式。在这里，详细介绍一下分区的各种操作。同样，这篇文章是对官方文档的梳理。
+
+3. 分区管理对于一个一分区的表来说，分区管理包括添加分区、删除分区、合并分区、拆分分区以及，改变分区方
                             
                         </div>
                         <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-01-20
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-03-24
                             </span>
                             <span class="publish-author">
                                 
                                 <i class="fas fa-bookmark fa-fw icon-category"></i>
                                 
-                                <a href="/categories/security/" class="post-category">
-                                    security
+                                <a href="/categories/database/" class="post-category">
+                                    database
                                 </a>
                                 
                                 
@@ -382,8 +384,12 @@
                     
                     <div class="card-action article-tags">
                         
-                        <a href="/tags/tls/">
-                            <span class="chip bg-color">tls</span>
+                        <a href="/tags/partition/">
+                            <span class="chip bg-color">partition</span>
+                        </a>
+                        
+                        <a href="/tags/mysql/">
+                            <span class="chip bg-color">mysql</span>
                         </a>
                         
                     </div>
@@ -393,35 +399,34 @@
             
             <div class="article tag-post col s12 m6 l4" data-aos="zoom-in">
                 <div class="card">
-                    <a href="/ssl-and-tls-part-2-cryptography/">
+                    <a href="/all-you-need-to-know-about-mysql-partitions-part-1/">
                         <div class="card-image tag-image">
                             
                             
-                            <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="SSL and TLS (Part 2): Cryptography">
+                            <img src="/medias/featureimages/25.jpg" class="responsive-img" alt="All You Need to Know About MySQL Partitions (Part 1)">
                             
-                            <span class="card-title">SSL and TLS (Part 2): Cryptography</span>
+                            <span class="card-title">All You Need to Know About MySQL Partitions (Part 1)</span>
                         </div>
                     </a>
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                在SSL and TLS (Part 1): Brief Intro中简单介绍了一下SSL/TLS，并以需要解决的三个问题结尾。这三个问题是：
+                                
+什么是分区？为什么要分区？该怎么分区？分区有什么好处？使用分区应该注意什么？通过对MySQL文档的梳理，在这篇文章以及Part 2中详细介绍一下关于MySQL分区的方方面面。
 
-保密性（Confidentiality）
-真实性（Authenticity）
-完整性（Inte
+1. Overview of Paritioning in 
                             
                         </div>
                         <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-01-19
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-03-24
                             </span>
                             <span class="publish-author">
                                 
                                 <i class="fas fa-bookmark fa-fw icon-category"></i>
                                 
-                                <a href="/categories/security/" class="post-category">
-                                    security
+                                <a href="/categories/database/" class="post-category">
+                                    database
                                 </a>
                                 
                                 
@@ -432,8 +437,12 @@
                     
                     <div class="card-action article-tags">
                         
-                        <a href="/tags/tls/">
-                            <span class="chip bg-color">tls</span>
+                        <a href="/tags/partition/">
+                            <span class="chip bg-color">partition</span>
+                        </a>
+                        
+                        <a href="/tags/mysql/">
+                            <span class="chip bg-color">mysql</span>
                         </a>
                         
                     </div>
@@ -443,32 +452,31 @@
             
             <div class="article tag-post col s12 m6 l4" data-aos="zoom-in">
                 <div class="card">
-                    <a href="/ssl-and-tls-part-1-brief-intro/">
+                    <a href="/what-happens-when-using-load-data/">
                         <div class="card-image tag-image">
                             
                             
-                            <img src="/medias/featureimages/11.jpg" class="responsive-img" alt="SSL and TLS (Part 1): Brief Intro">
+                            <img src="/medias/featureimages/11.jpg" class="responsive-img" alt="What Happens When Using LOAD DATA">
                             
-                            <span class="card-title">SSL and TLS (Part 1): Brief Intro</span>
+                            <span class="card-title">What Happens When Using LOAD DATA</span>
                         </div>
                     </a>
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                在万物互联的时代，We don’t connect to the Internet, we are the Internet.
-如此重要的互联网，需要一种协议来保护传输中的信息安全，那就是SSL（Secure Socket Layer）和T
+                                在之前的文章Files to MySQL中简单介绍了mysqlimport和LOAD DATA的使用，也知道了mysqlimport其实就是使用了LOAD DATA语句。在这篇文章中详细介绍一下LOAD DATA这个语句，来看看当使用这个语
                             
                         </div>
                         <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-01-15
+                                <i class="far fa-clock fa-fw icon-date"></i>2019-12-18
                             </span>
                             <span class="publish-author">
                                 
                                 <i class="fas fa-bookmark fa-fw icon-category"></i>
                                 
-                                <a href="/categories/security/" class="post-category">
-                                    security
+                                <a href="/categories/database/" class="post-category">
+                                    database
                                 </a>
                                 
                                 
@@ -479,8 +487,224 @@
                     
                     <div class="card-action article-tags">
                         
-                        <a href="/tags/tls/">
-                            <span class="chip bg-color">tls</span>
+                        <a href="/tags/mysql/">
+                            <span class="chip bg-color">mysql</span>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <div class="article tag-post col s12 m6 l4" data-aos="zoom-in">
+                <div class="card">
+                    <a href="/files-to-mysql/">
+                        <div class="card-image tag-image">
+                            
+                            
+                            <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="Files to MySQL">
+                            
+                            <span class="card-title">Files to MySQL</span>
+                        </div>
+                    </a>
+                    <div class="card-content article-content">
+                        <div class="summary block-with-text">
+                            
+                                问题：把一个本地的文件（比如.txt或.csv文件）导入到指定的一张MySQL表中。可以使用mysqlimport或者LOAD DATA命令来完成。这篇文章仅仅是简单介绍一下mysqlimport和LOAD DATA的简单用法。关于LOAD
+                            
+                        </div>
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2019-12-17
+                            </span>
+                            <span class="publish-author">
+                                
+                                <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                
+                                <a href="/categories/database/" class="post-category">
+                                    database
+                                </a>
+                                
+                                
+                            </span>
+                        </div>
+                    </div>
+
+                    
+                    <div class="card-action article-tags">
+                        
+                        <a href="/tags/mysql/">
+                            <span class="chip bg-color">mysql</span>
+                        </a>
+                        
+                        <a href="/tags/tips/">
+                            <span class="chip bg-color">tips</span>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <div class="article tag-post col s12 m6 l4" data-aos="zoom-in">
+                <div class="card">
+                    <a href="/data-types-in-mysql/">
+                        <div class="card-image tag-image">
+                            
+                            
+                            <img src="/medias/featureimages/14.jpg" class="responsive-img" alt="Data Types in MySQL">
+                            
+                            <span class="card-title">Data Types in MySQL</span>
+                        </div>
+                    </a>
+                    <div class="card-content article-content">
+                        <div class="summary block-with-text">
+                            
+                                1. 开始为了能更好地理解与使用MySQL，根据MySQL文档花点时间整理了一下MySQL的数据类型。MySQL中一共有五大类数据类型，如下图：
+
+
+这篇文章只对其中的数字类型、字符串类型和时间类型进行总结。
+在这些数据类型的使用中，有几个
+                            
+                        </div>
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2019-12-16
+                            </span>
+                            <span class="publish-author">
+                                
+                                <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                
+                                <a href="/categories/database/" class="post-category">
+                                    database
+                                </a>
+                                
+                                
+                            </span>
+                        </div>
+                    </div>
+
+                    
+                    <div class="card-action article-tags">
+                        
+                        <a href="/tags/mysql/">
+                            <span class="chip bg-color">mysql</span>
+                        </a>
+                        
+                        <a href="/tags/data-type/">
+                            <span class="chip bg-color">data_type</span>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <div class="article tag-post col s12 m6 l4" data-aos="zoom-in">
+                <div class="card">
+                    <a href="/file-to-redis/">
+                        <div class="card-image tag-image">
+                            
+                            
+                            <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="File to Redis">
+                            
+                            <span class="card-title">File to Redis</span>
+                        </div>
+                    </a>
+                    <div class="card-content article-content">
+                        <div class="summary block-with-text">
+                            
+                                问题是这样的，现在需要把一个文件里的所有数据上传到redis的set中，文件里存储的就是ID，每行一个：
+head id.list
+10000
+10001
+10002
+10003
+10004
+10005
+10006
+10007
+10008
+
+                            
+                        </div>
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2019-12-10
+                            </span>
+                            <span class="publish-author">
+                                
+                                <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                
+                                <a href="/categories/database/" class="post-category">
+                                    database
+                                </a>
+                                
+                                
+                            </span>
+                        </div>
+                    </div>
+
+                    
+                    <div class="card-action article-tags">
+                        
+                        <a href="/tags/redis/">
+                            <span class="chip bg-color">redis</span>
+                        </a>
+                        
+                        <a href="/tags/tips/">
+                            <span class="chip bg-color">tips</span>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <div class="article tag-post col s12 m6 l4" data-aos="zoom-in">
+                <div class="card">
+                    <a href="/character-sets-and-collations-in-mysql/">
+                        <div class="card-image tag-image">
+                            
+                            
+                            <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="Character Sets and Collations in MySQL">
+                            
+                            <span class="card-title">Character Sets and Collations in MySQL</span>
+                        </div>
+                    </a>
+                    <div class="card-content article-content">
+                        <div class="summary block-with-text">
+                            
+                                最近遇到一个关于MySQL字符乱码的问题，比较好解决，但是为了更好地理解MySQL中的字符系统，参考MySQL的文档整理一下关于MySQL中字符集合字符序的问题。
+1. 什么是字符集和字符序MySQL是存储数据的数据库，既然是存储数据的，那
+                            
+                        </div>
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2019-12-08
+                            </span>
+                            <span class="publish-author">
+                                
+                                <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                
+                                <a href="/categories/database/" class="post-category">
+                                    database
+                                </a>
+                                
+                                
+                            </span>
+                        </div>
+                    </div>
+
+                    
+                    <div class="card-action article-tags">
+                        
+                        <a href="/tags/mysql/">
+                            <span class="chip bg-color">mysql</span>
+                        </a>
+                        
+                        <a href="/tags/charset/">
+                            <span class="chip bg-color">charset</span>
                         </a>
                         
                     </div>

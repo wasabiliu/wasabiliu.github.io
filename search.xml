@@ -492,7 +492,7 @@
       
       <categories>
           
-          <category> mysql </category>
+          <category> database </category>
           
       </categories>
       
@@ -500,6 +500,8 @@
         <tags>
             
             <tag> partition </tag>
+            
+            <tag> mysql </tag>
             
         </tags>
       
@@ -517,7 +519,7 @@
       
       <categories>
           
-          <category> mysql </category>
+          <category> database </category>
           
       </categories>
       
@@ -525,6 +527,8 @@
         <tags>
             
             <tag> partition </tag>
+            
+            <tag> mysql </tag>
             
         </tags>
       
@@ -804,7 +808,7 @@
       
       <categories>
           
-          <category> mysql </category>
+          <category> database </category>
           
       </categories>
       
@@ -829,7 +833,7 @@
       
       <categories>
           
-          <category> mysql </category>
+          <category> database </category>
           
       </categories>
       
@@ -856,7 +860,7 @@
       
       <categories>
           
-          <category> mysql </category>
+          <category> database </category>
           
       </categories>
       
@@ -883,7 +887,7 @@
       
       <categories>
           
-          <category> redis </category>
+          <category> database </category>
           
       </categories>
       
@@ -910,7 +914,7 @@
       
       <categories>
           
-          <category> mysql </category>
+          <category> database </category>
           
       </categories>
       
