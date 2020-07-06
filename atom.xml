@@ -538,7 +538,7 @@
     <link href="http://deuterium.fun/csapp-ch1-a-tour-of-computer-systems/"/>
     <id>http://deuterium.fun/csapp-ch1-a-tour-of-computer-systems/</id>
     <published>2020-04-30T01:56:19.000Z</published>
-    <updated>2020-04-30T02:07:35.116Z</updated>
+    <updated>2020-07-03T09:28:20.418Z</updated>
     
     <summary type="html">
     
@@ -617,9 +617,9 @@
       <category term="database" scheme="http://deuterium.fun/categories/database/"/>
     
     
-      <category term="partition" scheme="http://deuterium.fun/tags/partition/"/>
-    
       <category term="mysql" scheme="http://deuterium.fun/tags/mysql/"/>
+    
+      <category term="partition" scheme="http://deuterium.fun/tags/partition/"/>
     
   </entry>
   
