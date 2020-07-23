@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://deuterium.fun/"/>
-  <updated>2020-07-03T09:20:15.582Z</updated>
+  <updated>2020-07-23T13:00:15.701Z</updated>
   <id>http://deuterium.fun/</id>
   
   <author>
@@ -15,6 +15,36 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>ddia, Distributed Data (Part 3): Transactions</title>
+    <link href="http://deuterium.fun/ddia-distributed-data-part-3-transactions/"/>
+    <id>http://deuterium.fun/ddia-distributed-data-part-3-transactions/</id>
+    <published>2020-07-23T12:49:22.000Z</published>
+    <updated>2020-07-23T13:00:15.701Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;blockquote&gt;
+&lt;p&gt;这篇文章是ddia第七章的阅读笔记。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 id=&quot;0x00-Intro&quot;&gt;&lt;a href=&quot;#0x00-Intro&quot; class=&quot;headerlink&quot; title=&quot;0x00
+        
+      
+    
+    </summary>
+    
+    
+      <category term="cs" scheme="http://deuterium.fun/categories/cs/"/>
+    
+    
+      <category term="ddia" scheme="http://deuterium.fun/tags/ddia/"/>
+    
+  </entry>
   
   <entry>
     <title>new &amp; make in Golang</title>
@@ -590,36 +620,6 @@
       <category term="history" scheme="http://deuterium.fun/tags/history/"/>
     
       <category term="china" scheme="http://deuterium.fun/tags/china/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>All You Need to Know About MySQL Partitions (Part 2)</title>
-    <link href="http://deuterium.fun/all-you-need-to-know-about-mysql-partitions-part-2/"/>
-    <id>http://deuterium.fun/all-you-need-to-know-about-mysql-partitions-part-2/</id>
-    <published>2020-03-24T03:12:31.000Z</published>
-    <updated>2020-07-03T09:24:38.353Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;blockquote&gt;
-&lt;p&gt;在&lt;a href=&quot;https://deuterium.fun/all-you-need-to-know-about-mysql-partitions-part-1/&quot;&gt;Part
-        
-      
-    
-    </summary>
-    
-    
-      <category term="database" scheme="http://deuterium.fun/categories/database/"/>
-    
-    
-      <category term="mysql" scheme="http://deuterium.fun/tags/mysql/"/>
-    
-      <category term="partition" scheme="http://deuterium.fun/tags/partition/"/>
     
   </entry>
   
