@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://deuterium.fun/"/>
-  <updated>2020-07-23T13:07:28.689Z</updated>
+  <updated>2020-07-27T03:02:40.289Z</updated>
   <id>http://deuterium.fun/</id>
   
   <author>
@@ -15,6 +15,36 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>ddia, Distributed Data (Part 4): Troubles</title>
+    <link href="http://deuterium.fun/ddia-distributed-data-part-4-troubles/"/>
+    <id>http://deuterium.fun/ddia-distributed-data-part-4-troubles/</id>
+    <published>2020-07-27T03:00:06.000Z</published>
+    <updated>2020-07-27T03:02:40.289Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;blockquote&gt;
+&lt;p&gt;这篇文章是ddia第八章的阅读笔记。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;0x00-Intro&quot;&gt;&lt;a href=&quot;#0x00-Intro&quot; class=&quot;headerlink&quot; title=&quot;0x00
+        
+      
+    
+    </summary>
+    
+    
+      <category term="cs" scheme="http://deuterium.fun/categories/cs/"/>
+    
+    
+      <category term="ddia" scheme="http://deuterium.fun/tags/ddia/"/>
+    
+  </entry>
   
   <entry>
     <title>ddia, Distributed Data (Part 3): Transactions</title>
@@ -590,36 +620,6 @@
     
     
       <category term="csapp" scheme="http://deuterium.fun/tags/csapp/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>《中国历代政治得失》笔记</title>
-    <link href="http://deuterium.fun/zhong-guo-li-dai-zheng-zhi-de-shi-bi-ji/"/>
-    <id>http://deuterium.fun/zhong-guo-li-dai-zheng-zhi-de-shi-bi-ji/</id>
-    <published>2020-03-30T01:53:16.000Z</published>
-    <updated>2020-03-30T02:04:18.376Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;blockquote&gt;
-&lt;p&gt;利用周末一个下午的时间，重新刷了一遍钱穆的《中国历代政治得失》。能说“西方在政治经验上一般都比较短浅”这话的，只有中国人。这不是自夸，这是事实。从整本书中都能看出钱穆对中国古代政治经验的一种称赞。他推崇汉代的地方政府组织，推崇唐代的中央政府组织，贬
-        
-      
-    
-    </summary>
-    
-    
-      <category term="reading" scheme="http://deuterium.fun/categories/reading/"/>
-    
-    
-      <category term="history" scheme="http://deuterium.fun/tags/history/"/>
-    
-      <category term="china" scheme="http://deuterium.fun/tags/china/"/>
     
   </entry>
   

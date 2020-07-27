@@ -1,0 +1,930 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="ddia, Distributed Data (Part 4): Troubles, Deuterium">
+    <meta name="description" content="
+这篇文章是ddia第八章的阅读笔记。
+
+0x00 Intro
+
+所有可能出错的地方一定会出错。
+这篇文章来讲讲，分布式系统中会出现哪些错误。
+知道会有什么错误，才能知道如何去解决。
+0x01 Faults and Partial Fail">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>ddia, Distributed Data (Part 4): Troubles | Deuterium</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+    
+    <script src="/libs/jquery/jquery.min.js"></script>
+    
+<link rel="alternate" href="/atom.xml" title="Deuterium" type="application/atom+xml">
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper head-container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">Deuterium</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>Home</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>Tags</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>Categories</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>About</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="https://valineliu.gitbook.io/deuterium-wiki/" target="_blank" rel="noopener" class="waves-effect waves-light">
+      
+      <i class="fab fa-wikipedia-w" style="zoom: 0.6;"></i>
+      
+      <span>Wiki</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>Friends</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="Search" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">Deuterium</div>
+        <div class="logo-desc">
+            
+            Software and anecdotes.
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			Home
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			Tags
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			Categories
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			About
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="https://valineliu.gitbook.io/deuterium-wiki/" target="_blank" rel="noopener" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fab fa-wikipedia-w"></i>
+			
+			Wiki
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			Friends
+		</a>
+          
+        </li>
+        
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/1.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <div class="description center-align post-title">
+                        ddia, Distributed Data (Part 4): Troubles
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        height: calc(100vh - 250px);
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #3B5998;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #3B5998;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #3B5998;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/ddia/">
+                                <span class="chip bg-color">ddia</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/cs/" class="post-category">
+                                cs
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
+                    2020-07-27
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
+                    1.8k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>Read Times:&nbsp;&nbsp;
+                    6 Min
+                </div>
+                
+				
+                
+            </div>
+            
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <blockquote>
+<p>这篇文章是ddia第八章的阅读笔记。</p>
+</blockquote>
+<h2 id="0x00-Intro"><a href="#0x00-Intro" class="headerlink" title="0x00 Intro"></a>0x00 Intro</h2><img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/CS/8.The%20Troubles%20with%20Distributed%20Systems.png">
+
+<p>所有可能出错的地方一定会出错。</p>
+<p>这篇文章来讲讲，分布式系统中会出现哪些错误。</p>
+<p>知道会有什么错误，才能知道如何去解决。</p>
+<h2 id="0x01-Faults-and-Partial-Failures"><a href="#0x01-Faults-and-Partial-Failures" class="headerlink" title="0x01 Faults and Partial Failures"></a>0x01 Faults and Partial Failures</h2><p>在单个节点上，系统要么功能正常，妖门完全失效，没有中间状态。</p>
+<p>但是涉及到多个节点时，可能会出现部分正常部分失效的状态。</p>
+<p>而且这个失效还是不确定的，不知道哪个节点在什么时候就可能发生一个错误导致失效了。</p>
+<p>不确定性加部分失效，就很难。</p>
+<h2 id="0x02-Unreliable-Networks"><a href="#0x02-Unreliable-Networks" class="headerlink" title="0x02 Unreliable Networks"></a>0x02 Unreliable Networks</h2><p>首先是网络不可靠。</p>
+<p>在分布式系统的多个节点之间，没有共享内存，只能通过网络来传递信息。</p>
+<p>发送方发送消息，接收方来接收，操作完成后给发送方返回结果，一来一往。</p>
+<p>但是发送方发送之后，可能会出现很多问题：</p>
+<ol>
+<li>请求发出去了，但是丢了；</li>
+<li>请求在某个队列中排队呢，可能是网络或接收方已经超负荷；</li>
+<li>接收方崩了；</li>
+<li>接收方暂时无法响应（可能在GC）；</li>
+<li>接收方接收到了请求，也处理完了，但是响应暂时发不出去（超负荷）；</li>
+<li>接收方接收到了请求，也处理完了，但是响应丢了。</li>
+</ol>
+<p>比如下图：</p>
+<img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/CS/no%20response.png">
+
+<p>总之client没有收到响应，也不知道是网络问题还是server的问题。</p>
+<p><font color=red><strong>一个简单的机制来处理这个问题：超时。如果超时了还没收到就认为收不到了。</strong></font></p>
+<h3 id="2-1-超时与无期限的延迟"><a href="#2-1-超时与无期限的延迟" class="headerlink" title="2.1 超时与无期限的延迟"></a>2.1 超时与无期限的延迟</h3><p>那么多长时间才算超时呢？</p>
+<p>长了，意味着更长时间的等待；短了，意味着可能会出现误判。</p>
+<p>假如一个虚拟的系统，数据传输延迟最大是d，请求在r内一定能处理完，那么最大的超时时间就是2d+r。</p>
+<p>但是大多数系统并没有d和r的保证。</p>
+<p>超时时间不是一个固定的值，而应该是一个变化的量，可以采用类似TCP的超时重试机制。</p>
+<h3 id="2-2-同步与异步网络"><a href="#2-2-同步与异步网络" class="headerlink" title="2.2 同步与异步网络"></a>2.2 同步与异步网络</h3><p>互联网的网络和电话网络的不同在于，电话网络是独占的，而互联网的网络是共享的。</p>
+<p>这是为了提高资源的利用率。</p>
+<p>但这样就导致不能像电话网络一样有一个可预测的延迟。</p>
+<h2 id="0x03-Unreliable-Clocks"><a href="#0x03-Unreliable-Clocks" class="headerlink" title="0x03 Unreliable Clocks"></a>0x03 Unreliable Clocks</h2><p>时间也很重要。</p>
+<p>需要应用程序需要依赖时间，要么时间戳，要么时间段：</p>
+<ol>
+<li>某个请求是否超时了？</li>
+<li>某个服务99%的响应时间是多少？</li>
+<li>在过去五分钟内，服务平均每秒处理多少个请求？</li>
+<li>用户的停留时间是多少？</li>
+<li>这篇文章什么时候发表的？</li>
+<li>在什么时间发送提醒邮件？</li>
+<li>这个缓存什么时候过期？</li>
+<li>日志中的错误消息的时间戳是什么时候？</li>
+</ol>
+<p>前四个涉及时间段，后四个涉及时间戳。</p>
+<p>跨节点通信需要时间，所以收到消息的时间应该小于发送的时间。</p>
+<p>但是由于不同节点的时间可能不同步，就会出现收到消息的时间小于发送时间。</p>
+<h3 id="3-1-单调时钟和钟表时钟"><a href="#3-1-单调时钟和钟表时钟" class="headerlink" title="3.1 单调时钟和钟表时钟"></a>3.1 单调时钟和钟表时钟</h3><p>现代计算机内部有两种时钟：一个是钟表上的时钟（time-of-day clock），一个是单调时钟（monotonic clock）。</p>
+<p>钟表上的时钟返回当前的日期和时间，比如Linux的<code>clock_gettime(CLOCK_REALTIME)</code>，这是一个时间点。</p>
+<p>这个时钟可以和时间服务器NTP同步，<font color=red><strong>这时钟表时钟就会出现回拨或者向前跳跃的现象</strong></font>。</p>
+<p><font color=red><strong>单调时钟更适合用来测量时间段</strong></font>，比如服务响应时间，Linux中的<code>clock_gettime(CLOCK_MONOTONIC)</code>。</p>
+<p>单调时钟保证总是向前，不会出现钟表时钟的回拨或跳跃现象。</p>
+<h3 id="3-2-依赖同步的时钟"><a href="#3-2-依赖同步的时钟" class="headerlink" title="3.2 依赖同步的时钟"></a>3.2 依赖同步的时钟</h3><p>如果应用需要精确同步的时钟，最好仔细监控所有节点上的时钟偏差。</p>
+<h4 id="3-2-1-时间戳与事件顺序"><a href="#3-2-1-时间戳与事件顺序" class="headerlink" title="3.2.1 时间戳与事件顺序"></a>3.2.1 时间戳与事件顺序</h4><p>跨节点的事件，就依赖同步的时钟。如果时钟不同步，就会出现问题。比如：</p>
+<img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/CS/disorder%20of%20clocks.png">
+
+<p>Client B 的写入时间明明比A晚，但是B的时钟却早于A，导致错误。</p>
+<h4 id="3-2-2-全局快照的同步时钟"><a href="#3-2-2-全局快照的同步时钟" class="headerlink" title="3.2.2 全局快照的同步时钟"></a>3.2.2 全局快照的同步时钟</h4><p>常见的快照隔离实现中需要单调递增的事务ID。</p>
+<p>但是当需要多个节点时，需要有一个服务来产生全局的、单调递增的事务ID。</p>
+<h3 id="3-3-进程暂停"><a href="#3-3-进程暂停" class="headerlink" title="3.3 进程暂停"></a>3.3 进程暂停</h3><p>另一个危险的例子就是进程暂停。</p>
+<p>加入一个系统中只有一个主节点，其他节点需要知道这个主节点有没有失效。</p>
+<p>一种方式是通过一个服务获取lease，类似一个带有超时的锁。</p>
+<p>某个节点拿到这个lease后就可以被认为是主节点，在过期之前续期，成功了就继续是主节点。</p>
+<p>大概这样：</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">while</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    request <span class="token operator">=</span> <span class="token function">getIncomingRequest</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">// Ensure that the lease always has at least 10 seconds remaining</span>
+    <span class="token keyword">if</span><span class="token punctuation">(</span>lease<span class="token punctuation">.</span>expiryTimeMillis <span class="token operator">-</span> System<span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&lt;</span> <span class="token number">10000</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        lease <span class="token operator">=</span> lease<span class="token punctuation">.</span><span class="token function">renew</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">if</span><span class="token punctuation">(</span>lease<span class="token punctuation">.</span><span class="token function">isValid</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token function">process</span><span class="token punctuation">(</span>request<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这是有问题的，比如第一个if通过之后，系统GC了，停了15秒，这个时候这个lease已经过期了，就可能有其他的节点变成了新的主节点，但是这个节点还认为自己是主节点，boom。</p>
+<p>除了GC，还有很多情况会导致进程中途停止一段时间：</p>
+<ul>
+<li>虚拟化环境中，可能会暂停虚拟机然后继续；</li>
+<li>操作系统上下文切换；</li>
+<li>SIGSTOP信号。</li>
+</ul>
+<p>等等。</p>
+<h2 id="0x04-Knowledge-Truth-and-Lies"><a href="#0x04-Knowledge-Truth-and-Lies" class="headerlink" title="0x04 Knowledge, Truth, and Lies"></a>0x04 Knowledge, Truth, and Lies</h2><h3 id="4-1-真相由多数决定"><a href="#4-1-真相由多数决定" class="headerlink" title="4.1 真相由多数决定"></a>4.1 真相由多数决定</h3><p>多个节点中，如果一个节点本来是正常的，只是由于网络原因不能与其它节点通信，那么其余的节点就会认为这个节点出现了故障。</p>
+<p><font color=red><strong>也就是说，节点不能根据自己的信息来判断自身的状态。</strong></font></p>
+<p>最常见的法定票数是取系统节点半数以上，quorum。</p>
+<p>对于前面lease的问题，可以通过fencing技术来解决。</p>
+<p>简单来说就是获取lease的时候返回一个fencing令牌，这个令牌每授予一次就增1，每次发送写请求的时候带上这个令牌，通过这个令牌可以检测过期的lease。</p>
+<p>如图：</p>
+<img src="https://deuterium-figure-1251214161.cos.ap-beijing.myqcloud.com/blogs/CS/lease%20with%20fencing.png">
+
+<p>也就是说，只靠客户端自己检查锁的状态是不够的，需要资源本身主动检查，不过这会使服务器实现变得复杂。</p>
+<h3 id="4-2-拜占庭故障"><a href="#4-2-拜占庭故障" class="headerlink" title="4.2 拜占庭故障"></a>4.2 拜占庭故障</h3><p>fencing技术有一个问题，就是客户端可以伪造一个更大的fencing。</p>
+<p>这就涉及到一个假设了，前面都是假设节点虽然不可靠但一定是诚实的。</p>
+<p>不诚实的节点就更加复杂了，这就是拜占庭将军问题。</p>
+<p><font color=red><strong>拜占庭将军问题就是，在不信任的环境中需要达成一致。</strong></font></p>
+<p>这个要求更高，这里就不涉及了。</p>
+
+            </div>
+            <hr/>
+
+            
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/ddia/">
+                                    <span class="chip bg-color">ddia</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="far fa-dot-circle"></i>&nbsp;Current
+            </div>
+            <div class="card">
+                <a href="/ddia-distributed-data-part-4-troubles/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="ddia, Distributed Data (Part 4): Troubles">
+                        
+                        <span class="card-title">ddia, Distributed Data (Part 4): Troubles</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+这篇文章是ddia第八章的阅读笔记。
+
+0x00 Intro
+
+所有可能出错的地方一定会出错。
+这篇文章来讲讲，分布式系统中会出现哪些错误。
+知道会有什么错误，才能知道如何去解决。
+0x01 Faults and Partial Fail
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-07-27
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/cs/" class="post-category">
+                                    cs
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/ddia/">
+                        <span class="chip bg-color">ddia</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                Next&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/ddia-distributed-data-part-3-transactions/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/25.jpg" class="responsive-img" alt="ddia, Distributed Data (Part 3): Transactions">
+                        
+                        <span class="card-title">ddia, Distributed Data (Part 3): Transactions</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+这篇文章是ddia第七章的阅读笔记。
+
+0x00 Intro
+
+在一个系统中有很多可能出错的地方。
+为了提高系统的可靠性，需要好好处理那些可能的错误。
+事务（transaction）就是一个首选的机制。
+这篇文章里主要看看事务。
+0x01
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-07-23
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/cs/" class="post-category">
+                                    cs
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/ddia/">
+                        <span class="chip bg-color">ddia</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+    
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+<!-- 代码块折行 -->
+
+<style type="text/css">
+code[class*="language-"], pre[class*="language-"] { white-space: pre !important; }
+</style>
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;You Will See...</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+    <footer class="page-footer bg-color">
+    <div class="container row center-align">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            <span id="year">2020</span>
+            <a href="http://deuterium.fun" target="_blank">Valineliu</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+            
+            
+            
+            
+            
+            <br>
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link ">
+
+
+    <a href="mailto:1749118121@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;Search</span>
+            <input type="search" id="searchInput" name="s" placeholder="Please enter a search keyword"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
