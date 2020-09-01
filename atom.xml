@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://deuterium.fun/"/>
-  <updated>2020-07-27T03:02:40.289Z</updated>
+  <updated>2020-09-01T03:58:40.145Z</updated>
   <id>http://deuterium.fun/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Functional Options Pattern in Go</title>
+    <link href="http://deuterium.fun/functional-options-pattern-in-go/"/>
+    <id>http://deuterium.fun/functional-options-pattern-in-go/</id>
+    <published>2020-08-31T12:57:14.000Z</published>
+    <updated>2020-09-01T03:58:40.145Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;blockquote&gt;
+&lt;p&gt;Functional Options
+        
+      
+    
+    </summary>
+    
+    
+      <category term="programming" scheme="http://deuterium.fun/categories/programming/"/>
+    
+    
+      <category term="go" scheme="http://deuterium.fun/tags/go/"/>
+    
+  </entry>
   
   <entry>
     <title>ddia, Distributed Data (Part 4): Troubles</title>
@@ -580,36 +608,6 @@
 &lt;/blockquote&gt;
 &lt;p&gt;机器级的程序把内存当做一个大数组，数组里的元素就是字节。&lt;/p&gt;
 &lt;p&gt;接下来就应该看看，编译器和运行时系统是如何把由一块块字节组成的信息翻译成它本来的养子。&lt;
-        
-      
-    
-    </summary>
-    
-    
-      <category term="cs" scheme="http://deuterium.fun/categories/cs/"/>
-    
-    
-      <category term="csapp" scheme="http://deuterium.fun/tags/csapp/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>csapp ch1: A Tour of Computer Systems</title>
-    <link href="http://deuterium.fun/csapp-ch1-a-tour-of-computer-systems/"/>
-    <id>http://deuterium.fun/csapp-ch1-a-tour-of-computer-systems/</id>
-    <published>2020-04-30T01:56:19.000Z</published>
-    <updated>2020-07-03T09:28:20.418Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;blockquote&gt;
-&lt;p&gt;这篇文章是csapp第一章阅读笔记。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;img
         
       
     

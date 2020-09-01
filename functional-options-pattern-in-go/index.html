@@ -1,0 +1,1052 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="Functional Options Pattern in Go, Deuterium">
+    <meta name="description" content="
+Functional Options Pattern：
+
+定义一个Options结构体(StuffClientOptions)，包含所有的可选项；
+定义一个函数类型，参数是Options结构指针（StuffClientOption）；
+创">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Functional Options Pattern in Go | Deuterium</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+    
+    <script src="/libs/jquery/jquery.min.js"></script>
+    
+<link rel="alternate" href="/atom.xml" title="Deuterium" type="application/atom+xml">
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper head-container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">Deuterium</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>Home</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>Tags</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>Categories</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>About</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="https://valineliu.gitbook.io/deuterium-wiki/" target="_blank" rel="noopener" class="waves-effect waves-light">
+      
+      <i class="fab fa-wikipedia-w" style="zoom: 0.6;"></i>
+      
+      <span>Wiki</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>Friends</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="Search" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">Deuterium</div>
+        <div class="logo-desc">
+            
+            Software and anecdotes.
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			Home
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			Tags
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			Categories
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			About
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="https://valineliu.gitbook.io/deuterium-wiki/" target="_blank" rel="noopener" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fab fa-wikipedia-w"></i>
+			
+			Wiki
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			Friends
+		</a>
+          
+        </li>
+        
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/0.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <div class="description center-align post-title">
+                        Functional Options Pattern in Go
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        height: calc(100vh - 250px);
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #3B5998;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #3B5998;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #3B5998;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/go/">
+                                <span class="chip bg-color">go</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/programming/" class="post-category">
+                                programming
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
+                    2020-08-31
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
+                    1.4k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>Read Times:&nbsp;&nbsp;
+                    5 Min
+                </div>
+                
+				
+                
+            </div>
+            
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <blockquote>
+<p>Functional Options Pattern：</p>
+<ol>
+<li>定义一个Options结构体(<code>StuffClientOptions</code>)，包含所有的可选项；</li>
+<li>定义一个函数类型，参数是Options结构指针（<code>StuffClientOption</code>）；</li>
+<li>创建一个Options类型的变量，包含所有的默认值（<code>defaultStuffClientOptions</code>）；</li>
+<li>对所有的可选项定义设置函数（<code>WithXXX</code>），在里面对选项进行设置；</li>
+<li>定义一个接口，指定我们提供的服务（<code>StuffClient</code>）；</li>
+<li>创建一个包内可见的变量，实现接口（<code>stuffClient</code>）；</li>
+<li>定义一个构造函数，使用可变参数（<code>NewStuffClient</code>）。</li>
+</ol>
+</blockquote>
+<p>Go语言让程序员困扰的一个问题就是如何编写一个可选参数的函数。当一个类具有多个选项，我们在构造这个类的时候可能希望一些选项使用默认值，而有时候还需要进行更精细的控制。</p>
+<p>这个在很多语言中都很容易。比如在C类语言中，我们可以通过函数重载的方式，提供具有不同个数参数的同名字函数；在PHP中可以对参数设置一个默认值。但是在Go中这些方法都行不通。</p>
+<p>这个时候就可以用功能选项模式（<strong>Functional Options Pattern</strong>）来完成。这里通过一个简单的例子逐步介绍这个模式。</p>
+<p>假如我们提供一个服务叫做<code>StuffClient</code>，这个服务有两个可选项（超时timeout和重试次数retries）：</p>
+<pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">type</span> StuffClient <span class="token keyword">interface</span> <span class="token punctuation">{</span>
+    <span class="token function">DoStuff</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token builtin">error</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">type</span> stuffClient <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+    conn Connection
+    timeout <span class="token builtin">int</span>
+    retires <span class="token builtin">int</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这个结构体是私有的，所以我们需要一个构造函数：</p>
+<pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">func</span> <span class="token function">NewStuffClient</span><span class="token punctuation">(</span>conn Connection<span class="token punctuation">,</span> timeout<span class="token punctuation">,</span> retries <span class="token builtin">int</span><span class="token punctuation">)</span> StuffClient <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token operator">&amp;</span>stuffClient <span class="token punctuation">{</span>
+        conn<span class="token punctuation">:</span> conn<span class="token punctuation">,</span>
+        timeout<span class="token punctuation">:</span> timeout<span class="token punctuation">,</span>
+        retries<span class="token punctuation">:</span> retries<span class="token punctuation">,</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>但是这样每次构造一个新的对象都需要传递全部参数，但是大多数时候我们使用默认值就可以了。我们同样不能定义多个具有相同名字但不同参数的函数，然后回报<code>redelared</code>错误。</p>
+<p>这时我们可以定义一个不同的构造函数：</p>
+<pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">func</span> <span class="token function">NewStuffClient</span><span class="token punctuation">(</span>conn Connection<span class="token punctuation">)</span> StuffClient <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token operator">&amp;</span>stuffClient <span class="token punctuation">{</span>
+        conn<span class="token punctuation">:</span> conn<span class="token punctuation">,</span>
+        timeout<span class="token punctuation">:</span> DEFAULT_TIMEOUT<span class="token punctuation">,</span>
+        retries<span class="token punctuation">:</span> DEFAULT_RETRIES<span class="token punctuation">,</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token function">NewStuffClientWithOptions</span><span class="token punctuation">(</span>conn Connection<span class="token punctuation">,</span> timeout<span class="token punctuation">,</span> retries <span class="token builtin">int</span><span class="token punctuation">)</span> StuffClient <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token operator">&amp;</span>stuffClient <span class="token punctuation">{</span>
+        conn<span class="token punctuation">:</span> conn<span class="token punctuation">,</span>
+        timeout<span class="token punctuation">:</span> timeout<span class="token punctuation">,</span>
+        retries<span class="token punctuation">:</span> retries<span class="token punctuation">,</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>但是这样太麻烦了，尤其当我们需要再添加一个选项的时候，需要改动的地方太多了。</p>
+<p>我们可以传递一个配置对象config：</p>
+<pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">type</span> StuffClientOptions <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+    Retries <span class="token builtin">int</span> <span class="token comment" spellcheck="true">// number of times to retry the request before giving up</span>
+    Timeout <span class="token builtin">int</span> <span class="token comment" spellcheck="true">// connection timeout in seconds</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token function">NewStuffClient</span><span class="token punctuation">(</span>conn Connection<span class="token punctuation">,</span> options StuffClientOptions<span class="token punctuation">)</span> StuffClient <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token operator">&amp;</span>stuffClient <span class="token punctuation">{</span>
+        conn<span class="token punctuation">:</span> conn<span class="token punctuation">,</span>
+        timeout<span class="token punctuation">:</span> options<span class="token punctuation">.</span>Timeout<span class="token punctuation">,</span>
+        retries<span class="token punctuation">:</span> options<span class="token punctuation">.</span>Retries<span class="token punctuation">,</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>但是这样也有点麻烦，我们需要每次都要构造一个config然后传进去，即使我们不想指定某些值。</p>
+<p>最后我们的功能选项模式出场了。通过Go的闭包，可以更加简洁地实现上面的需求：</p>
+<pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">type</span> StuffClientOption <span class="token keyword">func</span><span class="token punctuation">(</span><span class="token operator">*</span>StuffClientOptions<span class="token punctuation">)</span>
+
+<span class="token keyword">type</span> StuffClientOptions <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+    Retries <span class="token builtin">int</span> <span class="token comment" spellcheck="true">// number of times to retry the request before giving up</span>
+    Timeout <span class="token builtin">int</span> <span class="token comment" spellcheck="true">// connection timeout in seconds</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token function">WithRetries</span><span class="token punctuation">(</span>r <span class="token builtin">int</span><span class="token punctuation">)</span> StuffClientOption <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token keyword">func</span><span class="token punctuation">(</span>o <span class="token operator">*</span>StuffClientOptions<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        o<span class="token punctuation">.</span>Retries <span class="token operator">=</span> r
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token function">WithTimeout</span><span class="token punctuation">(</span>t <span class="token builtin">int</span><span class="token punctuation">)</span> StuffClientOption <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token keyword">func</span><span class="token punctuation">(</span>o <span class="token operator">*</span>StuffClientOptions<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        o<span class="token punctuation">.</span>Timeout <span class="token operator">=</span> t
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>首先，我们为我们的结构<code>StuffClient</code>定义了一个可选项的结构<code>StuffClientOptions</code>，又定义了一个函数类型<code>StuffClientOption</code>并以上面的Option结构作为参数。然后还有几个<code>WithXXX</code>函数返回一个闭包。现在，我们可以这样：</p>
+<pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">var</span> defaultStuffClientOptions <span class="token operator">=</span> StuffClientOptions <span class="token punctuation">{</span>
+    Retries<span class="token punctuation">:</span> <span class="token number">3</span><span class="token punctuation">,</span>
+    Timeout<span class="token punctuation">:</span> <span class="token number">2</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token function">NewStuffClient</span><span class="token punctuation">(</span>conn Connection<span class="token punctuation">,</span> opts <span class="token operator">...</span>StuffClientOption<span class="token punctuation">)</span> StuffClient <span class="token punctuation">{</span>
+    options <span class="token operator">:=</span> defaultStuffClientOptions
+    <span class="token keyword">for</span> <span class="token boolean">_</span><span class="token punctuation">,</span> o <span class="token operator">:=</span> <span class="token keyword">range</span> opts <span class="token punctuation">{</span>
+        <span class="token function">o</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>options<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> <span class="token operator">&amp;</span>stuffClient <span class="token punctuation">{</span>
+        conn<span class="token punctuation">:</span> conn<span class="token punctuation">,</span>
+        timeout<span class="token punctuation">:</span> options<span class="token punctuation">.</span>Timeout<span class="token punctuation">,</span>
+        retries<span class="token punctuation">:</span> options<span class="token punctuation">.</span>Retries<span class="token punctuation">,</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这里我们调整了构造函数的定义，接收一个可变参数，这个可变参数是上面函数类型的数组，然后将所有的函数执行一遍，就对我们的选项进行了设置，没有设置的使用默认值。</p>
+<p>完整的代码：</p>
+<pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">package</span> main
+
+<span class="token keyword">import</span> <span class="token punctuation">(</span>
+    <span class="token string">"fmt"</span>
+<span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 1、定义一个Option结构体，包含所有需要的可选项</span>
+<span class="token keyword">type</span> StuffClientOptions <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+    Retries <span class="token builtin">int</span> <span class="token comment" spellcheck="true">// # of times to retry the request before giving up</span>
+    Timeout <span class="token builtin">int</span> <span class="token comment" spellcheck="true">// connection timeout in seconds</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">// 2、定义一个函数类型，这个函数的参数是Option结构体的指针类型</span>
+<span class="token keyword">type</span> StuffClientOption <span class="token keyword">func</span><span class="token punctuation">(</span><span class="token operator">*</span>StuffClientOptions<span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 3、创建一个Option类型的变量，包括所有的默认值</span>
+<span class="token keyword">var</span> defaultStuffClientOptions <span class="token operator">=</span> StuffClientOptions <span class="token punctuation">{</span>
+    Retries<span class="token punctuation">:</span> <span class="token number">3</span><span class="token punctuation">,</span>
+    Timeout<span class="token punctuation">:</span> <span class="token number">2</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">// 4、WithXXX函数，参数是选项的值，返回2中定义的函数，内部进行设置</span>
+<span class="token keyword">func</span> <span class="token function">WithRetries</span><span class="token punctuation">(</span>r <span class="token builtin">int</span><span class="token punctuation">)</span> StuffClientOption <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token keyword">func</span><span class="token punctuation">(</span>o <span class="token operator">*</span>StuffClientOptions<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        o<span class="token punctuation">.</span>Retries <span class="token operator">=</span> r
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token function">WithTimeout</span><span class="token punctuation">(</span>t <span class="token builtin">int</span><span class="token punctuation">)</span> StuffClientOption <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token keyword">func</span><span class="token punctuation">(</span>o <span class="token operator">*</span>StuffClientOptions<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        o<span class="token punctuation">.</span>Timeout <span class="token operator">=</span> t
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">// 5、定义接口</span>
+<span class="token keyword">type</span> StuffClient <span class="token keyword">interface</span> <span class="token punctuation">{</span>
+    <span class="token function">DoStuff</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token builtin">error</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">type</span> Connection <span class="token keyword">struct</span><span class="token punctuation">{</span><span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">// 6、包内可见的一个变量</span>
+<span class="token keyword">type</span> stuffClient <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+    conn Connection
+    timeout <span class="token builtin">int</span>
+    retries <span class="token builtin">int</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">// 构造函数</span>
+<span class="token keyword">func</span> <span class="token function">NewStuffClient</span><span class="token punctuation">(</span>conn Connection<span class="token punctuation">,</span> opts <span class="token operator">...</span>StuffClientOption<span class="token punctuation">)</span> StuffClient <span class="token punctuation">{</span>
+    options <span class="token operator">:=</span> defaultStuffClientOptions
+    <span class="token keyword">for</span> <span class="token boolean">_</span><span class="token punctuation">,</span> o <span class="token operator">:=</span> <span class="token keyword">range</span> opts <span class="token punctuation">{</span>
+        <span class="token function">o</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>options<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">return</span> <span class="token operator">&amp;</span>stuffClient <span class="token punctuation">{</span>
+        conn<span class="token punctuation">:</span> conn<span class="token punctuation">,</span>
+        timeout<span class="token punctuation">:</span> options<span class="token punctuation">.</span>Timeout<span class="token punctuation">,</span>
+        retries<span class="token punctuation">:</span> options<span class="token punctuation">.</span>Retries<span class="token punctuation">,</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token punctuation">(</span>c stuffClient<span class="token punctuation">)</span> <span class="token function">DoStuff</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token builtin">error</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token boolean">nil</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    x <span class="token operator">:=</span> <span class="token function">NewStuffClient</span><span class="token punctuation">(</span>Connection<span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
+    fmt<span class="token punctuation">.</span><span class="token function">Printf</span><span class="token punctuation">(</span><span class="token string">"%+v\n"</span><span class="token punctuation">,</span> x<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// print &amp;{conn:{} timeout:2 retries:3}</span>
+
+    x <span class="token operator">=</span> <span class="token function">NewStuffClient</span><span class="token punctuation">(</span>
+        Connection<span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token function">WithRetries</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token punctuation">)</span>
+    fmt<span class="token punctuation">.</span><span class="token function">Printf</span><span class="token punctuation">(</span><span class="token string">"%+v\n"</span><span class="token punctuation">,</span> x<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// print &amp;{conn:{} timeout:2 retries:1}</span>
+
+    x <span class="token operator">=</span> <span class="token function">NewStuffClient</span><span class="token punctuation">(</span>
+        Connection<span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token function">WithRetries</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+        <span class="token function">WithTimeout</span><span class="token punctuation">(</span><span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token punctuation">)</span>
+    fmt<span class="token punctuation">.</span><span class="token function">Printf</span><span class="token punctuation">(</span><span class="token string">"%+v\n"</span><span class="token punctuation">,</span> x<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// print &amp;{conn:{} timeout:100 retries:1}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>更简单一点，我们可以不定义<code>StuffClientOptions</code>，直接使用我们的<code>StuffClient</code>：</p>
+<pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">var</span> defaultStuffClient <span class="token operator">=</span> struffClient <span class="token punctuation">{</span>
+    retries<span class="token punctuation">:</span> <span class="token number">3</span><span class="token punctuation">,</span>
+    timeout<span class="token punctuation">:</span> <span class="token number">2</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">type</span> StuffClientOption <span class="token keyword">func</span><span class="token punctuation">(</span><span class="token operator">*</span>stuffClient<span class="token punctuation">)</span>
+
+<span class="token keyword">func</span> <span class="token function">WithRetries</span><span class="token punctuation">(</span>r <span class="token builtin">int</span><span class="token punctuation">)</span> StuffClientOption <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token keyword">func</span><span class="token punctuation">(</span>o <span class="token operator">*</span>stuffClient<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        o<span class="token punctuation">.</span>retries <span class="token operator">=</span> r
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token function">WithTimeout</span><span class="token punctuation">(</span>t <span class="token builtin">int</span><span class="token punctuation">)</span> StuffClientOption <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token keyword">func</span><span class="token punctuation">(</span>o <span class="token operator">*</span>stuffClient<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        o<span class="token punctuation">.</span>timeout <span class="token operator">=</span> t
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">type</span> StuffClient <span class="token keyword">interface</span> <span class="token punctuation">{</span>
+    <span class="token function">DoStuff</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token builtin">error</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">type</span> stuffClient <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+    conn Connection<span class="token punctuation">,</span>
+    timeout <span class="token builtin">int</span>
+    retries <span class="token builtin">int</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">type</span> Connection <span class="token keyword">struct</span><span class="token punctuation">{</span><span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token function">NewStuffClient</span><span class="token punctuation">(</span>conn Connection<span class="token punctuation">,</span> opts <span class="token operator">...</span>StuffClientOption<span class="token punctuation">)</span> StuffClient <span class="token punctuation">{</span>
+    client <span class="token operator">:=</span> defaultStuffClient
+    <span class="token keyword">for</span> <span class="token boolean">_</span><span class="token punctuation">,</span> o <span class="token operator">:=</span> <span class="token keyword">range</span> opts <span class="token punctuation">{</span>
+        <span class="token function">o</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>client<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+
+    client<span class="token punctuation">.</span>conn <span class="token operator">=</span> conn
+    <span class="token keyword">return</span> client
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token punctuation">(</span>c stuffClient<span class="token punctuation">)</span> <span class="token function">DoStuff</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token builtin">error</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token boolean">nil</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这里没有使用config结构，但是在一些场景中使用config结构更加合适，比如在构造函数中对config有进一步的操作但是并不保存数据，或者把这个config传递到其他地方的时候，使用config结构更加方便。</p>
+
+            </div>
+            <hr/>
+
+            
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/go/">
+                                    <span class="chip bg-color">go</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="far fa-dot-circle"></i>&nbsp;Current
+            </div>
+            <div class="card">
+                <a href="/functional-options-pattern-in-go/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="Functional Options Pattern in Go">
+                        
+                        <span class="card-title">Functional Options Pattern in Go</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+Functional Options Pattern：
+
+定义一个Options结构体(StuffClientOptions)，包含所有的可选项；
+定义一个函数类型，参数是Options结构指针（StuffClientOption）；
+创
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-08-31
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/programming/" class="post-category">
+                                    programming
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/go/">
+                        <span class="chip bg-color">go</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                Next&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/ddia-distributed-data-part-4-troubles/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="ddia, Distributed Data (Part 4): Troubles">
+                        
+                        <span class="card-title">ddia, Distributed Data (Part 4): Troubles</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+这篇文章是ddia第八章的阅读笔记。
+
+0x00 Intro
+
+所有可能出错的地方一定会出错。
+这篇文章来讲讲，分布式系统中会出现哪些错误。
+知道会有什么错误，才能知道如何去解决。
+0x01 Faults and Partial Fail
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-07-27
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/cs/" class="post-category">
+                                    cs
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/ddia/">
+                        <span class="chip bg-color">ddia</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+    
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+<!-- 代码块折行 -->
+
+<style type="text/css">
+code[class*="language-"], pre[class*="language-"] { white-space: pre !important; }
+</style>
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;You Will See...</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+    <footer class="page-footer bg-color">
+    <div class="container row center-align">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            <span id="year">2020</span>
+            <a href="http://deuterium.fun" target="_blank">Valineliu</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+            
+            
+            
+            
+            
+            <br>
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link ">
+
+
+    <a href="mailto:1749118121@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;Search</span>
+            <input type="search" id="searchInput" name="s" placeholder="Please enter a search keyword"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
