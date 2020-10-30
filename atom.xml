@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://deuterium.fun/"/>
-  <updated>2020-10-26T02:04:40.847Z</updated>
+  <updated>2020-10-30T01:15:10.159Z</updated>
   <id>http://deuterium.fun/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Learn OAuth 2.0</title>
+    <link href="http://deuterium.fun/learn-oauth-2-0/"/>
+    <id>http://deuterium.fun/learn-oauth-2-0/</id>
+    <published>2020-10-30T01:13:22.000Z</published>
+    <updated>2020-10-30T01:15:10.159Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;blockquote&gt;
+&lt;p&gt;说起OAuth，大多数人都听说过，有的还在工作中用到过。OAuth可以用来保护资源，尤其是API。不过当深入OAuth并仔细看看的时候，原来OAuth有很多值得讨论以及注意地方。这篇文章是《OAuth 2 In
+        
+      
+    
+    </summary>
+    
+    
+      <category term="security" scheme="http://deuterium.fun/categories/security/"/>
+    
+    
+      <category term="oauth" scheme="http://deuterium.fun/tags/oauth/"/>
+    
+  </entry>
   
   <entry>
     <title>Data Science (Part 1): Basic R</title>
@@ -583,37 +611,6 @@
       <category term="mysql" scheme="http://deuterium.fun/tags/mysql/"/>
     
       <category term="tips" scheme="http://deuterium.fun/tags/tips/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>csapp ch02 (part 2): Integer Representations</title>
-    <link href="http://deuterium.fun/csapp-ch02-part-2-integer-representations/"/>
-    <id>http://deuterium.fun/csapp-ch02-part-2-integer-representations/</id>
-    <published>2020-05-07T01:44:53.000Z</published>
-    <updated>2020-05-07T09:43:33.699Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;blockquote&gt;
-&lt;p&gt;这篇文章是csapp第二章第二节的阅读笔记。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;既然知道了信息是如何存储的，那么接下来看看，整数是如何存储的。整数包括两种：有符号整数和无符号整数，分别对应可为负和不可为负。&lt;/p&gt;
-&lt;p&gt;这里会涉及到如下的
-        
-      
-    
-    </summary>
-    
-    
-      <category term="cs" scheme="http://deuterium.fun/categories/cs/"/>
-    
-    
-      <category term="csapp" scheme="http://deuterium.fun/tags/csapp/"/>
     
   </entry>
   
