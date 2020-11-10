@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://deuterium.fun/"/>
-  <updated>2020-11-09T03:03:32.510Z</updated>
+  <updated>2020-11-10T09:08:08.486Z</updated>
   <id>http://deuterium.fun/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Generate a random string in Go</title>
+    <link href="http://deuterium.fun/generate-a-random-string-in-go/"/>
+    <id>http://deuterium.fun/generate-a-random-string-in-go/</id>
+    <published>2020-11-10T08:30:15.000Z</published>
+    <updated>2020-11-10T09:08:08.486Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;blockquote&gt;
+&lt;p&gt;如何高效地产生一个随机字符串？这是一个简单的问题，但是简单的问题也有极致的做法。这个问题是StackOverflow上的一个问题，&lt;a
+        
+      
+    
+    </summary>
+    
+    
+      <category term="programming" scheme="http://deuterium.fun/categories/programming/"/>
+    
+    
+      <category term="go" scheme="http://deuterium.fun/tags/go/"/>
+    
+  </entry>
   
   <entry>
     <title>Learn OAuth 2.0</title>
@@ -582,35 +610,6 @@
     
     
       <category term="csapp" scheme="http://deuterium.fun/tags/csapp/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Use pt-osc to ALTER MySQL table</title>
-    <link href="http://deuterium.fun/use-pt-osc-to-alter-mysql-table/"/>
-    <id>http://deuterium.fun/use-pt-osc-to-alter-mysql-table/</id>
-    <published>2020-05-08T07:41:44.000Z</published>
-    <updated>2020-07-03T09:27:17.784Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;h2 id=&quot;1-怎么了（问题）&quot;&gt;&lt;a href=&quot;#1-怎么了（问题）&quot; class=&quot;headerlink&quot; title=&quot;1. 怎么了（问题）&quot;&gt;&lt;/a&gt;1.
-        
-      
-    
-    </summary>
-    
-    
-      <category term="database" scheme="http://deuterium.fun/categories/database/"/>
-    
-    
-      <category term="mysql" scheme="http://deuterium.fun/tags/mysql/"/>
-    
-      <category term="tips" scheme="http://deuterium.fun/tags/tips/"/>
     
   </entry>
   

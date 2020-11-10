@@ -1,0 +1,1107 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="Generate a random string in Go, Deuterium">
+    <meta name="description" content="
+如何高效地产生一个随机字符串？这是一个简单的问题，但是简单的问题也有极致的做法。这个问题是StackOverflow上的一个问题，How to generate a random string of a fixed length in G">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Generate a random string in Go | Deuterium</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+    
+    <script src="/libs/jquery/jquery.min.js"></script>
+    
+<link rel="alternate" href="/atom.xml" title="Deuterium" type="application/atom+xml">
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper head-container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">Deuterium</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>Home</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>Tags</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>Categories</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>About</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="https://valineliu.gitbook.io/deuterium-wiki/" target="_blank" rel="noopener" class="waves-effect waves-light">
+      
+      <i class="fab fa-wikipedia-w" style="zoom: 0.6;"></i>
+      
+      <span>Wiki</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>Friends</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="Search" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">Deuterium</div>
+        <div class="logo-desc">
+            
+            Software and anecdotes.
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			Home
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			Tags
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			Categories
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			About
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="https://valineliu.gitbook.io/deuterium-wiki/" target="_blank" rel="noopener" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fab fa-wikipedia-w"></i>
+			
+			Wiki
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			Friends
+		</a>
+          
+        </li>
+        
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/7.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <div class="description center-align post-title">
+                        Generate a random string in Go
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        height: calc(100vh - 250px);
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #3B5998;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #3B5998;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #3B5998;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/go/">
+                                <span class="chip bg-color">go</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/programming/" class="post-category">
+                                programming
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
+                    2020-11-10
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
+                    1.9k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>Read Times:&nbsp;&nbsp;
+                    9 Min
+                </div>
+                
+				
+                
+            </div>
+            
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <blockquote>
+<p>如何高效地产生一个随机字符串？这是一个简单的问题，但是简单的问题也有极致的做法。这个问题是StackOverflow上的一个问题，<a href="https://stackoverflow.com/questions/22892120/how-to-generate-a-random-string-of-a-fixed-length-in-go" target="_blank" rel="noopener">How to generate a random string of a fixed length in Go?</a></p>
+</blockquote>
+<h3 id="1-最通用的方案"><a href="#1-最通用的方案" class="headerlink" title="1. 最通用的方案"></a>1. 最通用的方案</h3><p>最普通的方案就是随机产生每个字符，所以整个字符串也是随机的，这样的好处是可以控制要使用的字符。</p>
+<pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">func</span> <span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    rand<span class="token punctuation">.</span><span class="token function">Seed</span><span class="token punctuation">(</span>time<span class="token punctuation">.</span><span class="token function">Now</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">UnixNano</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">var</span> letterRunes <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token function">rune</span><span class="token punctuation">(</span><span class="token string">"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"</span><span class="token punctuation">)</span>
+
+<span class="token keyword">func</span> <span class="token function">RandStringRunes</span><span class="token punctuation">(</span>n <span class="token builtin">int</span><span class="token punctuation">)</span> <span class="token builtin">string</span> <span class="token punctuation">{</span>
+    b <span class="token operator">:=</span> <span class="token function">make</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">rune</span><span class="token punctuation">,</span> n<span class="token punctuation">)</span>
+    <span class="token keyword">for</span> i <span class="token operator">:=</span> <span class="token keyword">range</span> b <span class="token punctuation">{</span>
+        b<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> letterRunes<span class="token punctuation">[</span>rand<span class="token punctuation">.</span><span class="token function">Intn</span><span class="token punctuation">(</span><span class="token function">len</span><span class="token punctuation">(</span>letterRunes<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> <span class="token function">string</span><span class="token punctuation">(</span>b<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="2-字节替换rune"><a href="#2-字节替换rune" class="headerlink" title="2. 字节替换rune"></a>2. 字节替换rune</h3><p>如果需求是只使用英语字母字符（包括大小写），那么我们可以使用byte来替换rune，因为UTF-8编码中的英语字母和byte是一一对应的。</p>
+<pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">const</span> letterBytes <span class="token operator">=</span> <span class="token string">"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"</span>
+
+<span class="token keyword">func</span> <span class="token function">RandStringBytes</span><span class="token punctuation">(</span>n <span class="token builtin">int</span><span class="token punctuation">)</span> <span class="token builtin">string</span> <span class="token punctuation">{</span>
+    b <span class="token operator">:=</span> <span class="token function">make</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">byte</span><span class="token punctuation">,</span> n<span class="token punctuation">)</span>
+    <span class="token keyword">for</span> i <span class="token operator">:=</span> <span class="token keyword">range</span> b <span class="token punctuation">{</span>
+        b<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> letterBytes<span class="token punctuation">[</span>rand<span class="token punctuation">.</span><span class="token function">Intn</span><span class="token punctuation">(</span><span class="token function">len</span><span class="token punctuation">(</span>letterBytes<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> <span class="token function">string</span><span class="token punctuation">(</span>b<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="3-使用余数"><a href="#3-使用余数" class="headerlink" title="3. 使用余数"></a>3. 使用余数</h3><p>在2中，我们使用的<code>rand.Intn</code>来随机选择一个字段，<code>rand.Intn</code>会调用<code>Rand.Intn</code>，而<code>Rand.Intn</code>会调用<code>Rand.Int32n</code>，它会比直接调用<code>rand.Int63</code>慢，后者会产生一个63bit的随机整数。</p>
+<p>我们可以直接使用<code>rand.Int63</code>，然后除以<code>len(letterBytes)</code>的余数来选择字符：</p>
+<pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">func</span> <span class="token function">RandStringBytesRmndr</span><span class="token punctuation">(</span>n <span class="token builtin">int</span><span class="token punctuation">)</span> <span class="token builtin">string</span> <span class="token punctuation">{</span>
+    b <span class="token operator">:=</span> <span class="token function">make</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">byte</span><span class="token punctuation">,</span> n<span class="token punctuation">)</span>
+    <span class="token keyword">for</span> i <span class="token operator">:=</span> <span class="token keyword">range</span> b <span class="token punctuation">{</span>
+        b<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> letterBytes<span class="token punctuation">[</span>rand<span class="token punctuation">.</span><span class="token function">Int63</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">%</span> <span class="token function">int64</span><span class="token punctuation">(</span><span class="token function">len</span><span class="token punctuation">(</span>letterBytes<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> <span class="token function">string</span><span class="token punctuation">(</span>b<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这个实现明显会比上面的解决方案快，但是有一个小小的瑕疵，那就是字符被选择的概率并不是完全一样。但是这个差别是非常非常的小（字符的数量52远远小于1&lt;&lt;63-1），只是理论上会有差别，实践中可以忽略不计。</p>
+<h3 id="4-掩码"><a href="#4-掩码" class="headerlink" title="4. 掩码"></a>4. 掩码</h3><p>通过前面的方案，我们可以看到我们并不需要太多的bit来决定字符的平均分布，事实上我们只需要随机整数的后几个bit就可以选择字母。对于52个英语字母（大小写）来说，只需要6个bit就可以实现均匀分布（52=110100b），所以我们可以使用<code>rand.Int63</code>后6个bit来实现，我们只接受后六位在<code>0..len(letterBytes)-1</code>的随机数，所以不在这个范围，可以直接丢弃。通过掩码就可以得到一个整数的后6个bit。</p>
+<pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">const</span> letterBytes <span class="token operator">=</span> <span class="token string">"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"</span>
+
+<span class="token keyword">const</span> <span class="token punctuation">(</span>
+    letterIdxBits <span class="token operator">=</span> <span class="token number">6</span> <span class="token comment" spellcheck="true">// 6 bits to represent a letter index</span>
+    letterIdxMask <span class="token operator">=</span> <span class="token number">1</span> <span class="token operator">&lt;&lt;</span> letterIdxBits <span class="token operator">-</span> <span class="token number">1</span> <span class="token comment" spellcheck="true">// All 1-bits, as many as letterIdxBits</span>
+<span class="token punctuation">)</span>
+
+<span class="token keyword">func</span> <span class="token function">RandStringBytesMask</span><span class="token punctuation">(</span>n <span class="token builtin">int</span><span class="token punctuation">)</span> <span class="token builtin">string</span> <span class="token punctuation">{</span>
+    b <span class="token operator">:=</span> <span class="token function">make</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">byte</span><span class="token punctuation">,</span> n<span class="token punctuation">)</span>
+    <span class="token keyword">for</span> i <span class="token operator">:=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> n<span class="token punctuation">;</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> idx <span class="token operator">:=</span> <span class="token function">int</span><span class="token punctuation">(</span>rand<span class="token punctuation">.</span><span class="token function">Int63</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span> letterIdxMask<span class="token punctuation">)</span><span class="token punctuation">;</span> idx <span class="token operator">&lt;</span> <span class="token function">len</span><span class="token punctuation">(</span>letterBytes<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            b<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> letterBytes<span class="token punctuation">[</span>idx<span class="token punctuation">]</span>
+            i<span class="token operator">++</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> <span class="token function">string</span><span class="token punctuation">(</span>b<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="5-掩码加强版"><a href="#5-掩码加强版" class="headerlink" title="5. 掩码加强版"></a>5. 掩码加强版</h3><p>上面有个不好的地方，会产生大量的丢弃的case，造成重选和浪费。<code>rand.Int63</code>回产生63bit的随机数，如果我们把它分成6份，那么一次就可以产生10个6bit的随机数，这样就减少了浪费。</p>
+<pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">const</span> letterBytes <span class="token operator">=</span> <span class="token string">"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"</span>
+
+<span class="token keyword">const</span> <span class="token punctuation">(</span>
+    letterIdxBits <span class="token operator">=</span> <span class="token number">6</span> <span class="token comment" spellcheck="true">// 6 bits to represent a letter index</span>
+    letterIdxMask <span class="token operator">=</span> <span class="token number">1</span> <span class="token operator">&lt;&lt;</span> letterIdxBits <span class="token operator">-</span> <span class="token number">1</span> <span class="token comment" spellcheck="true">// All 1-bits, as many as letterIdxBits</span>
+    letterIdxMax <span class="token operator">=</span> <span class="token number">63</span> <span class="token operator">/</span> letterIdxBits <span class="token comment" spellcheck="true">// # of letter indices fitting in 63 bits</span>
+<span class="token punctuation">)</span>
+
+<span class="token keyword">func</span> <span class="token function">RandStringByesMaksImpr</span><span class="token punctuation">(</span>n <span class="token builtin">int</span><span class="token punctuation">)</span> <span class="token builtin">string</span> <span class="token punctuation">{</span>
+    b <span class="token operator">:=</span> <span class="token function">make</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">byte</span><span class="token punctuation">,</span> n<span class="token punctuation">)</span>
+    <span class="token comment" spellcheck="true">// A rand.Int63() generates 63 random bits, enough for letterIdxMsk letters!</span>
+    <span class="token keyword">for</span> i<span class="token punctuation">,</span> cache<span class="token punctuation">,</span> remain <span class="token operator">:=</span> n<span class="token number">-1</span><span class="token punctuation">,</span> rand<span class="token punctuation">.</span><span class="token function">Int63</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> letterIdxMax<span class="token punctuation">;</span> i <span class="token operator">>=</span> <span class="token number">0</span><span class="token punctuation">;</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> remain <span class="token operator">==</span> <span class="token number">0</span> <span class="token punctuation">{</span>
+            cache<span class="token punctuation">,</span> remain <span class="token operator">=</span> rand<span class="token punctuation">.</span><span class="token function">Int63</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> letterIdxMax
+        <span class="token punctuation">}</span>
+        <span class="token keyword">if</span> idx <span class="token operator">:=</span> <span class="token function">int</span><span class="token punctuation">(</span>cache <span class="token operator">&amp;</span> letterIdxMask<span class="token punctuation">)</span><span class="token punctuation">;</span> idx <span class="token operator">&lt;</span> <span class="token function">len</span><span class="token punctuation">(</span>letterBytes<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            b<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> letterBytes<span class="token punctuation">[</span>idx<span class="token punctuation">]</span>
+            i<span class="token operator">--</span>
+        <span class="token punctuation">}</span>
+        cache <span class="token operator">>>=</span> letterIdxBits
+        remain<span class="token operator">--</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> <span class="token function">string</span><span class="token punctuation">(</span>b<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="6-Source"><a href="#6-Source" class="headerlink" title="6. Source"></a>6. Source</h3><p>上面的代码的确好，没有太多可以改进的地方，即使可以提升，也得花费很大的复杂度。</p>
+<p>我们可以从另外一个方面进行优化，那就是提高随机数的产生（source）。</p>
+<p><code>crypto/rand</code>包提供了<code>Read(b []byte)</code>的方法，它可以随机生成我们所需bit的字节，但是因为处于安全方面的设计和检查，它的随机数产生比较慢。</p>
+<p>我们再转回<code>math/rand</code>，<code>rand.Rand</code>使用<code>rand.Source</code>来产生随机bit。<code>rand.Source</code>是一个接口，提供了<code>Int63() int64</code>，正是我们所需要的。</p>
+<p>所以我们可以直接使用<code>rand.Source</code>，而不是全局提供或者共享的随机源。</p>
+<pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">var</span> src <span class="token operator">=</span> rand<span class="token punctuation">.</span><span class="token function">NewSource</span><span class="token punctuation">(</span>time<span class="token punctuation">.</span><span class="token function">Now</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">UnixNano</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token keyword">func</span> <span class="token function">RandStringBytesMaskImprSrc</span><span class="token punctuation">(</span>n <span class="token builtin">int</span><span class="token punctuation">)</span> <span class="token builtin">string</span> <span class="token punctuation">{</span>
+    b <span class="token operator">:=</span> <span class="token function">make</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">byte</span><span class="token punctuation">,</span> n<span class="token punctuation">)</span>
+    <span class="token comment" spellcheck="true">// A src.Int63() generates 63 random bits, enough for letterIdxMax characters!</span>
+    <span class="token keyword">for</span> i<span class="token punctuation">,</span> cache<span class="token punctuation">,</span> remain <span class="token operator">:=</span> n<span class="token number">-1</span><span class="token punctuation">,</span> src<span class="token punctuation">.</span><span class="token function">Int63</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> letterIdxMax<span class="token punctuation">;</span> i <span class="token operator">>=</span> <span class="token number">0</span><span class="token punctuation">;</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> remain <span class="token operator">==</span> <span class="token number">0</span> <span class="token punctuation">{</span>
+            cache<span class="token punctuation">,</span> remain <span class="token operator">=</span> src<span class="token punctuation">.</span><span class="token function">Int63</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> letterIdxMax
+        <span class="token punctuation">}</span>
+        <span class="token keyword">if</span> idx <span class="token operator">:=</span><span class="token function">int</span><span class="token punctuation">(</span>cache <span class="token operator">&amp;</span> letterIdxMask<span class="token punctuation">)</span><span class="token punctuation">;</span> idx <span class="token operator">&lt;</span> <span class="token function">len</span><span class="token punctuation">(</span>letterBytes<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            b<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> letterBytes<span class="token punctuation">[</span>idx<span class="token punctuation">]</span>
+            i<span class="token operator">--</span>
+        <span class="token punctuation">}</span>
+        cache <span class="token operator">>>=</span> letterIdxBits
+        remain<span class="token operator">--</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> <span class="token function">string</span><span class="token punctuation">(</span>b<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>需要注意的是，这里我们不需要去初始化<code>math/rand</code>包里的全局<code>Rand</code>，因为我们没有用到这个，并且<code>rand.Source</code>已经初始化好了。</p>
+<p>还有一点就是，<code>math/rand</code>包中的默认source是多线程安全的，而通过<code>rand.NewSource()</code>获取的source不是多线程安全的。</p>
+<p>### 7. 使用<code>strings.Builder</code></p>
+<p>前面所有的解决方案都是通过将一个slice转换成string返回的。这种转换方式会对slice的内容进行复制，因为string的值是不可变的。</p>
+<p>为了避免这个复制，我们可以使用<code>srings.Builder</code>。<code>strings.Builder</code>在内部维护了一个<code>[]byte</code>，当工作结束的时候，通过<code>Builder.String()</code>函数返回一个string，而在内部避免了多余的复制。</p>
+<pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">func</span> <span class="token function">RandStringBytesMaskImprSrcSB</span><span class="token punctuation">(</span>n <span class="token builtin">int</span><span class="token punctuation">)</span> <span class="token builtin">string</span> <span class="token punctuation">{</span>
+    sb <span class="token operator">:=</span> strins<span class="token punctuation">.</span>Builder<span class="token punctuation">{</span><span class="token punctuation">}</span>
+    sb<span class="token punctuation">.</span><span class="token function">Grow</span><span class="token punctuation">(</span>n<span class="token punctuation">)</span>
+    <span class="token comment" spellcheck="true">// A src.Int63() generates 63 random bits, enough for letterIdxMax characters!</span>
+    <span class="token keyword">for</span> i<span class="token punctuation">,</span> cache<span class="token punctuation">,</span> reamin <span class="token operator">:=</span> n<span class="token number">-1</span><span class="token punctuation">,</span> src<span class="token punctuation">.</span><span class="token function">Int63</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> letterIdxMax<span class="token punctuation">;</span> i <span class="token operator">>=</span> <span class="token number">0</span><span class="token punctuation">;</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> remain <span class="token operator">==</span> <span class="token number">0</span> <span class="token punctuation">{</span>
+            cache<span class="token punctuation">,</span> remain <span class="token operator">=</span> src<span class="token punctuation">.</span><span class="token function">Int63</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> letterIdxMax
+        <span class="token punctuation">}</span>
+        <span class="token keyword">if</span> idx <span class="token operator">:=</span> <span class="token function">int</span><span class="token punctuation">(</span>cache <span class="token operator">&amp;</span> letterIdxMask<span class="token punctuation">)</span><span class="token punctuation">;</span> idx <span class="token operator">&lt;</span> <span class="token function">len</span><span class="token punctuation">(</span>letterBytes<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            sb<span class="token punctuation">.</span><span class="token function">WriteByte</span><span class="token punctuation">(</span>letterBytes<span class="token punctuation">[</span>idx<span class="token punctuation">]</span><span class="token punctuation">)</span>
+            i<span class="token operator">--</span>
+        <span class="token punctuation">}</span>
+        cache <span class="token operator">>>=</span> letterIdxBits
+        remain<span class="token operator">--</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> sb<span class="token punctuation">.</span><span class="token function">String</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>注意，新建一个<code>strings.Builder</code>之后，要调用<code>Builder.Grow()</code>函数，保证具有足够的空间，防止多余的复制。</p>
+<h3 id="8-Benchmark"><a href="#8-Benchmark" class="headerlink" title="8. Benchmark"></a>8. Benchmark</h3><p>最后通过测试来看看各种实现的性能：</p>
+<pre class="line-numbers language-go"><code class="language-go"><span class="token keyword">package</span> main
+
+<span class="token keyword">import</span> <span class="token punctuation">(</span>
+    <span class="token string">"math/rand"</span>
+    <span class="token string">"testing"</span>
+    <span class="token string">"strings"</span>
+    <span class="token string">"time"</span>
+<span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// Implementations</span>
+
+<span class="token keyword">func</span> <span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    rand<span class="token punctuation">.</span><span class="token function">Seed</span><span class="token punctuation">(</span>time<span class="token punctuation">.</span><span class="token function">Now</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">UnixNano</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">var</span> letterRunes <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token function">rune</span><span class="token punctuation">(</span><span class="token string">"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"</span><span class="token punctuation">)</span>
+
+<span class="token keyword">func</span> <span class="token function">RandStringRunes</span><span class="token punctuation">(</span>n <span class="token builtin">int</span><span class="token punctuation">)</span> <span class="token builtin">string</span> <span class="token punctuation">{</span>
+    b <span class="token operator">:=</span> <span class="token function">make</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">rune</span><span class="token punctuation">,</span> n<span class="token punctuation">)</span>
+    <span class="token keyword">for</span> i <span class="token operator">:=</span> <span class="token keyword">range</span> b <span class="token punctuation">{</span>
+        b<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> letterRunes<span class="token punctuation">[</span>rand<span class="token punctuation">.</span><span class="token function">Intn</span><span class="token punctuation">(</span><span class="token function">len</span><span class="token punctuation">(</span>letterRunes<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> <span class="token function">string</span><span class="token punctuation">(</span>b<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">const</span> letterBytes <span class="token operator">=</span> <span class="token string">"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"</span>
+
+<span class="token keyword">const</span> <span class="token punctuation">(</span>
+    letterIdxBits <span class="token operator">=</span> <span class="token number">6</span> <span class="token comment" spellcheck="true">// 6 bits to represent a letter index</span>
+    letterIdxMask <span class="token operator">=</span> <span class="token number">1</span><span class="token operator">&lt;&lt;</span>letterIdxBits <span class="token operator">-</span> <span class="token number">1</span> <span class="token comment" spellcheck="true">// All 1-bits, as many as letterIdxBits</span>
+    letterIdxMax <span class="token operator">=</span> <span class="token number">63</span> <span class="token operator">/</span> letterIdxBits <span class="token comment" spellcheck="true">// # of letter indices fitting in 63 bits</span>
+<span class="token punctuation">)</span>
+
+<span class="token keyword">func</span> <span class="token function">RandStringBytes</span><span class="token punctuation">(</span>n <span class="token builtin">int</span><span class="token punctuation">)</span> <span class="token builtin">string</span> <span class="token punctuation">{</span>
+    b <span class="token operator">:=</span> <span class="token function">make</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">byte</span><span class="token punctuation">,</span> n<span class="token punctuation">)</span>
+    <span class="token keyword">for</span> i <span class="token operator">:=</span> <span class="token keyword">range</span> b <span class="token punctuation">{</span>
+        b<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> letterBytes<span class="token punctuation">[</span>rand<span class="token punctuation">.</span><span class="token function">Intn</span><span class="token punctuation">(</span><span class="token function">len</span><span class="token punctuation">(</span>letterBytes<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> <span class="token function">string</span><span class="token punctuation">(</span>b<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token function">RandStringBytesRmndr</span><span class="token punctuation">(</span>n <span class="token builtin">int</span><span class="token punctuation">)</span> <span class="token builtin">string</span> <span class="token punctuation">{</span>
+    b <span class="token operator">:=</span> <span class="token function">make</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">byte</span><span class="token punctuation">,</span> n<span class="token punctuation">)</span>
+    <span class="token keyword">for</span> i <span class="token operator">:=</span> <span class="token keyword">range</span> b <span class="token punctuation">{</span>
+        b<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> letterBytes<span class="token punctuation">[</span>rand<span class="token punctuation">.</span><span class="token function">Int63</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">%</span><span class="token function">int64</span><span class="token punctuation">(</span><span class="token function">len</span><span class="token punctuation">(</span>letterBytes<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> <span class="token function">string</span><span class="token punctuation">(</span>b<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token function">RandStringBytesMask</span><span class="token punctuation">(</span>n <span class="token builtin">int</span><span class="token punctuation">)</span> <span class="token builtin">string</span> <span class="token punctuation">{</span>
+    b <span class="token operator">:=</span> <span class="token function">make</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">byte</span><span class="token punctuation">,</span> n<span class="token punctuation">)</span>
+    <span class="token keyword">for</span> i <span class="token operator">:=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> n<span class="token punctuation">;</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> idx <span class="token operator">:=</span> <span class="token function">int</span><span class="token punctuation">(</span>rand<span class="token punctuation">.</span><span class="token function">Int63</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span> letterIdxMask<span class="token punctuation">)</span><span class="token punctuation">;</span> idx <span class="token operator">&lt;</span> <span class="token function">len</span><span class="token punctuation">(</span>letterBytes<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            b<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> letterBytes<span class="token punctuation">[</span>idx<span class="token punctuation">]</span>
+            i<span class="token operator">++</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> <span class="token function">string</span><span class="token punctuation">(</span>b<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token function">RandStringBytesMaskImpr</span><span class="token punctuation">(</span>n <span class="token builtin">int</span><span class="token punctuation">)</span> <span class="token builtin">string</span> <span class="token punctuation">{</span>
+    b <span class="token operator">:=</span> <span class="token function">make</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">byte</span><span class="token punctuation">,</span> n<span class="token punctuation">)</span>
+    <span class="token comment" spellcheck="true">// A rand.Int63() generates 63 random bits, enough for letterIdxMax letters!</span>
+    <span class="token keyword">for</span> i<span class="token punctuation">,</span> cache<span class="token punctuation">,</span> remain <span class="token operator">:=</span> n<span class="token number">-1</span><span class="token punctuation">,</span> rand<span class="token punctuation">.</span><span class="token function">Int63</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> letterIdxMax<span class="token punctuation">;</span> i <span class="token operator">>=</span> <span class="token number">0</span><span class="token punctuation">;</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> remain <span class="token operator">==</span> <span class="token number">0</span> <span class="token punctuation">{</span>
+            cache<span class="token punctuation">,</span> remain <span class="token operator">=</span> rand<span class="token punctuation">.</span><span class="token function">Int63</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> letterIdxMax
+        <span class="token punctuation">}</span>
+        <span class="token keyword">if</span> idx <span class="token operator">:=</span> <span class="token function">int</span><span class="token punctuation">(</span>cache <span class="token operator">&amp;</span> letterIdxMask<span class="token punctuation">)</span><span class="token punctuation">;</span> idx <span class="token operator">&lt;</span> <span class="token function">len</span><span class="token punctuation">(</span>letterBytes<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            b<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> letterBytes<span class="token punctuation">[</span>idx<span class="token punctuation">]</span>
+            i<span class="token operator">--</span>
+        <span class="token punctuation">}</span>
+        cache <span class="token operator">>>=</span> letterIdxBits
+        remain<span class="token operator">--</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> <span class="token function">string</span><span class="token punctuation">(</span>b<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">var</span> src <span class="token operator">=</span> rand<span class="token punctuation">.</span><span class="token function">NewSource</span><span class="token punctuation">(</span>time<span class="token punctuation">.</span><span class="token function">Now</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">UnixNano</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token keyword">func</span> <span class="token function">RandStringBytesMaskImprSrc</span><span class="token punctuation">(</span>n <span class="token builtin">int</span><span class="token punctuation">)</span> <span class="token builtin">string</span> <span class="token punctuation">{</span>
+    b <span class="token operator">:=</span> <span class="token function">make</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">byte</span><span class="token punctuation">,</span> n<span class="token punctuation">)</span>
+    <span class="token comment" spellcheck="true">// A src.Int63() generates 63 random bits, enough for letterIdxMax characters!</span>
+    <span class="token keyword">for</span> i<span class="token punctuation">,</span> cache<span class="token punctuation">,</span> remain <span class="token operator">:=</span> n<span class="token number">-1</span><span class="token punctuation">,</span> src<span class="token punctuation">.</span><span class="token function">Int63</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> letterIdxMax<span class="token punctuation">;</span> i <span class="token operator">>=</span> <span class="token number">0</span><span class="token punctuation">;</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> remain <span class="token operator">==</span> <span class="token number">0</span> <span class="token punctuation">{</span>
+            cache<span class="token punctuation">,</span> remain <span class="token operator">=</span> src<span class="token punctuation">.</span><span class="token function">Int63</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> letterIdxMax
+        <span class="token punctuation">}</span>
+        <span class="token keyword">if</span> idx <span class="token operator">:=</span> <span class="token function">int</span><span class="token punctuation">(</span>cache <span class="token operator">&amp;</span> letterIdxMask<span class="token punctuation">)</span><span class="token punctuation">;</span> idx <span class="token operator">&lt;</span> <span class="token function">len</span><span class="token punctuation">(</span>letterBytes<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            b<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> letterBytes<span class="token punctuation">[</span>idx<span class="token punctuation">]</span>
+            i<span class="token operator">--</span>
+        <span class="token punctuation">}</span>
+        cache <span class="token operator">>>=</span> letterIdxBits
+        remain<span class="token operator">--</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> <span class="token function">string</span><span class="token punctuation">(</span>b<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token function">RandStringBytesMaskImprSrcSB</span><span class="token punctuation">(</span>n <span class="token builtin">int</span><span class="token punctuation">)</span> <span class="token builtin">string</span> <span class="token punctuation">{</span>
+    sb <span class="token operator">:=</span> strings<span class="token punctuation">.</span>Builder<span class="token punctuation">{</span><span class="token punctuation">}</span>
+    sb<span class="token punctuation">.</span><span class="token function">Grow</span><span class="token punctuation">(</span>n<span class="token punctuation">)</span>
+    <span class="token comment" spellcheck="true">// A src.Int63() generates 63 random bits, enough for letterIdxMax characters!</span>
+    <span class="token keyword">for</span> i<span class="token punctuation">,</span> cache<span class="token punctuation">,</span> remain <span class="token operator">:=</span> n<span class="token number">-1</span><span class="token punctuation">,</span> src<span class="token punctuation">.</span><span class="token function">Int63</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> letterIdxMax<span class="token punctuation">;</span> i <span class="token operator">>=</span> <span class="token number">0</span><span class="token punctuation">;</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> remain <span class="token operator">==</span> <span class="token number">0</span> <span class="token punctuation">{</span>
+            cache<span class="token punctuation">,</span> remain <span class="token operator">=</span> src<span class="token punctuation">.</span><span class="token function">Int63</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> letterIdxMax
+        <span class="token punctuation">}</span>
+        <span class="token keyword">if</span> idx <span class="token operator">:=</span> <span class="token function">int</span><span class="token punctuation">(</span>cache <span class="token operator">&amp;</span> letterIdxMask<span class="token punctuation">)</span><span class="token punctuation">;</span> idx <span class="token operator">&lt;</span> <span class="token function">len</span><span class="token punctuation">(</span>letterBytes<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            sb<span class="token punctuation">.</span><span class="token function">WriteByte</span><span class="token punctuation">(</span>letterBytes<span class="token punctuation">[</span>idx<span class="token punctuation">]</span><span class="token punctuation">)</span>
+            i<span class="token operator">--</span>
+        <span class="token punctuation">}</span>
+        cache <span class="token operator">>>=</span> letterIdxBits
+        remain<span class="token operator">--</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> sb<span class="token punctuation">.</span><span class="token function">String</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">// Benchmark functions</span>
+
+<span class="token keyword">const</span> n <span class="token operator">=</span> <span class="token number">16</span>
+
+<span class="token keyword">func</span> <span class="token function">BenchmarkRunes</span><span class="token punctuation">(</span>b <span class="token operator">*</span>testing<span class="token punctuation">.</span>B<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">for</span> i <span class="token operator">:=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> b<span class="token punctuation">.</span>N<span class="token punctuation">;</span> i<span class="token operator">++</span> <span class="token punctuation">{</span>
+        <span class="token function">RandStringRunes</span><span class="token punctuation">(</span>n<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token function">BenchmarkBytes</span><span class="token punctuation">(</span>b <span class="token operator">*</span>testing<span class="token punctuation">.</span>B<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">for</span> i <span class="token operator">:=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> b<span class="token punctuation">.</span>N<span class="token punctuation">;</span> i<span class="token operator">++</span> <span class="token punctuation">{</span>
+        <span class="token function">RandStringBytes</span><span class="token punctuation">(</span>n<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token function">BenchmarkBytesRmndr</span><span class="token punctuation">(</span>b <span class="token operator">*</span>testing<span class="token punctuation">.</span>B<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">for</span> i <span class="token operator">:=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> b<span class="token punctuation">.</span>N<span class="token punctuation">;</span> i<span class="token operator">++</span> <span class="token punctuation">{</span>
+        <span class="token function">RandStringBytesRmndr</span><span class="token punctuation">(</span>n<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token function">BenchmarkBytesMask</span><span class="token punctuation">(</span>b <span class="token operator">*</span>testing<span class="token punctuation">.</span>B<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">for</span> i <span class="token operator">:=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> b<span class="token punctuation">.</span>N<span class="token punctuation">;</span> i<span class="token operator">++</span> <span class="token punctuation">{</span>
+        <span class="token function">RandStringBytesMask</span><span class="token punctuation">(</span>n<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token function">BenchmarkBytesMaskImpr</span><span class="token punctuation">(</span>b <span class="token operator">*</span>testing<span class="token punctuation">.</span>B<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">for</span> i <span class="token operator">:=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> b<span class="token punctuation">.</span>N<span class="token punctuation">;</span> i<span class="token operator">++</span> <span class="token punctuation">{</span>
+        <span class="token function">RandStringBytesMaskImpr</span><span class="token punctuation">(</span>n<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token function">BenchmarkBytesMaskImprSrc</span><span class="token punctuation">(</span>b <span class="token operator">*</span>testing<span class="token punctuation">.</span>B<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">for</span> i <span class="token operator">:=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> b<span class="token punctuation">.</span>N<span class="token punctuation">;</span> i<span class="token operator">++</span> <span class="token punctuation">{</span>
+        <span class="token function">RandStringBytesMaskImprSrc</span><span class="token punctuation">(</span>n<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token function">BenchmarkBytesMaskImprSrcSB</span><span class="token punctuation">(</span>b <span class="token operator">*</span>testing<span class="token punctuation">.</span>B<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">for</span> i <span class="token operator">:=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> b<span class="token punctuation">.</span>N<span class="token punctuation">;</span> i<span class="token operator">++</span> <span class="token punctuation">{</span>
+        <span class="token function">RandStringBytesMaskImprSrcSB</span><span class="token punctuation">(</span>n<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>测试结果：</p>
+<pre class="line-numbers language-shell"><code class="language-shell">BenchmarkRunes-8 2000000 773 ns/op 96 B/op 2 allocs/op
+BenchmarkBytes-8 2000000 615 ns/op 32 B/op 2 allocs/op
+BenchmarkBytesRmndr-8 3000000 430 ns/op 32 B/op 2 allocs/op
+BenchmarkBytesMask-8 3000000 560 ns/op 32 B/op 2 allocs/op
+BenchmarkBytesMaskImpr-8 10000000 174 ns/op 32 B/op 2 allocs/op
+BenchmarkBytesMaskImprSrc-8 10000000 138 ns/op 32 B/op 2 allocs/op
+BenchmarkBytesMaskImprSrcSB-8 10000000 193 ns/op 16 B/op 1 allocs/op<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+            </div>
+            <hr/>
+
+            
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/go/">
+                                    <span class="chip bg-color">go</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="far fa-dot-circle"></i>&nbsp;Current
+            </div>
+            <div class="card">
+                <a href="/generate-a-random-string-in-go/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="Generate a random string in Go">
+                        
+                        <span class="card-title">Generate a random string in Go</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+如何高效地产生一个随机字符串？这是一个简单的问题，但是简单的问题也有极致的做法。这个问题是StackOverflow上的一个问题，How to generate a random string of a fixed length in G
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-11-10
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/programming/" class="post-category">
+                                    programming
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/go/">
+                        <span class="chip bg-color">go</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                Next&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/learn-oauth-2-0/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="Learn OAuth 2.0">
+                        
+                        <span class="card-title">Learn OAuth 2.0</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+说起OAuth，大多数人都听说过，有的还在工作中用到过。OAuth可以用来保护资源，尤其是API。不过当深入OAuth并仔细看看的时候，原来OAuth有很多值得讨论以及注意地方。这篇文章是《OAuth 2 In Action》的阅读笔记与
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-10-30
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/security/" class="post-category">
+                                    security
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/oauth/">
+                        <span class="chip bg-color">oauth</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+    
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+<!-- 代码块折行 -->
+
+<style type="text/css">
+code[class*="language-"], pre[class*="language-"] { white-space: pre !important; }
+</style>
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;You Will See...</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+    <footer class="page-footer bg-color">
+    <div class="container row center-align">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            <span id="year">2020</span>
+            <a href="http://deuterium.fun" target="_blank">Valineliu</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+            
+            
+            
+            
+            
+            <br>
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link ">
+
+
+    <a href="mailto:1749118121@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;Search</span>
+            <input type="search" id="searchInput" name="s" placeholder="Please enter a search keyword"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
